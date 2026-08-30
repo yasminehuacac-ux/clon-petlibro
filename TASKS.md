@@ -3,7 +3,7 @@
 | ID | Task | Status | Prerequisite | Gate owner |
 |---|---|---|---|---|
 | TASK-001 | Baseline audit and reuse map | DONE | Project control pack | Work |
-| TASK-002 | RELIVANOW design system | BLOCKED | TASK-001 approved + local toolchain verified | Work |
+| TASK-002 | RELIVANOW design system | READY | TASK-001 approved + local toolchain verified | Work |
 | TASK-003 | Shopify data model | DRAFT | TASK-001/002 + commercial data | Work |
 | TASK-004 | PDP purchase area | DRAFT | TASK-002/003 + product assets | Work |
 | TASK-005 | Cart drawer and AOV | DRAFT | TASK-004 + offer rules | Work |
@@ -24,6 +24,6 @@
 
 Only one task may be `IN PROGRESS` at a time unless the user explicitly authorizes independent parallel work.
 
-## TASK-002 blocker
+## TASK-002 gate
 
-Local Node/npm, Shopify CLI, Theme Check, and Shopify development environment must be verified before implementation.
+Local Node.js, Shopify CLI, Theme Check, Shopify authentication, development-theme preview, and Theme Editor access were verified on 2026-08-29. TASK-002 is ready but has not started.

@@ -1,8 +1,8 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** Foundation / development-environment verification pending
-**Active task:** None; TASK-002 is blocked pending toolchain verification
+**Stage:** Foundation / development environment verified
+**Active task:** TASK-002 is the next active task (`READY`; implementation not started)
 **Last updated:** 2026-08-29
 
 ## Verified baseline facts
@@ -35,15 +35,20 @@
 - The intake is a single generic Horizon snapshot with no project-brand strings in implementation files.
 - An exact upstream Horizon 4.1.1 comparison is not required before implementation; the repository must not be described as byte-for-byte pristine Horizon.
 - The verified component/event graph and reuse decisions are recorded in `reports/TASK-001-RESULT.md` and `docs/TECHNICAL_ARCHITECTURE.md`.
+- Windows AMD64 development environment verified with Node.js v24.20.0 and Shopify CLI 4.7.0.
+- Shopify Theme Check inspected 327 files with zero offenses.
+- Authentication to the RELIVANOW Shopify store succeeded.
+- A Shopify development theme connected successfully; its local preview and Theme Editor were verified.
+- The live theme was not modified, and no theme push or publish was performed.
 
 ## Current blockers
 
 - Exact RELIVANOW product specifications require validation against the real product/manual.
 - Final product media and asset assignments are incomplete.
 - Reviews, bundles, subscriptions, financing, markets, shipping, and analytics providers are not frozen.
-- Shopify CLI, Theme Check, Node/npm, and Ruby are unavailable in the inspected environment.
-- Shopify authentication, Theme Editor behavior, browser rendering, and live commerce flows remain unverified.
+- Exact live product, variant, cart, app, and commercial-flow behavior still requires task-specific validation with representative store data.
+- The TASK-001 audit remains a historical static audit; its tooling and runtime limitations accurately describe that audit session, not the current environment.
 
-## Next gate
+## Next task
 
-Verify local Node/npm, Shopify CLI, Theme Check, and the Shopify development environment. TASK-002 remains `BLOCKED`, and no storefront implementation is authorized until this gate is resolved.
+TASK-002 is the next active task and is `READY`. This environment-gate closure does not begin its implementation.

@@ -25,6 +25,13 @@ Do not deploy, install apps, or change Git remotes.
 - Require Codex to stop on conflicting data rather than invent values.
 - Inspect diffs and command output as work proceeds.
 
+## Windows development terminals
+
+- In PowerShell, use `shopify.cmd` when script-execution policy blocks `shopify.ps1`.
+- Run `shopify.cmd theme dev` in a dedicated terminal and keep that process isolated for the duration of live validation.
+- Run Git, Theme Check, and other test commands in a second terminal so they do not interrupt the development server.
+- Never store storefront passwords, authentication codes, preview URLs, or temporary development-theme IDs in repository files, command transcripts, reports, or commits.
+
 ## Close a task
 
 1. Read the result report.
@@ -38,4 +45,3 @@ Do not deploy, install apps, or change Git remotes.
 ## Session strategy
 
 Use a fresh Codex chat for each major task. Persistent context belongs in repository files, not in an indefinitely growing conversation.
-

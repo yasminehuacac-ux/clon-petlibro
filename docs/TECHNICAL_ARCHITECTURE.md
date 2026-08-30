@@ -1,13 +1,14 @@
 # Technical architecture
 
-**Status:** Repository-validated static baseline; live Shopify behavior remains unverified.
+**Status:** Repository-validated baseline with a verified Shopify development-theme runtime; task-specific commerce behavior remains to be validated.
 
 ## Platform
 
 - Shopify Online Store 2.0.
 - Horizon 4.1.1 base.
 - Shopify Liquid, JSON templates, CSS, and modular JavaScript.
-- Shopify CLI and Theme Check are expected release tools but were unavailable in the TASK-001 environment.
+- Verified Windows AMD64 toolchain: Node.js v24.20.0, Shopify CLI 4.7.0, and operational Shopify Theme Check.
+- Live runtime validation is available through an authenticated Shopify development theme, including local preview and Theme Editor access.
 
 ## Architectural layers
 
@@ -91,4 +92,5 @@ For every requested feature:
 - No RELIVANOW or PETLIBRO strings were found in implementation directories; this supports, but does not prove, a generic intake.
 - Treat settings schema/data, layouts, JSON templates and section groups, event/component bases, section renderer/morphing, product form/variant pipeline, and cart mutation code as protected high-risk surfaces.
 - Prefer settings and semantic-token changes, existing block composition, and small additive hooks over edits to core event or rendering contracts.
-- Static JSON/JSONC parsing succeeded. Theme Check, Shopify authentication, Theme Editor, browser, and live cart/product validation were unavailable.
+- During the historical TASK-001 audit, static JSON/JSONC parsing succeeded while Theme Check, Shopify authentication, Theme Editor, browser, and live cart/product validation were unavailable. Those audit limitations are preserved as historical evidence.
+- The environment gate subsequently verified Theme Check, Shopify authentication, a development-theme connection, local preview, and Theme Editor availability. Product/cart behavior still requires task-specific runtime validation.
