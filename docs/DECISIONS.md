@@ -14,6 +14,9 @@
 | D-010 | FAQ and rating schema share their visible source | FROZEN | Trust and SEO consistency |
 | D-011 | Existing Horizon behavior is reused before new code | FROZEN | Performance and maintainability |
 | D-012 | Original intake ZIP remains untouched; output is a separate copy | FROZEN | Recovery and provenance |
+| D-013 | Intake provenance is metadata-verified Horizon 4.1.1, not upstream-diff-proven pristine Horizon | VERIFIED | The repository has one intake snapshot and no trusted upstream comparison |
+| D-014 | Core Horizon events, section rendering, product form, variant state, and AJAX cart flows are protected reuse surfaces | FROZEN | Local dependency tracing shows these systems coordinate multiple commerce consumers |
+| D-015 | The current intake repository is the official RELIVANOW project baseline; exact upstream Horizon 4.1.1 comparison is not required before implementation; existing tracked theme files are preserved unless an active task explicitly authorizes modification | FROZEN | Work approved TASK-001 and accepted the audited repository and reuse map |
 
 ## Pending decisions
 
@@ -29,4 +32,3 @@
 - Analytics/pixel stack and consent requirements.
 
 Add decisions; do not silently rewrite prior entries. Superseded decisions must point to their replacement.
-
