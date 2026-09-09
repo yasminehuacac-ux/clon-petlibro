@@ -35,3 +35,11 @@
 
 Every defect includes viewport/device, route, state/data, reproduction steps, expected result, actual result, screenshot/video, console/network evidence when relevant, and priority.
 
+## TASK-010 carried verification
+
+The following TASK-002 states lacked representative browser data and are explicitly deferred to TASK-010 without blocking the approved design-system gate:
+
+- Emulated `prefers-reduced-motion: reduce` across cards, variants, controls, drawers/dialogs, cart transitions, and scrolling. Static inspection confirms TASK-002's changed shared timing variables collapse to `0.01ms`, while transform-based card and variant motion remains gated by `prefers-reduced-motion: no-preference`.
+- Compare-at price and sale badge rendering with a real discounted product. Static wiring confirms both sale presentation paths consume the native `badge_sale_background_color` setting through `--color-sale`.
+- Review stars with representative review metafields and merchant color override. Static wiring confirms `--color-rating` / `--color-rating-rgb` feed the SVG star variables.
+- Visual coverage of all eight semantic color settings across controlled components and relevant color schemes.

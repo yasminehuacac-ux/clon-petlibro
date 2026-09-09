@@ -6,6 +6,8 @@ All notable project changes are recorded here.
 
 ### Added
 
+- RELIVANOW semantic color, spacing, motion, state, and layout aliases in Horizon's shared token pipeline.
+- Merchant-editable semantic colors for warm/surface, state, and rating roles.
 - Project control pack for ChatGPT Work + Codex.
 - Repository-level `AGENTS.md`.
 - Architecture, workflow, data, analytics, content, asset, QA, and release documentation.
@@ -16,6 +18,10 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- Work approved TASK-002 after responsive storefront, commerce-flow, keyboard/focus, Theme Editor, and static validation; TASK-003 is blocked pending commercial and content decisions.
+- Reduced-motion mode now collapses all timing variables changed by TASK-002 at the root, covering every consumer of those shared motion tokens.
+- Applied the approved RELIVANOW palette, Inter typography, restrained radii, borders, and hover treatment to the development configuration and shared primitives.
+- Styled sale prices, form errors, ratings, and shared states while preserving Horizon's dynamic button hover, custom-button, and adaptive focus behavior.
 - Project status and architecture now reflect the completed static baseline audit and its live-validation limits.
 - Work approved TASK-001 and accepted the current repository as the official RELIVANOW baseline.
 - TASK-001 moved to `DONE`; TASK-002 was held at `BLOCKED` pending local development-toolchain verification.

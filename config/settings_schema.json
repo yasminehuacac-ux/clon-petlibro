@@ -70,6 +70,59 @@
     ]
   },
   {
+    "name": "RELIVANOW semantic colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "semantic_warm_white",
+        "label": "Warm white",
+        "default": "#F7F7F4"
+      },
+      {
+        "type": "color",
+        "id": "semantic_surface",
+        "label": "Surface",
+        "default": "#F0F1ED"
+      },
+      {
+        "type": "color",
+        "id": "semantic_muted",
+        "label": "Muted text",
+        "default": "#666A65"
+      },
+      {
+        "type": "color",
+        "id": "semantic_brand_hover",
+        "label": "Brand hover",
+        "default": "#234200"
+      },
+      {
+        "type": "color",
+        "id": "semantic_brand_soft",
+        "label": "Brand soft",
+        "default": "#DDE7D3"
+      },
+      {
+        "type": "color",
+        "id": "semantic_success",
+        "label": "Success",
+        "default": "#277447"
+      },
+      {
+        "type": "color",
+        "id": "semantic_info",
+        "label": "Information and verified",
+        "default": "#3897F0"
+      },
+      {
+        "type": "color",
+        "id": "semantic_rating",
+        "label": "Review stars",
+        "default": "#FF6201"
+      }
+    ]
+  },
+  {
     "name": "t:names.typography",
     "settings": [
       {

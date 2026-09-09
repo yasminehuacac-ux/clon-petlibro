@@ -76,6 +76,14 @@ For every requested feature:
 - No separate desktop and mobile stylesheets.
 - Motion only when meaningful and gated by reduced-motion preferences.
 
+## RELIVANOW shared design-token layer
+
+- `config/settings_schema.json` exposes only semantic colors that cannot be represented by Horizon's four-slot dynamic palette.
+- Canvas, ink, brand, and border remain aliases of `settings.color_palette`; warm white, surface, muted, brand hover/soft, success, information/verified, and rating are eight additive merchant settings. Sale reuses Horizon's native `badge_sale_background_color` setting as its single editable source.
+- `snippets/theme-styles-variables.liquid` is the single emission point for RELIVANOW semantic aliases, spacing scale, 1440px container target, and 180–240ms motion family. The success token is emitted once in Horizon's existing color group, and rating provides both color and RGB forms for SVG opacity. Under reduced-motion preference, every shared duration changed by TASK-002 is overridden at `:root` to `0.01ms`; transform-based card and variant motion remains gated by `no-preference`.
+- Existing Horizon component variables and contrast-resolution snippets remain authoritative for buttons, custom-button hover, focus, inputs, variants, badges, drawers, and popovers. Shared CSS consumes semantic aliases only where controlled markup has a named brand or state role; no speculative global status selectors are introduced.
+- No product, cart, section composition, event, ref, or Theme Editor lifecycle contract is changed by TASK-002.
+
 ## Performance budget
 
 - One gallery and one variant source in the DOM.

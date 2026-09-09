@@ -1,6 +1,6 @@
 # TASK-002 — RELIVANOW design system
 
-**Status:** DRAFT  
+**Status:** DONE
 **Depends on:** TASK-001 approved  
 **Gate owner:** ChatGPT Work
 
@@ -46,4 +46,3 @@ Implement the approved RELIVANOW visual system through Horizon's existing settin
 ## Required handoff
 
 Create `reports/TASK-002-RESULT.md`, update project control files, and do not begin TASK-003.
-

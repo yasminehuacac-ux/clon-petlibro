@@ -3,8 +3,8 @@
 | ID | Task | Status | Prerequisite | Gate owner |
 |---|---|---|---|---|
 | TASK-001 | Baseline audit and reuse map | DONE | Project control pack | Work |
-| TASK-002 | RELIVANOW design system | READY | TASK-001 approved + local toolchain verified | Work |
-| TASK-003 | Shopify data model | DRAFT | TASK-001/002 + commercial data | Work |
+| TASK-002 | RELIVANOW design system | DONE | TASK-001 approved + local toolchain verified | Work |
+| TASK-003 | Shopify data model | BLOCKED | TASK-001/002 + commercial data | Work |
 | TASK-004 | PDP purchase area | DRAFT | TASK-002/003 + product assets | Work |
 | TASK-005 | Cart drawer and AOV | DRAFT | TASK-004 + offer rules | Work |
 | TASK-006 | PDP storytelling | DRAFT | TASK-004 + approved content | Work |
@@ -26,4 +26,4 @@ Only one task may be `IN PROGRESS` at a time unless the user explicitly authoriz
 
 ## TASK-002 gate
 
-Local Node.js, Shopify CLI, Theme Check, Shopify authentication, development-theme preview, and Theme Editor access were verified on 2026-08-29. TASK-002 is ready but has not started.
+Work approved TASK-002 after desktop/mobile Home and PDP validation, commerce-flow checks, keyboard/focus checks, Theme Editor verification, and static validation. TASK-002 is `DONE`. TASK-003 is `BLOCKED` pending the commercial and content decisions listed in `tasks/TASK-003-DATA-MODEL.md`.

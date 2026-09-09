@@ -14,12 +14,12 @@ body {
 
 :root {
   --hover-lift-amount: 4px;
-  --hover-scale-amount: 1.03;
+  --hover-scale-amount: 1.02;
   --hover-subtle-zoom-amount: 1.015;
   --hover-shadow-color: var(--color-shadow);
-  --hover-transition-duration: 0.25s;
-  --hover-transition-timing: ease-out;
-  --surface-transition-duration: 0.3s;
+  --hover-transition-duration: var(--animation-speed);
+  --hover-transition-timing: var(--animation-easing);
+  --surface-transition-duration: var(--animation-speed-slow);
   --surface-transition-timing: var(--ease-out-quad);
   --submenu-animation-speed: 360ms;
   --submenu-animation-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -1300,7 +1300,9 @@ input:not(:placeholder-shown)::placeholder {
 
 .button[aria-disabled='true'],
 .button-secondary[aria-disabled='true'],
-.button:disabled {
+.button:disabled,
+.button-secondary:disabled,
+.button-custom:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -2358,6 +2360,15 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) .volume-pricing-note {
 
 .price-item--sale {
   white-space: nowrap;
+  color: var(--color-sale);
+}
+
+:where(.form__message, .errors) {
+  color: var(--color-error);
+}
+
+:where(input, select, textarea)[aria-invalid='true'] {
+  border-color: var(--color-error);
 }
 
 .price__hidden {
@@ -3728,6 +3739,22 @@ fly-to-cart.fly-to-cart--sticky {
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --animation-speed: 0.01ms;
+    --animation-speed-slow: 0.01ms;
+    --animation-speed-medium: 0.01ms;
+    --drawer-animation-speed: 0.01ms;
+    --hover-transition-duration: 0.01ms;
+    --surface-transition-duration: 0.01ms;
+  }
+
+  html,
+  .page-wrapper {
+    scroll-behavior: auto;
   }
 }
 

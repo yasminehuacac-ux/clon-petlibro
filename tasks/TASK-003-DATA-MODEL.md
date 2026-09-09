@@ -1,8 +1,10 @@
 # TASK-003 — Shopify product data model
 
-**Status:** DRAFT  
+**Status:** BLOCKED
 **Depends on:** TASK-001 and TASK-002 approved; commercial data decisions available  
 **Gate owner:** ChatGPT Work
+
+**Blocker:** Required commercial and content decisions are unresolved: primary language, launch markets, final prices, available variants, verified specifications, delivery policy/source, warranty, reviews provider, and bundle rules.
 
 ## Objective
 
@@ -47,4 +49,3 @@ Finalize the Shopify-native data architecture for RELIVANOW products, benefits, 
 ## Required handoff
 
 Create `reports/TASK-003-RESULT.md`, update `docs/DATA_MODEL.md`, and do not begin TASK-004.
-

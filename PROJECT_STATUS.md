@@ -1,9 +1,9 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** Foundation / development environment verified
-**Active task:** TASK-002 is the next active task (`READY`; implementation not started)
-**Last updated:** 2026-08-29
+**Stage:** Design system approved; data model blocked
+**Active task:** TASK-003 (`BLOCKED`; not started)
+**Last updated:** 2026-09-09
 
 ## Verified baseline facts
 
@@ -40,9 +40,14 @@
 - Authentication to the RELIVANOW Shopify store succeeded.
 - A Shopify development theme connected successfully; its local preview and Theme Editor were verified.
 - The live theme was not modified, and no theme push or publish was performed.
+- TASK-002 implements the approved RELIVANOW semantic tokens and shared primitive states through Horizon's existing settings and CSS-variable architecture.
+- TASK-002 cascade corrections preserve Horizon's dynamic button hover, adaptive focus, custom-button overrides, and distinct sale/error roles; ratings now consume the semantic rating token through their actual SVG variables.
+- The development configuration now uses Inter, the approved four-slot core palette, restrained radii, 1px borders, and subtle motion; the Horizon preset remains unchanged.
+- Work approved TASK-002 after development-theme validation of Home, PDP, commerce flows, responsive layout, keyboard focus, and Theme Editor settings.
 
 ## Current blockers
 
+- TASK-003 cannot begin until primary language, launch markets, final prices, available variants, verified specifications, delivery, warranty, reviews provider, and bundle rules are decided.
 - Exact RELIVANOW product specifications require validation against the real product/manual.
 - Final product media and asset assignments are incomplete.
 - Reviews, bundles, subscriptions, financing, markets, shipping, and analytics providers are not frozen.
@@ -51,4 +56,4 @@
 
 ## Next task
 
-TASK-002 is the next active task and is `READY`. This environment-gate closure does not begin its implementation.
+TASK-002 is `DONE`. TASK-003 is `BLOCKED` and has not begun; resolve its listed commercial and content decisions before changing its state.
