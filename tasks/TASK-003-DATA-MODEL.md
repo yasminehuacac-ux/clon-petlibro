@@ -1,10 +1,10 @@
 # TASK-003 — Shopify product data model
 
-**Status:** BLOCKED
+**Status:** DONE
 **Depends on:** TASK-001 and TASK-002 approved; commercial data decisions available  
 **Gate owner:** ChatGPT Work
 
-**Blocker:** Required commercial and content decisions are unresolved: primary language, launch markets, final prices, available variants, verified specifications, delivery policy/source, warranty, reviews provider, and bundle rules.
+**Outcome:** Work approved the documented Shopify data model. No remote Shopify mutation was performed or authorized; TASK-004 remains `DRAFT` and unstarted pending its documented media/variant gates.
 
 ## Objective
 
@@ -39,12 +39,12 @@ Finalize the Shopify-native data architecture for RELIVANOW products, benefits, 
 
 ## Acceptance criteria
 
-- [ ] Every PDP data field has one documented source of truth.
-- [ ] Definitions support localization and merchant editing.
-- [ ] Variant/media/add-on compatibility rules are explicit.
-- [ ] FAQ and specs can be accessible HTML.
-- [ ] Missing commercial values remain `TBD` and are reported.
-- [ ] No live data mutation occurs without authorization.
+- [x] Every PDP data field has one documented source of truth.
+- [x] Definitions support localization and merchant editing.
+- [x] Variant/media/add-on compatibility rules are explicit.
+- [x] FAQ and specs can be accessible HTML.
+- [x] Missing commercial values remain explicitly PROVISIONAL or UNVERIFIED; incomplete media uses the separate PENDING asset-workflow status.
+- [x] No live data mutation occurred without authorization.
 
 ## Required handoff
 

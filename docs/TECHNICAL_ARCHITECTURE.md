@@ -55,8 +55,8 @@ For every requested feature:
 | Header/search/footer | Reuse + extend | Preserve header groups, responsive drawer, and predictive Section Rendering; compose visual menu content |
 | Slideshow | Reuse | Use existing section/snippet/custom element for campaign and proof carousels |
 | Dialog/modal/drawer | Reuse | Use shared focus, open/close, persistence, and lifecycle primitives |
-| Reviews | Create provider adapter | Provider remains unknown; keep rating UI/schema from one lazy-loaded source |
-| Add-ons/bundles | Compose | Use product forms/lists and metafields after offer and discount rules are approved |
+| Reviews | Create provider adapter | Judge.me is the planned single rating/review/schema source; integration remains separately authorized |
+| Add-ons/bundles | Compose | Use native product references, Shopify product forms/lists, and Shopify Bundles after compatibility, inventory, offer, and discount rules are approved |
 | PDP anchor nav | Create lightweight behavior | No matching native system found; use anchors, sticky offsets, and IntersectionObserver later |
 
 ## JavaScript boundaries
@@ -92,6 +92,17 @@ For every requested feature:
 - Explicit image dimensions.
 - Reviews, chat, and non-critical apps deferred.
 - Initial custom compressed JS target below 120 KB.
+
+## Shopify data and media layer
+
+- Native Product and Variant fields remain authoritative for title, description, options, SKU, barcode, price, compare-at price, inventory, availability, shipping weight, and variant selection.
+- Shopify `product.media` is the only PDP gallery source. Media order, types, alt text, Shopify CDN delivery, and variant featured-media associations remain native; primary media is never duplicated in metafields.
+- The `relivanow` namespace stores product-specific structured values. Variant metafields exist only for real SKU differences, and procurement/provenance fields have storefront access disabled.
+- Reusable/localizable structures use publishable/translatable metaobjects: feature, specification item/group, FAQ, localized PDP policy summary, market delivery, and bundle offer. Records remain `DRAFT` until confirmed and approved; empty references are skipped cleanly.
+- Specification items carry presentation labels and a controlled `value_source`; an explicit renderer allowlist reads authoritative typed product metafields, including paired min/max ranges, instead of duplicating values.
+- Native Shopify shipping/refund policies and shipping-rate configuration remain legal/operational sources. Shopify Markets owns catalogs, availability, currency and localization; Judge.me's standard review metafields are the planned single rating source; Shopify Bundles owns exact component-variant quantities, bundle price, and component-derived inventory state.
+- Product-level add-on references apply only when compatibility is approved uniformly across both confirmed Single Bowl colors; future bowl-specific compatibility requires an explicit variant relation.
+- TASK-003 is approved and documentation-only: it creates no definitions, records, products, variants, markets, bundles, app installations, or media. TASK-004 remains `DRAFT` and must consume the approved native data relationships without parallel state after its four media/variant gates are resolved.
 
 ## Provenance and protection boundary
 

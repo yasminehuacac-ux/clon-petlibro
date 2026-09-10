@@ -1,6 +1,10 @@
 # Asset manifest
 
-**Status:** Draft. Do not substitute PETLIBRO media or alter the physical product.
+**Status:** TASK-003 media model approved; final asset production and approval remain pending. Do not substitute PETLIBRO media or alter the physical product.
+
+The product-specific source of truth is the ordered manifest in `docs/CONTENT_MATRIX.md`. TASK-003 creates or uploads no media. Final assets must be approved before TASK-004 and entered through Shopify `product.media` with native variant associations.
+
+TASK-004 remains `DRAFT` until Work approves the final assets, primary hero color, default color/variant, and final native `product.media`-to-variant associations.
 
 ## Naming convention
 
@@ -14,39 +18,39 @@ Example:
 relivanow-smart-feeder-lifestyle-cloud-white-4x5-v01.webp
 ```
 
-## Required product assets
+## Required initial product gallery
 
-| ID | Asset | Variant/ratio | Status |
+This summary deliberately matches the eight-row source manifest in `docs/CONTENT_MATRIX.md`; that matrix owns the complete alt, source, responsive, technical-data, and prohibited-claim fields.
+
+| ID | Position and asset | Variant/ratio | Status |
 |---|---|---|---|
-| PDP-01 | Primary clean packshot | Each color; 4:5 or source master | TBD |
-| PDP-02 | Bowl-style comparison | Single/Dual | TBD |
-| PDP-03 | Pet using product | Cat and/or dog; 4:5 | TBD |
-| PDP-04 | Wide lifestyle scene | 16:9 desktop + vertical mobile | TBD |
-| PDP-05 | Camera/function close-up | 1:1 or 4:5 | TBD |
-| PDP-06 | App/control UI | 4:5 + mobile | TBD |
-| PDP-07 | Technical infographic | HTML-first; supporting media | TBD |
-| PDP-08 | Dimensions | HTML labels or accessible equivalent | TBD |
-| PDP-09 | Cleaning/maintenance | Sequence or video | TBD |
-| PDP-10 | In the box | 1:1 or 4:5 | TBD |
-| PDP-11 | Product video | Desktop/mobile poster | TBD |
+| FEEDER-MEDIA-01 | 1. Product hero | Confirmed Cloud White or Graphite Single Bowl; 4:5 | PENDING |
+| FEEDER-MEDIA-02 | 2. Cat lifestyle | Confirmed Single Bowl color; 4:5 | PENDING |
+| FEEDER-MEDIA-03 | 3. Dog lifestyle | Confirmed Single Bowl color; 4:5 | PENDING |
+| FEEDER-MEDIA-04 | 4. App scheduling | Single Bowl; 4:5; workflow pending manual review | NEEDS_REDESIGN |
+| FEEDER-MEDIA-05 | 5. Anti-stuck mechanism and secure lid | Single Bowl; 4:5; supplier-asset evidence pending manual review | NEEDS_REDESIGN |
+| FEEDER-MEDIA-06 | 6. Dual power supply | Single Bowl; 4:5; no battery-runtime claim | NEEDS_REDESIGN |
+| FEEDER-MEDIA-07 | 7. Box contents | Confirmed Single Bowl contents; 4:5 | NEEDS_REDESIGN |
+| FEEDER-MEDIA-08 | 8. Cloud White and Graphite comparison | Confirmed Single Bowl colors only; 4:5; no Sky Blue or Dual Bowl | NEEDS_REDESIGN |
 
 ## Required Home assets
 
 | ID | Asset | Requirement | Status |
 |---|---|---|---|
-| HOME-01 | Hero campaign 1 | Desktop + mobile independent crop | TBD |
-| HOME-02 | Hero campaign 2 | Desktop + mobile independent crop | TBD |
-| HOME-03 | Category media | One per approved category | TBD |
-| HOME-04 | Featured product stories | Approved product media | TBD |
-| HOME-05 | Ecosystem banner | Feeder/fountain relationship | TBD |
-| HOME-06 | UGC/social | Usage rights and real context | TBD |
-| HOME-07 | Brand manifesto | Emotional lifestyle scene | TBD |
+| HOME-01 | Hero campaign 1 | Desktop + mobile independent crop | PENDING |
+| HOME-02 | Hero campaign 2 | Desktop + mobile independent crop | PENDING |
+| HOME-03 | Category media | One per approved category | PENDING |
+| HOME-04 | Featured product stories | Approved product media | PENDING |
+| HOME-05 | Ecosystem banner | Feeder/fountain relationship | PENDING |
+| HOME-06 | UGC/social | Usage rights and real context | PENDING |
+| HOME-07 | Brand manifesto | Emotional lifestyle scene | PENDING |
 
 ## Quality rules
 
 - Natural light, warm neutral interiors, real shadows, believable pets.
-- Product geometry, buttons, bowls, camera, colors, and proportions remain exact.
+- Product geometry, buttons, bowl, lid, dispenser, colors, and proportions remain exact.
+- Do not depict or claim a camera for this feeder unless the selected SKU is independently verified; never add, remove, or alter the body, buttons, lid, dispenser, or bowl.
+- Do not use permanent external supplier URLs or assign media to Sky Blue/Dual Bowl before supplier and SKU approval.
 - Important headings stay as HTML rather than baked into media.
 - Every file records dimensions, format, usage rights, source, and mobile crop.
 - Shopify/CDN output uses responsive sizing; source masters remain separate from optimized exports.
-

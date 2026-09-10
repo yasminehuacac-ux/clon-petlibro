@@ -4,7 +4,7 @@
 |---|---|---|---|---|
 | TASK-001 | Baseline audit and reuse map | DONE | Project control pack | Work |
 | TASK-002 | RELIVANOW design system | DONE | TASK-001 approved + local toolchain verified | Work |
-| TASK-003 | Shopify data model | BLOCKED | TASK-001/002 + commercial data | Work |
+| TASK-003 | Shopify data model | DONE | TASK-001/002 + commercial data | Work |
 | TASK-004 | PDP purchase area | DRAFT | TASK-002/003 + product assets | Work |
 | TASK-005 | Cart drawer and AOV | DRAFT | TASK-004 + offer rules | Work |
 | TASK-006 | PDP storytelling | DRAFT | TASK-004 + approved content | Work |
@@ -26,4 +26,8 @@ Only one task may be `IN PROGRESS` at a time unless the user explicitly authoriz
 
 ## TASK-002 gate
 
-Work approved TASK-002 after desktop/mobile Home and PDP validation, commerce-flow checks, keyboard/focus checks, Theme Editor verification, and static validation. TASK-002 is `DONE`. TASK-003 is `BLOCKED` pending the commercial and content decisions listed in `tasks/TASK-003-DATA-MODEL.md`.
+Work approved TASK-002 after desktop/mobile Home and PDP validation, commerce-flow checks, keyboard/focus checks, Theme Editor verification, and static validation. TASK-002 is `DONE`. TASK-003 was subsequently unblocked by Work's commercial and content decisions.
+
+## TASK-003 gate
+
+Work approved the documentation-only Shopify data model. TASK-003 is `DONE`; no remote Shopify data or media was changed. TASK-004 remains `DRAFT` and unstarted pending final approved assets, the primary hero color, the default color/variant, and approved final native associations between `product.media` and variants.

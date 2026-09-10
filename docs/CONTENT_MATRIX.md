@@ -1,80 +1,204 @@
 # Content matrix
 
-**Status:** Draft. `TBD` values cannot be invented or copied from PETLIBRO.
+**Status:** TASK-003 model approved. Individual content and media may be published only when their source status and operational gate permit it.
 
-## Global
+## Global commercial decisions
 
-| Field | Approved value/status | Owner |
+| Field | Value | Status / owner |
 |---|---|---|
-| Brand | RELIVANOW | Work |
-| Descriptor | Smart Pet Care | Work |
-| Main tagline | Smart care for life together. | Work |
-| Primary language | TBD | Work |
-| Launch markets | TBD | Work |
-| Free-shipping threshold | TBD by market | Operations |
-| Return window | 30 days, operational confirmation required | Operations |
-| Warranty | TBD: 12 or 24 months | Operations |
-| Support route | TBD | Operations |
+| Brand | RELIVANOW | CONFIRMED / Work |
+| Descriptor | Smart Pet Care | CONFIRMED / Work |
+| Main tagline | Smart care for life together. | CONFIRMED / Work |
+| Initial primary language | English | CONFIRMED / Work |
+| Planned markets | United States, Canada, Australia, Germany, Spain, Belgium | CONFIRMED plan / Work |
+| Base currency | USD | CONFIRMED / Work |
+| Free shipping | USD 99 or more | PROVISIONAL / Operations |
+| Shipping below threshold | Calculated at checkout | PROVISIONAL / Operations |
+| Return window | 30 days | PROVISIONAL / Operations/legal |
+| Limited warranty | 24 months | PROVISIONAL / Operations/legal |
+| Reviews provider | Judge.me | CONFIRMED direction; installation not authorized |
+| Fixed bundles | Shopify Bundles | CONFIRMED direction; products not created |
 
-## Product purchase content
+## Product and variant matrix
 
-| Field | Working value/status |
-|---|---|
-| Product name | RELIVANOW Smart Automatic Pet Feeder |
-| Tagline | TBD final copy |
-| Single Bowl price | Working USD 129; confirm in Shopify |
-| Dual Bowl price | Working USD 159; confirm in Shopify |
-| Cloud White | Confirm physical availability and media |
-| Graphite | Confirm physical availability and media |
-| Sky Blue | Confirm physical availability and media |
-| Key benefits | Draft from verified product functions only |
-| Delivery estimate | TBD source and market logic |
-| Financing | TBD by market/provider |
+| Field | Value | Status |
+|---|---|---|
+| Product title | RELIVANOW Smart Automatic Pet Feeder | CONFIRMED |
+| Initial option | Color | CONFIRMED |
+| Cloud White | Supplier white; Single Bowl; USD 129 | CONFIRMED launch model |
+| Graphite | Supplier black; Single Bowl; USD 129 | CONFIRMED launch model |
+| Sky Blue | No supplier confirmation, price, SKU, inventory, or media | UNVERIFIED; do not create or publish |
+| Single Bowl | Initial commercial configuration | CONFIRMED |
+| Dual Bowl | USD 159 working price; physical SKU, cost, inventory, media, and availability absent | UNVERIFIED with PROVISIONAL price; do not create or publish |
 
-## Product facts requiring validation
+## Confirmed supplier facts
 
-- Capacity.
-- Camera resolution and angle.
-- Night vision.
-- Meal and portion limits.
-- Kibble size.
-- Power input and battery backup.
-- Wi-Fi bands.
-- App/platform compatibility.
-- Dimensions and net weight by bowl style.
-- Cleaning and material claims.
+| Fact | Value | Status |
+|---|---|---|
+| Capacity | 2 L | CONFIRMED |
+| Net product weight | 1,200 g | CONFIRMED supplier value; do not treat as packaged shipping weight without SKU-level evidence |
+| Connectivity | Wi-Fi enabled | CONFIRMED |
+| Supported band | 2.4 GHz | CONFIRMED |
+| Control | Generic mobile app connection/support | CONFIRMED; this does not independently confirm a specific remote feeding or scheduling workflow |
+| Suitable pets | Dogs and cats | CONFIRMED |
+| Construction | Detachable | CONFIRMED |
+| Feeding frequency | 1–10 meals per day | CONFIRMED |
+| Portion control | 1–12 portions per meal | CONFIRMED; grams per portion UNVERIFIED |
+| Primary power | Power adapter | CONFIRMED |
+| Backup power | Three batteries | CONFIRMED; battery duration UNVERIFIED |
+| Supplier colors | White and black | CONFIRMED |
+| Box contents | Pet feeder ×1; power adapter ×1; instruction manual ×1 | CONFIRMED |
+| Scheduled feeding | Shown in supplier asset | PROVISIONAL publication status; evidence qualifier CONFIRMED BY SUPPLIER ASSET; manual review required |
+| Remote feeding/scheduling workflow in the app | Shown in supplier asset | PROVISIONAL publication status; evidence qualifier CONFIRMED BY SUPPLIER ASSET; manual review required |
+| Anti-tamper/anti-drop lid lock | Shown in supplier asset | PROVISIONAL publication status; evidence qualifier CONFIRMED BY SUPPLIER ASSET; manual review required |
+| Anti-stuck grain mechanism | Shown in supplier asset | PROVISIONAL publication status; evidence qualifier CONFIRMED BY SUPPLIER ASSET; manual review required |
+| Voice/intercom-related marketing | Shown in supplier asset | PROVISIONAL publication status; evidence qualifier CONFIRMED BY SUPPLIER ASSET; exact capability/copy requires manual review |
 
-## Home campaigns
+## Unverified technical claims
 
-| Module | Content status |
-|---|---|
-| Hero campaign 1 | TBD |
-| Hero campaign 2 | TBD |
-| Hero campaign 3 | TBD |
-| Categories | Feeders, fountains, accessories; final catalog TBD |
-| New & Popular | TBD Shopify product list |
-| Promotion/bundle | TBD after margin validation |
-| Ecosystem | Draft required |
-| Social/UGC | Real approved assets required |
-| Press/testimonials | Evidence and usage rights required |
-| Manifesto | Draft required |
+These claims are not public copy and must not appear in media, alt text, PDP content, schema, filters, comparisons, or FAQs until verified:
+
+- Integrated camera, camera resolution, night vision, video recording, or cloud storage.
+- AI detection or individual pet recognition.
+- Permanent two-way microphone/intercom capability.
+- 5 GHz Wi-Fi compatibility.
+- Exact grams per portion.
+- Physical dimensions or exact material.
+- Electrical or food-contact certifications.
+- Official app name or exact iOS/Android compatibility.
+- Battery runtime.
+- Dual Bowl availability as a real SKU.
+
+The supplier PDF's generic reference to “video models” does not establish that this selected SKU includes a camera.
+
+## Initial English content
+
+All copy below is original RELIVANOW staging copy. It remains in documentation until the individual value is approved; PROVISIONAL text is not entered or published merely because the overall product is confirmed.
+
+### Product title
+
+RELIVANOW Smart Automatic Pet Feeder
+
+### Subtitle
+
+Smart feeding for a more predictable daily routine.
+
+**Status:** PROVISIONAL COPY based only on confirmed functions.
+
+### Short value proposition
+
+Set 1 to 10 meals a day, choose 1 to 12 portions per meal, and use supported mobile app controls.
+
+**Status:** PROVISIONAL COPY based only on the CONFIRMED meal/portion ranges and generic app support; it does not claim a specific remote scheduling workflow.
+
+### Key benefits
+
+1. Set from 1 to 10 meals each day.
+2. Choose from 1 to 12 portions per meal.
+3. Manage feeding with supported mobile app controls.
+4. Connect through a 2.4 GHz Wi-Fi network.
+5. Keep a backup power option ready with three batteries.
+6. Detachable construction supports easier routine care.
+
+**Status:** PROVISIONAL COPY based only on CONFIRMED meal, portion, app, Wi-Fi, power, and construction values. Do not infer a specific remote scheduling workflow, grams, battery duration, or app platform compatibility.
+
+### Technical summary
+
+A 2 L automatic feeder for cats and dogs with 2.4 GHz Wi-Fi connectivity, generic mobile app support, 1 to 10 meals per day, 1 to 12 portions per meal, detachable construction, adapter power, and a three-battery backup option.
+
+**Status:** PROVISIONAL COPY based only on CONFIRMED facts.
+
+### Box contents
+
+- Pet feeder ×1
+- Power adapter ×1
+- Instruction manual ×1
+
+**Status:** CONFIRMED.
+
+### Care note
+
+Disconnect the feeder from power and follow the supplied instruction manual before cleaning detachable parts. Do not immerse powered components.
+
+**Status:** PROVISIONAL; final wording requires manual and safety review.
+
+### Initial FAQs
+
+| Question | Answer | Status |
+|---|---|---|
+| How many meals can I set each day? | The feeder supports from 1 to 10 meals per day. | PROVISIONAL COPY / CONFIRMED range |
+| How many portions can I set for each meal? | You can select from 1 to 12 portions per meal. The exact weight of each portion has not yet been verified. | PROVISIONAL COPY / CONFIRMED range |
+| Which Wi-Fi band does the feeder support? | The confirmed supported band is 2.4 GHz. No 5 GHz support claim is currently approved. | PROVISIONAL COPY / CONFIRMED band |
+| Does the feeder support a mobile app? | Yes. Generic mobile app support is confirmed. The official app name, platform requirements, and exact remote feeding workflow will be added only after verification. | PROVISIONAL COPY / CONFIRMED generic app support |
+| Is it suitable for cats and dogs? | Yes. The supplier identifies the feeder as suitable for both cats and dogs. | PROVISIONAL COPY / CONFIRMED fact |
+| How is the feeder powered? | Primary power is supplied through the included adapter, with a backup option using three batteries. Battery runtime has not been verified. | PROVISIONAL COPY / CONFIRMED sources |
+| What is included in the box? | The box includes one pet feeder, one power adapter, and one instruction manual. | PROVISIONAL COPY / CONFIRMED contents |
+| How should I clean it? | Disconnect power and follow the instruction manual before cleaning detachable parts. Final care instructions will be confirmed against the approved manual. | PROVISIONAL |
+
+## Product media manifest
+
+### Gallery authority and production rules
+
+- Shopify `product.media` is the sole native source for PDP gallery files, ordering, alt text, and media types.
+- TASK-003 creates no images, edits no images, uploads no media, and changes no remote Shopify content.
+- Primary product images must not be stored in metafields. TASK-004 must consume `product.media` and native variant featured-media associations.
+- Do not retain permanent external supplier URLs. Final approved masters are uploaded to Shopify and served through the Shopify CDN.
+- Do not download or copy PETLIBRO media. PETLIBRO may inform layout rhythm only.
+- Product geometry must remain exact: do not alter the body shape, buttons, lid, dispenser, or bowl.
+- No media is assigned to Sky Blue or Dual Bowl until those physical variants and their assets are verified.
+- Final assets must be produced and approved before TASK-004.
+- Logical media IDs are planning/QA identifiers, not a parallel runtime taxonomy. TASK-004 reads native gallery order and media type; variant selection jumps to native featured media and does not filter the remaining gallery by color.
+- Before TASK-004, Work must choose the leading hero color and default available variant, approve one final ratio/crop per row, and map each color-specific approved file to the matching native variant featured media. Neutral/shared files remain unassigned gallery media.
+- Asset workflow status is separate from technical verification: `EXISTING` means a source asset is available for assessment, `NEEDS_REDESIGN` requires original RELIVANOW production/redesign, `PENDING` has no review-ready final, and `APPROVED` has passed rights, geometry, claims, alt, crop, and Shopify-upload review.
+
+| Logical media ID | Gallery position | Type | Related variant | Related color | Desktop/mobile requirement | Recommended aspect ratio | Provisional English alt text | Source | Status | Technical data allowed / gate | Claims prohibited while UNVERIFIED |
+|---|---:|---|---|---|---|---|---|---|---|---|---|
+| `FEEDER-MEDIA-01` | 1 | hero / product | Single Bowl only | Cloud White or Graphite; leading color selection PENDING | One high-resolution master with safe crop for desktop and 390px mobile; product fully visible | 4:5 | RELIVANOW automatic pet feeder with a single bowl | Planned original RELIVANOW production after physical-sample verification | PENDING | Physical product appearance; 2 L only if added as HTML, not baked-in text | Camera, dimensions, material, certifications, Dual Bowl, Sky Blue |
+| `FEEDER-MEDIA-02` | 2 | lifestyle | Single Bowl only | Use photographed confirmed color | Independent mobile-safe crop; cat and feeder unobstructed | 4:5 | Cat beside the RELIVANOW automatic pet feeder at home | Original licensed RELIVANOW lifestyle shoot | PENDING | Suitable for cats; physical use context | Health outcomes, pet recognition, camera/AI monitoring, exact portion grams |
+| `FEEDER-MEDIA-03` | 3 | lifestyle | Single Bowl only | Use photographed confirmed color | Independent mobile-safe crop; dog and feeder unobstructed | 4:5 | Dog beside the RELIVANOW automatic pet feeder at home | Original licensed RELIVANOW lifestyle shoot | PENDING | Suitable for dogs; physical use context | Health outcomes, pet recognition, camera/AI monitoring, exact portion grams |
+| `FEEDER-MEDIA-04` | 4 | feature | Single Bowl | Neutral or photographed confirmed color | Legible UI composition on desktop and mobile; keep explanatory text in HTML where possible | 4:5 | Mobile feeding schedule shown beside the RELIVANOW pet feeder | Supplier asset as factual reference; original RELIVANOW redesign required | NEEDS_REDESIGN | After manual approval only: exact app scheduling workflow. Confirmed supporting data: generic app support, 1–10 meals/day, 1–12 portions/meal, 2.4 GHz | Official app name, iOS/Android versions, 5 GHz, exact grams, camera/cloud/AI |
+| `FEEDER-MEDIA-05` | 5 | technical / feature | Single Bowl | Color-neutral detail or photographed confirmed color | Detail must remain understandable at mobile width; provide descriptive alt | 4:5 | Secure feeder lid and anti-stuck dispensing mechanism | Supplier asset as factual reference; original RELIVANOW redesign required | NEEDS_REDESIGN | After manual approval only: anti-drop lid lock and anti-stuck mechanism | Safety guarantees, jam-free absolute claims, material/certification claims, altered lid/dispenser geometry |
+| `FEEDER-MEDIA-06` | 6 | technical / feature | Single Bowl | Not color-dependent | Desktop/mobile readable power diagram; no battery-duration badge | 4:5 | Power adapter and three-battery backup options for the feeder | Supplier asset as factual reference; original RELIVANOW redesign required | NEEDS_REDESIGN | Power adapter; backup power using three batteries | Battery runtime, uninterrupted-service guarantees, battery type unless verified, certifications |
+| `FEEDER-MEDIA-07` | 7 | box contents | Single Bowl | Match photographed product color | All included items visible at mobile width; labels should remain HTML if possible | 4:5 | Pet feeder, power adapter, and instruction manual included in the box | Verified supplier contents plus original RELIVANOW product photography | NEEDS_REDESIGN | Feeder ×1; adapter ×1; manual ×1 | Extra accessories, batteries included, Dual Bowl parts, unverified materials |
+| `FEEDER-MEDIA-08` | 8 | product / technical comparison | Single Bowl | Cloud White and Graphite only | Side-by-side composition with mobile stack-safe crop; equal scale and lighting | 4:5 | Cloud White and Graphite RELIVANOW automatic pet feeders | Confirmed supplier colors; original RELIVANOW photography/redesign required | NEEDS_REDESIGN | Confirmed white/black finishes presented as Cloud White/Graphite | Sky Blue, Dual Bowl, color-dependent technical differences not verified |
+
+`APPROVED` is reserved for a final asset whose product geometry, rights, color accuracy, technical claims, alt text, responsive crop, and Shopify upload have all passed review. No row has that status during TASK-003.
+
+## Delivery by market
+
+| Market | Estimate | Status | Publication rule |
+|---|---|---|---|
+| United States | 7–15 days | CONFIRMED supplier estimate | Publish only after carrier/tracking/operations validation |
+| Canada | 8–15 days | CONFIRMED supplier estimate | Publish only after carrier/duties/operations validation |
+| Australia | 9–15 days | CONFIRMED supplier estimate | Publish only after carrier/tax/operations validation |
+| Spain | 6–10 days | CONFIRMED supplier estimate | Publish only after carrier/VAT/operations validation |
+| Germany | No estimate | UNVERIFIED | Keep the Market inactive and/or omit its shipping zone |
+| Belgium | No estimate | UNVERIFIED | Keep the Market inactive and/or omit its shipping zone |
 
 ## Reviews
 
-- Provider: TBD.
-- Rating/count source: TBD.
-- Verified-buyer policy: TBD.
-- Real reviews and media only.
-- Stars: `#FF6201`.
-- Verified Buyer: `#3897F0`.
+- Judge.me is the planned single future source for average rating, review count, verified reviews, customer photos/videos, and review structured data.
+- The future adapter must consume Judge.me's standard `reviews.rating` and `reviews.rating_count` inputs and ensure Horizon/Judge.me emit only one aggregate-rating schema source.
+- Do not create manual rating/count fields, invent reviews, import PETLIBRO reviews, or run two Product review schema sources.
+- Integration remains pending a separately authorized installation/configuration.
+- Stars use the approved RELIVANOW rating token; verified-buyer presentation uses the approved information token.
 
-## Content incidents
+## Bundle offers
+
+| Offer | Components | Discount | Status |
+|---|---|---:|---|
+| Daily Feeding | Feeder + mat | 10% | PROVISIONAL |
+| Complete Feeding | Feeder + bowl set + mat | 12–15% | PROVISIONAL |
+| Smart Care | Feeder + fountain | 15% | PROVISIONAL |
+| Multi-Pet | Dual feeder + fountain + accessories | 15–18% | UNVERIFIED because Dual Bowl is unverified |
+
+All component variant IDs/quantities, compatibility, inventory, margin, CPA, AOV, and profitability must be validated before creating or publishing a Shopify Bundle. The native bundle parent variant owns the final price and exact components; component variants own inventory. Discount ranges here are planning values only.
+
+## Content incident carried forward
 
 ### CONTENT-ALT-001 — Description image alternative text
 
-- **Status:** Open Shopify product-content issue; pending correction by the content owner. Confirmed by static theme tracing during TASK-002 closure on 2026-09-09; does not block TASK-002 and does not start TASK-003.
-- **Product:** Portable Pet Water Bottle with Bowl. Product URL/ID and affected image URLs were not supplied.
-- **Evidence:** User-supplied external review of development theme `#193260781938` at 1440×900 and 390×844 reports four description images with `alt="undefined"`. Codex did not run that browser review; screenshots and raw HTML were not supplied.
-- **Local diagnosis:** `templates/product.json:281` binds the description text block to `closest.product.description`; `snippets/text.liquid:97` outputs that Shopify-managed HTML directly. The formatter only wraps tables and neither constructs image tags nor assigns alt attributes. No theme path was found that manufactures the literal value `undefined` for description images.
-- **Pending action — Shopify content owner:** Correct the four affected alt attributes in the saved product description using approved, image-specific text; use an empty alt only for confirmed decorative images. Retest both viewports and preserve all valid existing alts.
-- **Changes made:** Tracking only. No remote content edited, no alternative text invented, and no global substitution added. This content correction is pending outside the theme implementation.
+- **Status:** Open Shopify product-content issue; pending correction by the content owner. It does not block TASK-002 or authorize TASK-004.
+- **Product:** Portable Pet Water Bottle with Bowl. Four description images were externally reported with `alt="undefined"`.
+- **Diagnosis:** The theme outputs Shopify-managed `product.description` HTML directly and does not manufacture image alt attributes.
+- **Action:** Correct only the four affected saved description alts with approved image-specific text; use an empty alt only for decorative images. No global theme substitution or invented alt text.

@@ -13,7 +13,7 @@ The PETLIBRO material in `docs/PETLIBRO_AUDIT.md` is a benchmark audit, not a so
 
 ## Current stage
 
-Project control pack installed. `TASK-001-BASELINE-AUDIT.md` is the only task ready for execution.
+TASK-002 and TASK-003 are approved and complete. TASK-004 remains `DRAFT` and has not begun; final assets, hero/default variant choices, and native media associations are still required.
 
 ## Theme directories
 
@@ -31,4 +31,3 @@ Project control pack installed. `TASK-001-BASELINE-AUDIT.md` is the only task re
 - `docs/`: approved product, design, architecture, and QA context.
 - `tasks/`: bounded execution prompts.
 - `reports/`: evidence and handoff from Codex to ChatGPT Work.
-
