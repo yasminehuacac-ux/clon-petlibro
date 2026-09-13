@@ -5,7 +5,7 @@
 | TASK-001 | Baseline audit and reuse map | DONE | Project control pack | Work |
 | TASK-002 | RELIVANOW design system | DONE | TASK-001 approved + local toolchain verified | Work |
 | TASK-003 | Shopify data model | DONE | TASK-001/002 + commercial data | Work |
-| TASK-004 | PDP purchase area | DRAFT | TASK-002/003 + product assets | Work |
+| TASK-004 | PDP purchase area | DONE | TASK-002/003 + product assets | Work |
 | TASK-005 | Cart drawer and AOV | DRAFT | TASK-004 + offer rules | Work |
 | TASK-006 | PDP storytelling | DRAFT | TASK-004 + approved content | Work |
 | TASK-007 | Reviews integration | DRAFT | Provider selected | Work |
@@ -30,4 +30,4 @@ Work approved TASK-002 after desktop/mobile Home and PDP validation, commerce-fl
 
 ## TASK-003 gate
 
-Work approved the documentation-only Shopify data model. TASK-003 is `DONE`; no remote Shopify data or media was changed. TASK-004 remains `DRAFT` and unstarted pending final approved assets, the primary hero color, the default color/variant, and approved final native associations between `product.media` and variants.
+Work approved the documentation-only Shopify data model and TASK-003 is `DONE`. Work then approved TASK-004 validation against the current Product through unpublished development theme `193260781938`. The complete purchase panel and 16 long-form modules passed static, Theme Editor, real-data, fail-closed, and exact-width development-preview validation. Five confirmed Product metafield definitions/values were added after preserving the prior state; no price, variant, inventory, handle, SEO, media, live-theme, or publication change occurred. TASK-004 is `DONE`; unavailable approved assets and third-party/merchandising data remain separate follow-up gates. TASK-005 remains `DRAFT` and unstarted.

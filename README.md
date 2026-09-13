@@ -13,7 +13,7 @@ The PETLIBRO material in `docs/PETLIBRO_AUDIT.md` is a benchmark audit, not a so
 
 ## Current stage
 
-TASK-002 and TASK-003 are approved and complete. TASK-004 remains `DRAFT` and has not begun; final assets, hero/default variant choices, and native media associations are still required.
+TASK-002, TASK-003, and TASK-004 are approved and complete. TASK-004 was validated against the current Shopify Product through unpublished development theme `193260781938`; the live theme was neither modified nor published. Unapproved media, legacy-variant reconciliation, Judge.me, comparisons, and other missing evidence remain fail-closed follow-up inputs rather than TASK-004 implementation defects. TASK-005 has not begun.
 
 ## Theme directories
 

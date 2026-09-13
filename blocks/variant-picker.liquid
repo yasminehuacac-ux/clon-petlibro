@@ -44,6 +44,187 @@
     },
     {
       "type": "header",
+      "content": "Visual purchase selectors"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_visual_color_swatches",
+      "label": "Enable visual color swatches",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_visual_style_cards",
+      "label": "Enable visual style cards",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "visual_style_option_names",
+      "label": "Style option names",
+      "default": "Style, Model, Configuration",
+      "visible_if": "{{ block.settings.enable_visual_style_cards }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_style_price",
+      "label": "Show style price",
+      "default": true,
+      "visible_if": "{{ block.settings.enable_visual_style_cards }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_style_compare_at",
+      "label": "Show style compare-at price",
+      "default": true,
+      "visible_if": "{{ block.settings.enable_visual_style_cards and block.settings.show_style_price }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_style_badges",
+      "label": "Show approved style badges",
+      "default": true,
+      "visible_if": "{{ block.settings.enable_visual_style_cards }}"
+    },
+    {
+      "type": "range",
+      "id": "style_card_image_size",
+      "label": "Style card image size",
+      "min": 64,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 96,
+      "visible_if": "{{ block.settings.enable_visual_style_cards }}"
+    },
+    {
+      "type": "header",
+      "content": "Color swatch mapping"
+    },
+    {
+      "type": "select",
+      "id": "default_color_display_mode",
+      "label": "Default color display mode",
+      "info": "Product metafield color_display_mode overrides this setting.",
+      "options": [
+        {
+          "value": "swatch_only",
+          "label": "Swatch only"
+        },
+        {
+          "value": "swatch_and_name",
+          "label": "Swatch and name"
+        }
+      ],
+      "default": "swatch_only",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "text",
+      "id": "color_swatch_name_1",
+      "label": "Mapping 1 — option value name",
+      "default": "White",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "color",
+      "id": "color_swatch_color_1",
+      "label": "Mapping 1 — swatch color",
+      "default": "#FFFFFF",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "text",
+      "id": "color_swatch_name_2",
+      "label": "Mapping 2 — option value name",
+      "default": "Black",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "color",
+      "id": "color_swatch_color_2",
+      "label": "Mapping 2 — swatch color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "text",
+      "id": "color_swatch_name_3",
+      "label": "Mapping 3 — option value name",
+      "default": "Cloud White",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "color",
+      "id": "color_swatch_color_3",
+      "label": "Mapping 3 — swatch color",
+      "default": "#FFFFFF",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "text",
+      "id": "color_swatch_name_4",
+      "label": "Mapping 4 — option value name",
+      "default": "Graphite",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "color",
+      "id": "color_swatch_color_4",
+      "label": "Mapping 4 — swatch color",
+      "default": "#323433",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "text",
+      "id": "color_swatch_name_5",
+      "label": "Mapping 5 — option value name",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "color",
+      "id": "color_swatch_color_5",
+      "label": "Mapping 5 — swatch color",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "text",
+      "id": "color_swatch_name_6",
+      "label": "Mapping 6 — option value name",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "color",
+      "id": "color_swatch_color_6",
+      "label": "Mapping 6 — swatch color",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "text",
+      "id": "color_swatch_name_7",
+      "label": "Mapping 7 — option value name",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "color",
+      "id": "color_swatch_color_7",
+      "label": "Mapping 7 — swatch color",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "text",
+      "id": "color_swatch_name_8",
+      "label": "Mapping 8 — option value name",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "color",
+      "id": "color_swatch_color_8",
+      "label": "Mapping 8 — swatch color",
+      "visible_if": "{{ block.settings.enable_visual_color_swatches }}"
+    },
+    {
+      "type": "header",
       "content": "t:content.appearance"
     },
     {

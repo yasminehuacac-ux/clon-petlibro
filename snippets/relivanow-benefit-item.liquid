@@ -1,0 +1,15 @@
+{% doc %}
+  Renders one already-validated RELIVANOW feature in the compact purchase summary.
+
+  @param {metaobject} benefit - Confirmed relivanow_feature record.
+  @param {boolean} show_body - Whether approved supporting text is visible.
+{% enddoc %}
+
+<li class="relivanow-key-benefits__item">
+  <strong class="relivanow-key-benefits__title">{{ benefit.title.value | escape }}</strong>
+  {% if show_body and benefit.body != blank %}
+    <div class="relivanow-key-benefits__body">
+      {{ benefit.body | metafield_tag }}
+    </div>
+  {% endif %}
+</li>

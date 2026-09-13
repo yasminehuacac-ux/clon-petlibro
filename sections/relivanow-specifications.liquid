@@ -1,0 +1,145 @@
+{% liquid
+  assign specification_groups = product.metafields.relivanow.specification_groups.value
+  assign renderable_group_count = 0
+%}
+
+{% capture rendered_groups %}
+  {% for group in specification_groups %}
+    {% liquid
+      assign group_status = group.verification_status.value | upcase
+      assign group_title = group.title.value
+      if group_status != 'CONFIRMED' or group_title == blank
+        continue
+      endif
+    %}
+    {% capture group_rows %}
+      {% for item in group.items.value %}
+        {% render 'relivanow-specification-row', item: item, product_resource: product, yes_label: section.settings.yes_label, no_label: section.settings.no_label %}
+      {% endfor %}
+    {% endcapture %}
+    {% assign group_rows = group_rows | strip %}
+    {% if group_rows != blank %}
+      {% assign renderable_group_count = renderable_group_count | plus: 1 %}
+      <article class="relivanow-specifications__group">
+        <h3>{{ group_title | escape }}</h3>
+        <dl>{{ group_rows }}</dl>
+        {% if group.note != blank %}<div class="relivanow-specifications__group-note rte">{{ group.note | metafield_tag }}</div>{% endif %}
+      </article>
+    {% endif %}
+  {% endfor %}
+{% endcapture %}
+
+{% assign rendered_groups = rendered_groups | strip %}
+{% if section.settings.enable_section and renderable_group_count > 0 and rendered_groups != blank %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section class="relivanow-specifications section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-section-header', eyebrow: section.settings.eyebrow, heading: section.settings.heading, text: section.settings.intro, alignment: section.settings.alignment %}
+    <div class="relivanow-specifications__groups{% if renderable_group_count > 1 %} relivanow-specifications__groups--columns{% endif %}">{{ rendered_groups }}</div>
+    {% if section.settings.net_weight_note != blank and product.metafields.relivanow.net_product_weight != blank %}
+      <p class="relivanow-specifications__weight-note">{{ section.settings.net_weight_note | escape }}</p>
+    {% endif %}
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Product Specifications — link confirmed specification groups and confirmed allowlisted items to typed Product metafields' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-specifications__groups {
+    display: grid;
+    gap: var(--gap-lg);
+  }
+
+  .relivanow-specifications__group {
+    min-width: 0;
+  }
+
+  .relivanow-specifications__group h3 {
+    margin-block: 0 var(--margin-sm);
+    font-size: var(--font-h4--size);
+  }
+
+  .relivanow-specifications__group dl {
+    margin: 0;
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .relivanow-specifications__row {
+    display: grid;
+    grid-template-columns: minmax(8rem, 40%) minmax(0, 1fr);
+    gap: var(--gap-sm);
+    padding-block: var(--padding-sm);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .relivanow-specifications__row :is(dt, dd) {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .relivanow-specifications__row dt {
+    color: var(--color-muted);
+  }
+
+  .relivanow-specifications__row dd {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .relivanow-specifications__note,
+  .relivanow-specifications__group-note,
+  .relivanow-specifications__weight-note {
+    color: var(--color-muted);
+    font-size: var(--font-paragraph-small--size);
+    font-weight: var(--font-weight-normal);
+  }
+
+  .relivanow-specifications__note .metafield-rich_text_field > :first-child,
+  .relivanow-specifications__note .metafield-rich_text_field > :last-child,
+  .relivanow-specifications__group-note .metafield-rich_text_field > :first-child,
+  .relivanow-specifications__group-note .metafield-rich_text_field > :last-child {
+    margin-block: 0;
+  }
+
+  .relivanow-specifications__weight-note {
+    margin-block: var(--margin-md) 0;
+  }
+
+  @media screen and (max-width: 479px) {
+    .relivanow-specifications__row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--gap-3xs);
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .relivanow-specifications__groups--columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW specs",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Product specifications" },
+    { "type": "richtext", "id": "intro", "label": "Introductory text" },
+    { "type": "text", "id": "yes_label", "label": "Boolean yes label", "default": "Yes" },
+    { "type": "text", "id": "no_label", "label": "Boolean no label", "default": "No" },
+    { "type": "text", "id": "net_weight_note", "label": "Net weight clarification", "default": "Product net weight; not packaged shipping weight." },
+    { "type": "select", "id": "alignment", "label": "Header alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "left" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#F7F7F4" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "presets": [{ "name": "RELIVANOW specs", "category": "Product" }]
+}
+{% endschema %}

@@ -1,0 +1,209 @@
+{% liquid
+  assign compared_product_count = 0
+  assign comparison_row_count = 0
+  assign seen_product_ids = '|'
+
+  for block in section.blocks
+    if block.type == 'product'
+      assign compared_product = block.settings.product
+      assign product_status = compared_product.metafields.relivanow.verification_status.value | upcase
+      assign block_status = block.settings.verification_status | upcase
+      assign product_token = '|' | append: compared_product.id | append: '|'
+      unless compared_product == blank or compared_product.title == blank or compared_product.url == blank or product_status != 'CONFIRMED' or block_status != 'CONFIRMED' or seen_product_ids contains product_token
+        assign seen_product_ids = seen_product_ids | append: compared_product.id | append: '|'
+        assign compared_product_count = compared_product_count | plus: 1
+      endunless
+    elsif block.type == 'row'
+      assign row_status = block.settings.verification_status | upcase
+      if row_status == 'CONFIRMED' and block.settings.label != blank
+        assign comparison_row_count = comparison_row_count | plus: 1
+      endif
+    endif
+  endfor
+%}
+
+{% if section.settings.enable_section and section.settings.heading != blank and compared_product_count >= 2 and compared_product_count <= 4 and comparison_row_count > 0 %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section class="relivanow-product-comparison section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style" style="{% render 'spacing-style', settings: section.settings %} --comparison-products: {{ compared_product_count }};">
+    {% render 'relivanow-section-header', eyebrow: section.settings.eyebrow, heading: section.settings.heading, text: section.settings.text, alignment: section.settings.alignment %}
+    <p class="relivanow-product-comparison__instruction" id="ComparisonInstruction-{{ section.id }}">{{ section.settings.scroll_instruction | escape }}</p>
+    <div class="relivanow-product-comparison__scroll" role="region" aria-labelledby="ComparisonHeading-{{ section.id }}" aria-describedby="ComparisonInstruction-{{ section.id }}" tabindex="0">
+      <span class="visually-hidden" id="ComparisonHeading-{{ section.id }}">{{ section.settings.heading | escape }}</span>
+      <table class="relivanow-product-comparison__table">
+        <thead>
+          <tr>
+            <th scope="col" class="relivanow-product-comparison__feature-heading">{{ section.settings.feature_column_label | escape }}</th>
+            {% liquid
+              assign header_seen_ids = '|'
+              assign badge_rendered = false
+            %}
+            {% for block in section.blocks %}
+              {% if block.type != 'product' %}{% continue %}{% endif %}
+              {% liquid
+                assign compared_product = block.settings.product
+                assign product_status = compared_product.metafields.relivanow.verification_status.value | upcase
+                assign block_status = block.settings.verification_status | upcase
+                assign product_token = '|' | append: compared_product.id | append: '|'
+                if compared_product == blank or compared_product.title == blank or compared_product.url == blank or product_status != 'CONFIRMED' or block_status != 'CONFIRMED' or header_seen_ids contains product_token
+                  continue
+                endif
+                assign header_seen_ids = header_seen_ids | append: compared_product.id | append: '|'
+                assign product_image = compared_product.featured_media.preview_image
+                assign product_image_alt = product_image.alt | default: compared_product.title
+                assign approved_badge = false
+                if badge_rendered == false and block.settings.badge != 'none'
+                  assign approved_badge = true
+                  assign badge_rendered = true
+                endif
+              %}
+              <th scope="col" class="relivanow-product-comparison__product" {{ block.shopify_attributes }}>
+                {% if approved_badge %}
+                  <span class="relivanow-product-comparison__badge">
+                    {% if block.settings.badge == 'recommended' %}{{ section.settings.recommended_label | escape }}{% else %}{{ section.settings.best_value_label | escape }}{% endif %}
+                  </span>
+                {% endif %}
+                <a href="{{ compared_product.url }}">
+                  <span class="relivanow-product-comparison__media">
+                    {% if product_image != blank %}
+                      {{ product_image | image_url: width: 480 | image_tag: widths: '160, 240, 360, 480', sizes: '180px', loading: 'lazy', alt: product_image_alt }}
+                    {% else %}
+                      {{ 'product-apparel-1' | placeholder_svg_tag: 'relivanow-product-comparison__placeholder' }}
+                    {% endif %}
+                  </span>
+                  <span class="relivanow-product-comparison__title">{{ compared_product.title | escape }}</span>
+                </a>
+                <span class="relivanow-product-comparison__price">{{ compared_product.price | money }}</span>
+                <span class="relivanow-product-comparison__availability">
+                  {% if compared_product.available %}{{ section.settings.available_label | escape }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}
+                </span>
+              </th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in section.blocks %}
+            {% if row.type != 'row' or row.settings.verification_status != 'CONFIRMED' or row.settings.label == blank %}{% continue %}{% endif %}
+            <tr {{ row.shopify_attributes }}>
+              <th scope="row">{{ row.settings.label | escape }}</th>
+              {% liquid
+                assign row_seen_ids = '|'
+                assign product_slot = 0
+              %}
+              {% for product_block in section.blocks %}
+                {% if product_block.type != 'product' %}{% continue %}{% endif %}
+                {% liquid
+                  assign compared_product = product_block.settings.product
+                  assign product_status = compared_product.metafields.relivanow.verification_status.value | upcase
+                  assign block_status = product_block.settings.verification_status | upcase
+                  assign product_token = '|' | append: compared_product.id | append: '|'
+                  if compared_product == blank or compared_product.title == blank or compared_product.url == blank or product_status != 'CONFIRMED' or block_status != 'CONFIRMED' or row_seen_ids contains product_token
+                    continue
+                  endif
+                  assign row_seen_ids = row_seen_ids | append: compared_product.id | append: '|'
+                  assign product_slot = product_slot | plus: 1
+                  assign type_key = 'value_' | append: product_slot | append: '_type'
+                  assign text_key = 'value_' | append: product_slot | append: '_text'
+                  assign value_type = row.settings[type_key]
+                  assign value_text = row.settings[text_key] | strip
+                %}
+                <td>
+                  {% case value_type %}
+                    {% when 'yes' %}<span class="relivanow-product-comparison__yes">{{ section.settings.yes_label | escape }}</span>
+                    {% when 'no' %}<span>{{ section.settings.no_label | escape }}</span>
+                    {% when 'text' %}{% if value_text != blank %}{{ value_text | escape }}{% else %}{{ section.settings.not_available_label | escape }}{% endif %}
+                    {% else %}{{ section.settings.not_available_label | escape }}
+                  {% endcase %}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Product Comparison — select at least two different confirmed Products and one confirmed comparison row' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-product-comparison__instruction { margin-block: 0 var(--margin-xs); color: var(--color-muted); font-size: var(--font-paragraph-small--size); }
+  .relivanow-product-comparison__scroll { max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; }
+  .relivanow-product-comparison__scroll:focus-visible { outline: var(--focus-outline-width) solid currentcolor; outline-offset: var(--focus-outline-offset); }
+  .relivanow-product-comparison__table { width: 100%; min-width: calc(11rem + (var(--comparison-products) * 12rem)); border-collapse: collapse; table-layout: fixed; }
+  .relivanow-product-comparison__table th,
+  .relivanow-product-comparison__table td { width: 12rem; min-width: 12rem; padding: var(--padding-sm); border: 1px solid var(--color-border); text-align: center; vertical-align: middle; overflow-wrap: anywhere; }
+  .relivanow-product-comparison__table :is(th:first-child, td:first-child) { position: sticky; inset-inline-start: 0; z-index: 1; width: 11rem; min-width: 11rem; background: var(--color-background); text-align: start; }
+  .relivanow-product-comparison__table thead th:first-child { z-index: 2; }
+  .relivanow-product-comparison__product { position: relative; background: var(--color-surface); }
+  .relivanow-product-comparison__product a { display: grid; gap: var(--gap-xs); color: currentcolor; text-decoration: none; }
+  .relivanow-product-comparison__product a:focus-visible { outline: var(--focus-outline-width) solid currentcolor; outline-offset: var(--focus-outline-offset); }
+  .relivanow-product-comparison__media { display: block; aspect-ratio: 1; border-radius: var(--style-border-radius-xs); background: var(--color-background); overflow: hidden; }
+  .relivanow-product-comparison__media :is(img, svg) { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .relivanow-product-comparison__title { font-weight: var(--font-weight-semibold); }
+  .relivanow-product-comparison__price,
+  .relivanow-product-comparison__availability { display: block; margin-block-start: var(--margin-3xs); }
+  .relivanow-product-comparison__availability { color: var(--color-muted); font-size: var(--font-paragraph-small--size); }
+  .relivanow-product-comparison__badge { display: inline-block; margin-block-end: var(--margin-xs); padding: 0.25em 0.65em; border-radius: 999px; color: var(--color-ink); background: var(--color-brand-soft); font-size: var(--font-paragraph-small--size); }
+  .relivanow-product-comparison__yes { color: var(--color-brand); font-weight: var(--font-weight-semibold); }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW comparison",
+  "max_blocks": 12,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Compare feeders" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "text", "id": "feature_column_label", "label": "Feature column label", "default": "Feature" },
+    { "type": "text", "id": "yes_label", "label": "Yes label", "default": "Yes" },
+    { "type": "text", "id": "no_label", "label": "No label", "default": "No" },
+    { "type": "text", "id": "not_available_label", "label": "Not available label", "default": "Not available" },
+    { "type": "text", "id": "available_label", "label": "Available label", "default": "Available" },
+    { "type": "text", "id": "recommended_label", "label": "Recommended badge label", "default": "Recommended" },
+    { "type": "text", "id": "best_value_label", "label": "Best value badge label", "default": "Best value" },
+    { "type": "text", "id": "scroll_instruction", "label": "Horizontal scroll instruction", "default": "Swipe or scroll horizontally to view all products." },
+    { "type": "select", "id": "alignment", "label": "Header alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "center" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFFFFF" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Compared Product",
+      "limit": 4,
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Relationship verification", "options": [{ "value": "UNVERIFIED", "label": "Unverified" }, { "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNVERIFIED" },
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "select", "id": "badge", "label": "Optional allowlisted badge", "options": [{ "value": "none", "label": "None" }, { "value": "recommended", "label": "Recommended" }, { "value": "best_value", "label": "Best value" }], "default": "none" }
+      ]
+    },
+    {
+      "type": "row",
+      "name": "Comparison row",
+      "limit": 8,
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Verification status", "options": [{ "value": "UNVERIFIED", "label": "Unverified" }, { "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNVERIFIED" },
+        { "type": "text", "id": "label", "label": "Feature" },
+        { "type": "select", "id": "value_1_type", "label": "Product 1 value type", "options": [{ "value": "not_available", "label": "Not available" }, { "value": "yes", "label": "Yes" }, { "value": "no", "label": "No" }, { "value": "text", "label": "Short text" }], "default": "not_available" },
+        { "type": "text", "id": "value_1_text", "label": "Product 1 short text", "visible_if": "{{ block.settings.value_1_type == 'text' }}" },
+        { "type": "select", "id": "value_2_type", "label": "Product 2 value type", "options": [{ "value": "not_available", "label": "Not available" }, { "value": "yes", "label": "Yes" }, { "value": "no", "label": "No" }, { "value": "text", "label": "Short text" }], "default": "not_available" },
+        { "type": "text", "id": "value_2_text", "label": "Product 2 short text", "visible_if": "{{ block.settings.value_2_type == 'text' }}" },
+        { "type": "select", "id": "value_3_type", "label": "Product 3 value type", "options": [{ "value": "not_available", "label": "Not available" }, { "value": "yes", "label": "Yes" }, { "value": "no", "label": "No" }, { "value": "text", "label": "Short text" }], "default": "not_available" },
+        { "type": "text", "id": "value_3_text", "label": "Product 3 short text", "visible_if": "{{ block.settings.value_3_type == 'text' }}" },
+        { "type": "select", "id": "value_4_type", "label": "Product 4 value type", "options": [{ "value": "not_available", "label": "Not available" }, { "value": "yes", "label": "Yes" }, { "value": "no", "label": "No" }, { "value": "text", "label": "Short text" }], "default": "not_available" },
+        { "type": "text", "id": "value_4_text", "label": "Product 4 short text", "visible_if": "{{ block.settings.value_4_type == 'text' }}" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW comparison", "category": "Product" }]
+}
+{% endschema %}

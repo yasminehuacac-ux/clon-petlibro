@@ -1,0 +1,67 @@
+{% doc %}
+  Renders one allowlisted confirmed specification row from typed Product metafields.
+
+  @param {metaobject} item - relivanow_specification presentation record.
+  @param {product} product_resource - Current Product.
+  @param {string} yes_label - Localizable true label.
+  @param {string} no_label - Localizable false label.
+{% enddoc %}
+
+{% liquid
+  assign item_status = item.verification_status.value | upcase
+  assign item_label = item.label.value
+  assign value_source = item.value_source.value | downcase | strip
+%}
+
+{% capture specification_value %}
+  {% if item_status == 'CONFIRMED' and item_label != blank %}
+    {% case value_source %}
+      {% when 'capacity' %}
+        {% if product_resource.metafields.relivanow.capacity != blank %}
+          {{ product_resource.metafields.relivanow.capacity | metafield_tag }}
+        {% endif %}
+      {% when 'net_product_weight' %}
+        {% if product_resource.metafields.relivanow.net_product_weight != blank %}
+          {{ product_resource.metafields.relivanow.net_product_weight | metafield_tag }}
+        {% endif %}
+      {% when 'wifi_band' %}
+        {% assign values = product_resource.metafields.relivanow.wifi_band.value %}
+        {% for value in values %}{% unless forloop.first %}, {% endunless %}{{ value | escape }}{% endfor %}
+      {% when 'app_control' %}
+        {% if product_resource.metafields.relivanow.app_control != blank %}
+          {% if product_resource.metafields.relivanow.app_control.value %}{{ yes_label | escape }}{% else %}{{ no_label | escape }}{% endif %}
+        {% endif %}
+      {% when 'suitable_pets' %}
+        {% assign values = product_resource.metafields.relivanow.suitable_pets.value %}
+        {% for value in values %}{% unless forloop.first %}, {% endunless %}{{ value | escape }}{% endfor %}
+      {% when 'meals_per_day_range' %}
+        {% assign minimum = product_resource.metafields.relivanow.meals_per_day_min.value %}
+        {% assign maximum = product_resource.metafields.relivanow.meals_per_day_max.value %}
+        {% if minimum != blank and maximum != blank and maximum >= minimum %}{{ minimum }}–{{ maximum }}{% endif %}
+      {% when 'portions_per_meal_range' %}
+        {% assign minimum = product_resource.metafields.relivanow.portions_per_meal_min.value %}
+        {% assign maximum = product_resource.metafields.relivanow.portions_per_meal_max.value %}
+        {% if minimum != blank and maximum != blank and maximum >= minimum %}{{ minimum }}–{{ maximum }}{% endif %}
+      {% when 'construction' %}
+        {{ product_resource.metafields.relivanow.construction.value | escape }}
+      {% when 'power_source' %}
+        {% assign values = product_resource.metafields.relivanow.power_source.value %}
+        {% for value in values %}{% unless forloop.first %}, {% endunless %}{{ value | escape }}{% endfor %}
+      {% when 'backup_power' %}
+        {{ product_resource.metafields.relivanow.backup_power.value | escape }}
+    {% endcase %}
+  {% endif %}
+{% endcapture %}
+
+{% assign specification_value = specification_value | strip %}
+{% if specification_value != blank %}
+  <div class="relivanow-specifications__row">
+    <dt>{{ item_label | escape }}</dt>
+    <dd>
+      {{ specification_value }}
+      {% if item.note != blank %}
+        <div class="relivanow-specifications__note">{{ item.note | metafield_tag }}</div>
+      {% endif %}
+    </dd>
+  </div>
+{% endif %}

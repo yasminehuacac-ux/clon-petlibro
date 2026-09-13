@@ -1,0 +1,100 @@
+{% liquid
+  assign verified_row_count = 0
+%}
+
+{% capture verified_rows %}
+  {% for block in section.blocks %}
+    {% liquid
+      assign row_status = block.settings.verification_status | upcase
+      if row_status != 'CONFIRMED' or block.settings.feature == blank or block.settings.traditional_value == blank or block.settings.relivanow_value == blank
+        continue
+      endif
+      assign verified_row_count = verified_row_count | plus: 1
+      if verified_row_count > 6
+        break
+      endif
+    %}
+    <li class="relivanow-smart-feeding__row" {{ block.shopify_attributes }}>
+      <strong class="relivanow-smart-feeding__feature">{{ block.settings.feature | escape }}</strong>
+      <span class="relivanow-smart-feeding__value relivanow-smart-feeding__value--traditional">{{ block.settings.traditional_value | escape }}</span>
+      <span class="relivanow-smart-feeding__value relivanow-smart-feeding__value--relivanow">
+        {% if block.settings.icon == 'check' %}<span aria-hidden="true">✓</span>{% endif %}
+        {{ block.settings.relivanow_value | escape }}
+      </span>
+    </li>
+  {% endfor %}
+{% endcapture %}
+
+{% assign verified_rows = verified_rows | strip %}
+{% if section.settings.enable_section and section.settings.heading != blank and verified_row_count >= 3 and verified_rows != blank %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section class="relivanow-smart-feeding section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-section-header', eyebrow: section.settings.eyebrow, heading: section.settings.heading, text: section.settings.text, alignment: section.settings.alignment %}
+    <div class="relivanow-smart-feeding__head" aria-hidden="true">
+      <span></span>
+      <strong>{{ section.settings.traditional_heading | escape }}</strong>
+      <strong>{{ section.settings.relivanow_heading | escape }}</strong>
+    </div>
+    <ul class="relivanow-smart-feeding__rows" role="list">{{ verified_rows }}</ul>
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Why Choose Smart Feeding — configure three to six complete, confirmed comparison rows' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-smart-feeding__head,
+  .relivanow-smart-feeding__row { display: grid; grid-template-columns: minmax(10rem, 1.2fr) repeat(2, minmax(0, 1fr)); gap: var(--gap-sm); align-items: center; }
+  .relivanow-smart-feeding__head { padding: var(--padding-sm); background: var(--color-surface); text-align: center; }
+  .relivanow-smart-feeding__rows { margin: 0; padding: 0; border-block-start: 1px solid var(--color-border); list-style: none; }
+  .relivanow-smart-feeding__row { padding: var(--padding-md) var(--padding-sm); border-block-end: 1px solid var(--color-border); }
+  .relivanow-smart-feeding__value { min-width: 0; text-align: center; overflow-wrap: anywhere; }
+  .relivanow-smart-feeding__value--traditional { color: var(--color-muted); }
+  .relivanow-smart-feeding__value--relivanow { color: var(--color-brand); font-weight: var(--font-weight-semibold); }
+  .relivanow-smart-feeding__value--relivanow span { display: inline-grid; place-items: center; width: 1.4em; height: 1.4em; margin-inline-end: 0.25em; border-radius: 50%; color: var(--color-background); background: var(--color-brand); }
+
+  @media screen and (max-width: 749px) {
+    .relivanow-smart-feeding__head { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .relivanow-smart-feeding__head span { display: none; }
+    .relivanow-smart-feeding__row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .relivanow-smart-feeding__feature { grid-column: 1 / -1; padding-block-end: var(--padding-xs); border-block-end: 1px solid var(--color-border); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW smart choice",
+  "max_blocks": 6,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Why choose smart feeding" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "text", "id": "traditional_heading", "label": "Traditional column heading", "default": "Traditional feeder" },
+    { "type": "text", "id": "relivanow_heading", "label": "RELIVANOW column heading", "default": "RELIVANOW Smart Feeder" },
+    { "type": "select", "id": "alignment", "label": "Header alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "center" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#F7F7F4" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Verified difference",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Verification status", "options": [{ "value": "UNVERIFIED", "label": "Unverified" }, { "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNVERIFIED" },
+        { "type": "text", "id": "feature", "label": "Feature" },
+        { "type": "text", "id": "traditional_value", "label": "Traditional feeder value" },
+        { "type": "text", "id": "relivanow_value", "label": "RELIVANOW value" },
+        { "type": "select", "id": "icon", "label": "RELIVANOW icon", "options": [{ "value": "none", "label": "None" }, { "value": "check", "label": "Check" }], "default": "check" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW smart choice", "category": "Product" }]
+}
+{% endschema %}

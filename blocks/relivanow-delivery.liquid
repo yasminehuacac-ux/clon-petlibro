@@ -1,0 +1,100 @@
+<script src="{{ 'relivanow-delivery.js' | asset_url }}" type="module"></script>
+
+{% liquid
+  assign product_resource = closest.product
+  assign current_variant = product_resource.selected_or_first_available_variant
+  assign variant_status = current_variant.metafields.relivanow.verification_status.value | upcase
+  assign variant_delivery = current_variant.metafields.relivanow.delivery_note_override
+
+  assign country_handle = localization.country.iso_code | downcase
+  assign market_delivery = metaobjects['relivanow_market_delivery'][country_handle]
+  assign market_status = market_delivery.verification_status.value | upcase
+  assign shipping_eligible = market_delivery.shipping_eligible.value
+  assign min_days = market_delivery.min_days.value
+  assign max_days = market_delivery.max_days.value
+  assign market_delivery_note = market_delivery.delivery_note.value
+
+  assign has_variant_delivery = false
+  if variant_status == 'CONFIRMED' and variant_delivery != blank
+    assign has_variant_delivery = true
+  endif
+
+  assign has_market_delivery = false
+  if market_delivery != blank and market_status == 'CONFIRMED' and shipping_eligible == true and min_days != blank and max_days != blank and max_days >= min_days and market_delivery_note != blank
+    assign has_market_delivery = true
+  endif
+%}
+
+<relivanow-delivery
+  class="relivanow-delivery spacing-style"
+  data-product-id="{{ product_resource.id }}"
+  style="{% render 'spacing-style', settings: block.settings %}"
+  {% unless has_variant_delivery or has_market_delivery %}hidden{% endunless %}
+  {{ block.shopify_attributes }}
+>
+  {% if has_variant_delivery %}
+    <div class="relivanow-delivery__message" role="status" aria-live="polite">
+      {{ variant_delivery | metafield_tag }}
+    </div>
+  {% elsif has_market_delivery %}
+    <p class="relivanow-delivery__message" role="status" aria-live="polite">
+      {{ market_delivery_note | escape | newline_to_br }}
+    </p>
+  {% endif %}
+</relivanow-delivery>
+
+{% stylesheet %}
+  .relivanow-delivery {
+    display: block;
+    padding-inline-start: var(--padding-sm);
+    border-inline-start: 2px solid var(--color-info);
+  }
+
+  .relivanow-delivery[hidden] {
+    display: none;
+  }
+
+  .relivanow-delivery__message,
+  .relivanow-delivery__message :first-child,
+  .relivanow-delivery__message :last-child {
+    margin-block: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW delivery",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "RELIVANOW delivery"
+    }
+  ]
+}
+{% endschema %}

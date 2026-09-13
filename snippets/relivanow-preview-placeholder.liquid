@@ -1,0 +1,29 @@
+{% doc %}
+  Renders a Theme Editor-only placeholder for a block whose Product data is absent.
+
+  @param {string} label - Short description of the block being previewed.
+{% enddoc %}
+
+<div class="relivanow-preview-placeholder" role="status">
+  <strong>Preview only — configure product data</strong>
+  {% if label != blank %}
+    <span>{{ label | escape }}</span>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .relivanow-preview-placeholder {
+    display: grid;
+    gap: var(--gap-3xs);
+    padding: var(--padding-sm);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--style-border-radius-sm);
+    color: var(--color-muted);
+    background: var(--color-surface);
+    font-size: var(--font-paragraph-small--size);
+  }
+
+  .relivanow-preview-placeholder strong {
+    color: var(--color-foreground);
+  }
+{% endstylesheet %}

@@ -1,0 +1,223 @@
+{% liquid
+  assign product_resource = product
+  assign benefit_count = 0
+
+  capture benefit_items
+    for block in section.blocks
+      assign source = block.settings.source
+      assign item_status = block.settings.verification_status | upcase
+      assign item_title = block.settings.title
+      assign item_text = block.settings.text
+      assign item_link = block.settings.link
+      assign item_icon = block.settings.icon
+      assign policy = blank
+      assign expected_kind = blank
+
+      if source != 'manual'
+        case source
+          when 'shipping'
+            assign policy = product_resource.metafields.relivanow.shipping_policy.value
+            assign expected_kind = 'shipping'
+            if shop.shipping_policy.body != blank
+              assign item_link = shop.shipping_policy.url
+            endif
+          when 'return'
+            assign policy = product_resource.metafields.relivanow.return_policy.value
+            assign expected_kind = 'return'
+            if shop.refund_policy.body != blank
+              assign item_link = shop.refund_policy.url
+            endif
+          when 'warranty'
+            assign policy = product_resource.metafields.relivanow.warranty_policy.value
+            assign expected_kind = 'warranty'
+        endcase
+
+        assign policy_kind = policy.policy_kind.value | downcase
+        assign item_status = policy.verification_status.value | upcase
+        assign item_title = policy.title.value
+        assign item_text = policy.summary.value
+        if policy == blank or policy_kind != expected_kind
+          assign item_status = ''
+        endif
+      endif
+
+      if item_status != 'CONFIRMED' or item_title == blank
+        continue
+      endif
+
+      assign benefit_count = benefit_count | plus: 1
+      if benefit_count > 4
+        break
+      endif
+
+      assign safe_item_title = item_title | escape
+      assign safe_item_text = item_text | escape
+      assign safe_item_link = item_link | escape
+      echo '<li class="relivanow-benefits-bar__item" '
+      echo block.shopify_attributes
+      echo '>'
+      if item_link != blank
+        echo '<a class="relivanow-benefits-bar__inner" href="'
+        echo safe_item_link
+        echo '">'
+      else
+        echo '<div class="relivanow-benefits-bar__inner">'
+      endif
+
+      if item_icon != 'none'
+        echo '<svg class="relivanow-benefits-bar__icon" viewBox="0 0 20 20" aria-hidden="true">'
+        render 'icon', icon: item_icon
+        echo '</svg>'
+      endif
+      echo '<span class="relivanow-benefits-bar__content"><strong>'
+      echo safe_item_title
+      echo '</strong>'
+      if item_text != blank
+        echo '<span>'
+        echo safe_item_text
+        echo '</span>'
+      endif
+      echo '</span>'
+
+      if item_link != blank
+        echo '</a>'
+      else
+        echo '</div>'
+      endif
+      echo '</li>'
+    endfor
+  endcapture
+
+  assign benefit_items = benefit_items | strip
+%}
+
+{% if section.settings.enable_section and benefit_count > 0 and benefit_items != blank %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section
+    class="relivanow-long-form relivanow-benefits-bar section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %}"
+    aria-label="{{ section.settings.accessibility_label | default: 'Product benefits' | escape }}"
+  >
+    <ul class="relivanow-benefits-bar__list" role="list">{{ benefit_items }}</ul>
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Trust / Benefits Bar — add confirmed manual benefits or confirmed Product policy references' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-benefits-bar__list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+    padding: 0;
+    border-block: 1px solid var(--color-border);
+    list-style: none;
+  }
+
+  .relivanow-benefits-bar__item {
+    min-width: 0;
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .relivanow-benefits-bar__item:last-child {
+    border-block-end: 0;
+  }
+
+  .relivanow-benefits-bar__inner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--gap-xs);
+    align-items: center;
+    min-height: 88px;
+    padding: var(--padding-sm);
+    color: currentcolor;
+    text-decoration: none;
+  }
+
+  .relivanow-benefits-bar__inner:focus-visible {
+    outline: var(--focus-outline-width) solid currentcolor;
+    outline-offset: calc(-1 * var(--focus-outline-offset));
+  }
+
+  .relivanow-benefits-bar__icon {
+    width: 28px;
+    height: 28px;
+    color: var(--color-brand);
+  }
+
+  .relivanow-benefits-bar__content {
+    display: grid;
+    gap: var(--gap-3xs);
+    min-width: 0;
+  }
+
+  .relivanow-benefits-bar__content span {
+    color: var(--color-muted);
+    font-size: var(--font-paragraph-small--size);
+  }
+
+  @media screen and (min-width: 560px) {
+    .relivanow-benefits-bar__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .relivanow-benefits-bar__item:nth-child(odd) {
+      border-inline-end: 1px solid var(--color-border);
+    }
+
+    .relivanow-benefits-bar__item:nth-last-child(-n + 2) {
+      border-block-end: 0;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .relivanow-benefits-bar__list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .relivanow-benefits-bar__item,
+    .relivanow-benefits-bar__item:nth-child(odd) {
+      border-inline-end: 1px solid var(--color-border);
+      border-block-end: 0;
+    }
+
+    .relivanow-benefits-bar__item:last-child {
+      border-inline-end: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW benefits bar",
+  "max_blocks": 4,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "accessibility_label", "label": "Accessibility label", "default": "Product benefits" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#F7F7F4" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 32 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 32 }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        { "type": "select", "id": "source", "label": "Source", "options": [{ "value": "manual", "label": "Manual" }, { "value": "shipping", "label": "Product shipping policy" }, { "value": "return", "label": "Product return policy" }, { "value": "warranty", "label": "Product warranty policy" }], "default": "manual" },
+        { "type": "select", "id": "verification_status", "label": "Manual verification status", "options": [{ "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }, { "value": "UNVERIFIED", "label": "Unverified" }], "default": "PROVISIONAL", "visible_if": "{{ block.settings.source == 'manual' }}" },
+        { "type": "select", "id": "icon", "label": "Icon", "options": [{ "value": "none", "label": "None" }, { "value": "check_box", "label": "Check" }, { "value": "lock", "label": "Lock" }, { "value": "return", "label": "Return" }, { "value": "truck", "label": "Truck" }, { "value": "star", "label": "Star" }, { "value": "paw_print", "label": "Paw" }], "default": "check_box" },
+        { "type": "text", "id": "title", "label": "Manual title", "visible_if": "{{ block.settings.source == 'manual' }}" },
+        { "type": "textarea", "id": "text", "label": "Manual supporting text", "visible_if": "{{ block.settings.source == 'manual' }}" },
+        { "type": "url", "id": "link", "label": "Optional link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW benefits bar", "category": "Product" }]
+}
+{% endschema %}

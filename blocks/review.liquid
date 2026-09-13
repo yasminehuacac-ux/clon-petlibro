@@ -5,14 +5,7 @@
   assign product = closest.product
   assign rating = product.metafields.reviews.rating.value.rating
   assign scale_max = product.metafields.reviews.rating.value.scale_max
-  assign rating_count = product.metafields.reviews.rating_count
-
-  if request.visual_preview_mode and product == blank
-    assign product = collections.all.products.first
-    assign rating = product.metafields.reviews.rating.value | default: 4
-    assign scale_max = product.metafields.reviews.rating.value.scale_max | default: 5
-    assign rating_count = product.metafields.reviews.rating_count | default: 3
-  endif
+  assign rating_count = product.metafields.reviews.rating_count.value
 -%}
 
 {% if block_settings.text_color != blank %}
@@ -26,7 +19,7 @@
   {% endstyle %}
 {% endif %}
 
-{%- if rating != blank -%}
+{%- if rating != blank and rating_count != blank -%}
   {% liquid
     assign star_count_rating = scale_max
     assign decimal_rating = 0
@@ -112,6 +105,10 @@
         {%- endif -%}
       </p>
     {%- endif -%}
+  </div>
+{%- elsif request.design_mode -%}
+  <div {{ block.shopify_attributes }}>
+    {% render 'relivanow-preview-placeholder', label: 'Judge.me review block preview' %}
   </div>
 {%- endif -%}
 

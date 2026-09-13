@@ -4,7 +4,7 @@
 **Depends on:** TASK-001 and TASK-002 approved; commercial data decisions available  
 **Gate owner:** ChatGPT Work
 
-**Outcome:** Work approved the documented Shopify data model. No remote Shopify mutation was performed or authorized; TASK-004 remains `DRAFT` and unstarted pending its documented media/variant gates.
+**Outcome:** Work approved the documented Shopify data model. No remote Shopify mutation was performed or authorized. At TASK-003 close, TASK-004 remained `DRAFT`; later Work approval of the Cloud White visual/default direction authorized TASK-004 to move to `IN PROGRESS`.
 
 ## Objective
 

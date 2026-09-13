@@ -1,0 +1,325 @@
+{% liquid
+  assign product_resource = closest.product
+  assign add_on_products = product_resource.metafields.relivanow.add_on_products.value
+  assign renderable_add_on_count = 0
+
+  for add_on_product in add_on_products
+    assign add_on_status = add_on_product.metafields.relivanow.verification_status.value | upcase
+    assign add_on_variant = add_on_product.selected_or_first_available_variant
+    if add_on_product != blank and add_on_product.id != product_resource.id and add_on_product.has_only_default_variant and add_on_variant != blank and add_on_product.title != blank and add_on_status == 'CONFIRMED'
+      assign renderable_add_on_count = renderable_add_on_count | plus: 1
+    endif
+  endfor
+%}
+
+{% if renderable_add_on_count > 0 %}
+  <fieldset
+    class="relivanow-add-ons spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    <legend class="relivanow-add-ons__heading">{{ block.settings.heading | escape }}</legend>
+    <div class="relivanow-add-ons__list">
+      {% for add_on_product in add_on_products %}
+        {% liquid
+          assign add_on_status = add_on_product.metafields.relivanow.verification_status.value | upcase
+          assign add_on_variant = add_on_product.selected_or_first_available_variant
+          if add_on_product == blank or add_on_product.id == product_resource.id or add_on_product.has_only_default_variant == false or add_on_variant == blank or add_on_product.title == blank or add_on_status != 'CONFIRMED'
+            continue
+          endif
+
+          assign add_on_available = false
+          if add_on_product.available and add_on_variant.available
+            assign add_on_available = true
+          endif
+
+          assign add_on_image = add_on_product.featured_media.preview_image
+          assign add_on_image_alt = add_on_image.alt | default: add_on_product.title
+          assign add_on_badge = add_on_product.metafields.relivanow.purchase_badge.value | strip
+          assign add_on_badge_normalized = add_on_badge | downcase
+          assign add_on_badge_approved = false
+          case add_on_badge_normalized
+            when 'recommended', 'best value'
+              assign add_on_badge_approved = true
+          endcase
+
+          assign add_on_variant_status = add_on_variant.metafields.relivanow.verification_status.value | upcase
+          assign add_on_delivery_note = add_on_variant.metafields.relivanow.delivery_note_override
+        %}
+
+        <label
+          class="relivanow-add-on-card{% unless add_on_available %} relivanow-add-on-card--unavailable{% endunless %}"
+          data-relivanow-add-on
+        >
+          <input
+            class="relivanow-add-on-card__checkbox"
+            type="checkbox"
+            value="{{ add_on_variant.id }}"
+            data-addon-variant-id="{{ add_on_variant.id }}"
+            data-addon-available="{{ add_on_available }}"
+            aria-label="Add {{ add_on_product.title | escape }}"
+            {% unless add_on_available %}
+              disabled
+              aria-disabled="true"
+            {% endunless %}
+          >
+
+          <span class="relivanow-add-on-card__media" aria-hidden="true">
+            {% if add_on_image != blank %}
+              {{
+                add_on_image
+                | image_url: width: 192
+                | image_tag:
+                  widths: '96, 144, 192',
+                  sizes: '64px',
+                  loading: 'lazy',
+                  alt: add_on_image_alt,
+                  class: 'relivanow-add-on-card__image'
+              }}
+            {% else %}
+              {{ 'product-apparel-1' | placeholder_svg_tag: 'relivanow-add-on-card__placeholder' }}
+            {% endif %}
+          </span>
+
+          <span class="relivanow-add-on-card__content">
+            <strong class="relivanow-add-on-card__title">{{ add_on_product.title | escape }}</strong>
+            {% if block.settings.show_delivery_note and add_on_variant_status == 'CONFIRMED' and add_on_delivery_note != blank %}
+              <span class="relivanow-add-on-card__delivery">{{ add_on_delivery_note | metafield_tag }}</span>
+            {% endif %}
+            {% unless add_on_available %}
+              <span class="relivanow-add-on-card__availability">{{ 'products.product.sold_out' | t }}</span>
+            {% endunless %}
+          </span>
+
+          <span class="relivanow-add-on-card__meta">
+            {% if block.settings.show_badges and add_on_badge_approved %}
+              <span class="relivanow-add-on-card__badge">{{ add_on_badge | escape }}</span>
+            {% endif %}
+            {% if block.settings.show_price %}
+              <span class="relivanow-add-on-card__price">{{ add_on_variant.price | money }}</span>
+              {% if block.settings.show_compare_at and add_on_variant.compare_at_price > add_on_variant.price %}
+                <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
+                <s class="relivanow-add-on-card__compare">{{ add_on_variant.compare_at_price | money }}</s>
+              {% endif %}
+            {% endif %}
+          </span>
+        </label>
+      {% endfor %}
+    </div>
+  </fieldset>
+{% elsif request.design_mode %}
+  <div
+    class="relivanow-add-ons spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    {% render 'relivanow-preview-placeholder', label: 'Choose Add-ons preview' %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-add-ons {
+    min-width: 0;
+    margin: 0;
+    padding-inline: 0;
+    border: 0;
+  }
+
+  .relivanow-add-ons__heading {
+    margin-block-end: var(--margin-xs);
+    padding: 0;
+    font-weight: 600;
+  }
+
+  .relivanow-add-ons__list {
+    display: grid;
+    gap: var(--gap-xs);
+  }
+
+  .relivanow-add-on-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 24px 64px minmax(0, 1fr) max-content;
+    gap: var(--gap-xs);
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 88px;
+    padding: var(--padding-xs);
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-border-radius-sm);
+    background: var(--color-background);
+    cursor: pointer;
+  }
+
+  .relivanow-add-on-card:hover {
+    border-color: var(--color-brand);
+    background: var(--color-brand-soft);
+  }
+
+  .relivanow-add-on-card:has(:focus-visible) {
+    outline: var(--focus-outline-width) solid currentcolor;
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .relivanow-add-on-card:has(:checked) {
+    border-color: var(--color-brand);
+    background: var(--color-brand-soft);
+  }
+
+  .relivanow-add-on-card--unavailable {
+    cursor: not-allowed;
+    opacity: var(--opacity-60);
+  }
+
+  .relivanow-add-on-card__checkbox {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    accent-color: var(--color-brand);
+  }
+
+  .relivanow-add-on-card__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--style-border-radius-xs);
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+
+  .relivanow-add-on-card__image,
+  .relivanow-add-on-card__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    object-fit: contain;
+  }
+
+  .relivanow-add-on-card__content {
+    display: grid;
+    gap: var(--gap-3xs);
+    min-width: 0;
+  }
+
+  .relivanow-add-on-card__title {
+    overflow-wrap: anywhere;
+  }
+
+  .relivanow-add-on-card__delivery,
+  .relivanow-add-on-card__availability,
+  .relivanow-add-on-card__compare {
+    color: var(--color-muted);
+    font-size: var(--font-paragraph-small--size);
+  }
+
+  .relivanow-add-on-card__delivery .metafield-rich_text_field :first-child,
+  .relivanow-add-on-card__delivery .metafield-rich_text_field :last-child {
+    margin-block: 0;
+  }
+
+  .relivanow-add-on-card__meta {
+    display: grid;
+    justify-items: end;
+    min-width: max-content;
+    text-align: right;
+  }
+
+  .relivanow-add-on-card__badge {
+    padding: 0.2em 0.55em;
+    border-radius: 999px;
+    color: var(--color-ink);
+    background: var(--color-brand-soft);
+    font-size: var(--font-paragraph-small--size);
+  }
+
+  @media screen and (max-width: 479px) {
+    .relivanow-add-on-card {
+      grid-template-columns: 24px 56px minmax(0, 1fr);
+    }
+
+    .relivanow-add-on-card__media {
+      width: 56px;
+      height: 56px;
+    }
+
+    .relivanow-add-on-card__meta {
+      grid-column: 3;
+      justify-items: start;
+      text-align: left;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW add-ons",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Choose Add-ons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show price",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare_at",
+      "label": "Show compare-at price",
+      "default": true,
+      "visible_if": "{{ block.settings.show_price }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show approved badges",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_delivery_note",
+      "label": "Show verified delivery note",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "RELIVANOW add-ons"
+    }
+  ]
+}
+{% endschema %}

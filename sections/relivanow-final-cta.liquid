@@ -1,0 +1,88 @@
+{% liquid
+  assign image_status = section.settings.image_verification_status | upcase
+  assign cta_image = blank
+  if section.settings.image_source == 'custom'
+    assign cta_image = section.settings.image
+  else
+    assign cta_image = product.featured_media.preview_image
+  endif
+%}
+
+{% if section.settings.enable_section and image_status == 'CONFIRMED' and cta_image != blank and section.settings.heading != blank and section.settings.benefit != blank and section.settings.cta_label != blank %}
+  <script src="{{ 'relivanow-final-cta.js' | asset_url }}" type="module"></script>
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <relivanow-final-cta
+    class="relivanow-final-cta relivanow-final-cta--image-{{ section.settings.image_position }} section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %}"
+  >
+    <div class="relivanow-final-cta__layout">
+      <div class="relivanow-final-cta__media">
+        {% assign image_alt = section.settings.image_alt | default: cta_image.alt | default: product.title %}
+        {{ cta_image | image_url: width: 1400 | image_tag: widths: '480, 750, 1000, 1400', sizes: '(min-width: 750px) 50vw, 100vw', loading: 'lazy', alt: image_alt }}
+      </div>
+      <div class="relivanow-final-cta__content relivanow-final-cta__content--{{ section.settings.alignment }}">
+        {% if section.settings.eyebrow != blank %}<p class="relivanow-final-cta__eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+        <h2>{{ section.settings.heading | escape }}</h2>
+        <div class="relivanow-final-cta__benefit rte">{{ section.settings.benefit }}</div>
+        {% if section.settings.show_price %}
+          <div class="relivanow-final-cta__price">{% render 'price', product_resource: product, show_sale_price_first: true %}</div>
+        {% endif %}
+        <a class="button" href="#MainContent" data-relivanow-purchase-link>{{ section.settings.cta_label | escape }}</a>
+      </div>
+    </div>
+  </relivanow-final-cta>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Final CTA — approve an image and configure heading, benefit, and purchase-panel CTA label' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-final-cta__layout { display: grid; min-width: 0; gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .relivanow-final-cta__media { min-width: 0; aspect-ratio: 1; border-radius: var(--style-border-radius-sm); background: var(--color-surface); overflow: hidden; }
+  .relivanow-final-cta__media img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .relivanow-final-cta__content { display: grid; gap: var(--gap-sm); min-width: 0; }
+  .relivanow-final-cta__content--center { justify-items: center; text-align: center; }
+  .relivanow-final-cta__eyebrow,
+  .relivanow-final-cta__content h2,
+  .relivanow-final-cta__benefit > :first-child,
+  .relivanow-final-cta__benefit > :last-child { margin-block: 0; }
+  .relivanow-final-cta__eyebrow { color: var(--color-brand); font-size: var(--font-paragraph-small--size); font-weight: var(--font-weight-semibold); letter-spacing: 0.08em; text-transform: uppercase; }
+  .relivanow-final-cta__content h2 { font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.05; text-wrap: balance; }
+  .relivanow-final-cta__benefit { color: var(--color-muted); font-size: clamp(1rem, 1.5vw, 1.125rem); }
+  .relivanow-final-cta__price { font-size: 1.25rem; font-weight: var(--font-weight-semibold); }
+  .relivanow-final-cta__content .button { width: fit-content; min-height: 44px; }
+
+  @media screen and (min-width: 750px) {
+    .relivanow-final-cta__layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .relivanow-final-cta--image-right .relivanow-final-cta__media { order: 2; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW final CTA",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "select", "id": "image_source", "label": "Image source", "options": [{ "value": "product", "label": "Native Product featured image" }, { "value": "custom", "label": "Approved editorial image" }], "default": "product" },
+    { "type": "image_picker", "id": "image", "label": "Editorial image", "visible_if": "{{ section.settings.image_source == 'custom' }}" },
+    { "type": "select", "id": "image_verification_status", "label": "Image verification status", "options": [{ "value": "UNVERIFIED", "label": "Unverified" }, { "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNVERIFIED" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "select", "id": "image_position", "label": "Image position", "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }], "default": "left" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Bring more consistency to every mealtime" },
+    { "type": "richtext", "id": "benefit", "label": "Brief benefit" },
+    { "type": "checkbox", "id": "show_price", "label": "Show native Product price", "default": false },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Choose your feeder", "info": "This link returns to the main purchase panel; it does not add an item directly." },
+    { "type": "select", "id": "alignment", "label": "Content alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "left" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#DDE7D3" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "presets": [{ "name": "RELIVANOW final CTA", "category": "Product" }]
+}
+{% endschema %}

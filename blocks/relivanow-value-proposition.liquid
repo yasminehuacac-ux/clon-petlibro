@@ -1,0 +1,72 @@
+{% liquid
+  assign product_resource = closest.product
+  assign subtitle = product_resource.metafields.relivanow.product_subtitle.value
+%}
+
+{% if subtitle != blank %}
+  <div
+    class="relivanow-value-proposition spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    <p class="relivanow-value-proposition__subtitle">{{ subtitle | escape }}</p>
+  </div>
+{% elsif request.design_mode %}
+  <div
+    class="relivanow-value-proposition spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    {% render 'relivanow-preview-placeholder', label: 'Product subtitle preview' %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-value-proposition,
+  .relivanow-value-proposition__subtitle {
+    margin-block: 0;
+  }
+
+  .relivanow-value-proposition {
+    display: grid;
+    gap: var(--gap-xs);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product subtitle",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product subtitle"
+    }
+  ]
+}
+{% endschema %}

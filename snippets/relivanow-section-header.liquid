@@ -1,0 +1,64 @@
+{% doc %}
+  Renders the optional heading group shared by RELIVANOW long-form PDP sections.
+
+  @param {string} [eyebrow] - Optional eyebrow text.
+  @param {string} [heading] - Optional section heading.
+  @param {string} [text] - Optional rich text setting.
+  @param {string} [alignment] - left or center.
+{% enddoc %}
+
+{% if eyebrow != blank or heading != blank or text != blank %}
+  <header class="relivanow-section-header relivanow-section-header--{{ alignment | default: 'left' }}">
+    {% if eyebrow != blank %}
+      <p class="relivanow-section-header__eyebrow">{{ eyebrow | escape }}</p>
+    {% endif %}
+    {% if heading != blank %}
+      <h2 class="relivanow-section-header__heading">{{ heading | escape }}</h2>
+    {% endif %}
+    {% if text != blank %}
+      <div class="relivanow-section-header__text rte">{{ text }}</div>
+    {% endif %}
+  </header>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-section-header {
+    display: grid;
+    gap: var(--gap-xs);
+    max-width: 52rem;
+    margin-block-end: clamp(24px, 4vw, 48px);
+  }
+
+  .relivanow-section-header--center {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .relivanow-section-header__eyebrow,
+  .relivanow-section-header__heading,
+  .relivanow-section-header__text > :first-child,
+  .relivanow-section-header__text > :last-child {
+    margin-block: 0;
+  }
+
+  .relivanow-section-header__eyebrow {
+    color: var(--color-brand);
+    font-size: var(--font-paragraph-small--size);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .relivanow-section-header__heading {
+    font-family: var(--font-heading--family);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: var(--font-heading--weight);
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  .relivanow-section-header__text {
+    color: var(--color-muted);
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+  }
+{% endstylesheet %}

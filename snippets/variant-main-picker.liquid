@@ -22,6 +22,14 @@
     assign has_custom_variant_buttons = true
   endif
   assign fieldset_index = 0
+  assign product_color_swatches = product_resource.metafields.relivanow.color_swatches.value
+  assign product_color_display_mode = product_resource.metafields.relivanow.color_display_mode.value | strip | downcase
+  unless product_color_display_mode == 'swatch_only' or product_color_display_mode == 'swatch_and_name'
+    assign product_color_display_mode = block_settings.default_color_display_mode | default: 'swatch_only'
+  endunless
+  unless product_color_display_mode == 'swatch_only' or product_color_display_mode == 'swatch_and_name'
+    assign product_color_display_mode = 'swatch_only'
+  endunless
 %}
 
 {% unless product_resource.has_only_default_variant %}
@@ -57,8 +65,26 @@
         {%- liquid
           assign swatch_count = product_option.values | map: 'swatch' | compact | size
           assign variant_style = block_settings.variant_style
+          assign option_name_normalized = product_option.name | strip | downcase
+          assign is_relivanow_color_option = false
+          assign is_relivanow_style_option = false
+          assign option_id_attribute = blank
+          assign longest_value = 0
 
-          if swatch_count > 0 and block_settings.show_swatches
+          if block_settings.enable_visual_style_cards
+            assign recognized_style_option_names = block_settings.visual_style_option_names | default: 'Style, Model, Configuration' | downcase | replace: ', ', ',' | replace: ' ,', ',' | prepend: ',' | append: ','
+            assign current_style_option_token = ',' | append: option_name_normalized | append: ','
+            if recognized_style_option_names contains current_style_option_token
+              assign is_relivanow_style_option = true
+            endif
+          endif
+
+          if block_settings.enable_visual_color_swatches and option_name_normalized == 'color'
+            assign variant_style = 'swatch'
+            assign is_relivanow_color_option = true
+          elsif is_relivanow_style_option
+            assign variant_style = 'style_card'
+          elsif swatch_count > 0 and block_settings.show_swatches
             if block_settings.variant_style == 'dropdown'
               assign variant_style = 'swatch_dropdown'
             else
@@ -73,7 +99,7 @@
           endif
         -%}
 
-        {%- if product_option.values.size == 1 and variant_style != 'swatch' -%}
+        {%- if product_option.values.size == 1 and variant_style != 'swatch' and variant_style != 'style_card' -%}
           <div
             class="variant-option"
             data-testid="variant-option-single"
@@ -86,16 +112,25 @@
               {{- product_option.selected_value -}}
             </span>
           </div>
-        {%- elsif variant_style == 'swatch' or block_settings.variant_style == 'buttons' -%}
+        {%- elsif variant_style == 'swatch' or variant_style == 'style_card' or block_settings.variant_style == 'buttons' -%}
           <fieldset
-            class="variant-option variant-option--buttons{% if variant_style == 'swatch' %} variant-option--swatches{% else %} variant-option--{{ settings.variant_button_width }}{% endif %}"
+            class="variant-option variant-option--buttons{% if variant_style == 'swatch' %} variant-option--swatches{% elsif variant_style == 'style_card' %} variant-option--style-cards{% else %} variant-option--{{ settings.variant_button_width }}{% endif %}{% if is_relivanow_color_option %} variant-option--relivanow-color variant-option--color-{{ product_color_display_mode | replace: '_', '-' }}{% endif %}"
             data-fieldset-index="{{ fieldset_index }}"
             ref="fieldsets[]"
             {{ option_id_attribute }}
+            {% if is_relivanow_style_option %}
+              style="--style-card-image-size: {{ block_settings.style_card_image_size }}px;"
+            {% endif %}
           >
             <legend>
-              {{ product_option.name | escape -}}
-              {%- if variant_style == 'swatch' -%}
+              {%- if is_relivanow_color_option -%}
+                Choose Color
+              {%- elsif is_relivanow_style_option -%}
+                Choose Style
+              {%- else -%}
+                {{ product_option.name | escape -}}
+              {%- endif -%}
+              {%- if variant_style == 'swatch' and is_relivanow_color_option == false -%}
                 <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
               {%- endif %}
             </legend>
@@ -104,7 +139,8 @@
                 {% assign longest_value = product_option_value.size %}
               {% endif %}
               <label
-                class="variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% endif %}"
+                class="variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% elsif variant_style == 'style_card' %} variant-option__button-label--style-card{% endif %}"
+                {% if is_relivanow_color_option %}title="{{ product_option_value.name | escape }}"{% endif %}
               >
                 <input
                   type="radio"
@@ -135,19 +171,140 @@
                 {% if variant_style == 'swatch' %}
                   {% liquid
                     assign featured_media = product_option_value.variant.featured_media
+                    assign fallback_swatch_color = product_option_value.variant.metafields.relivanow.swatch_color.value
+                    assign mapped_swatch_color = blank
+                    assign product_swatch_image = blank
+                    assign product_swatch_color = blank
+                    assign product_swatch_match_found = false
+
+                    if is_relivanow_color_option
+                      assign option_value_normalized = product_option_value.name | strip | handleize
+
+                      for color_swatch_entry in product_color_swatches
+                        if product_swatch_match_found == false
+                          assign color_swatch_name_normalized = color_swatch_entry.option_value_name.value | strip | handleize
+                          if color_swatch_name_normalized == option_value_normalized
+                            assign candidate_swatch_image = color_swatch_entry.swatch_image.value
+                            assign candidate_swatch_color = color_swatch_entry.color.value
+                            if candidate_swatch_image != blank or candidate_swatch_color != blank
+                              assign product_swatch_image = candidate_swatch_image
+                              assign product_swatch_color = candidate_swatch_color
+                              assign product_swatch_match_found = true
+                            endif
+                          endif
+                        endif
+                      endfor
+
+                      for mapping_index in (1..8)
+                        assign mapping_name_setting = 'color_swatch_name_' | append: mapping_index
+                        assign mapping_color_setting = 'color_swatch_color_' | append: mapping_index
+                        assign mapping_name_normalized = block_settings[mapping_name_setting] | strip | handleize
+                        assign mapping_color = block_settings[mapping_color_setting]
+                        if mapping_name_normalized != blank and mapping_name_normalized == option_value_normalized and mapping_color != blank
+                          assign mapped_swatch_color = mapping_color
+                          break
+                        endif
+                      endfor
+                    endif
 
                     # If the variant has no featured media, and we have a combined listing product, then fall back to
                     # using the featured media of the child product that is linked to this option value.
                     if featured_media == blank and product_option_value.product_url
                       assign featured_media = product_option_value.variant.product.featured_media
                     endif
+
+                    assign swatch_variant_image = featured_media
+                    if is_relivanow_color_option
+                      assign swatch_variant_image = blank
+                    endif
                   %}
 
                   {% render 'swatch',
                     swatch: product_option_value.swatch,
-                    variant_image: featured_media,
-                    mode: 'unscaled'
+                    variant_image: swatch_variant_image,
+                    mode: 'unscaled',
+                    mapped_color: mapped_swatch_color,
+                    product_swatch_image: product_swatch_image,
+                    product_swatch_color: product_swatch_color,
+                    fallback_color: fallback_swatch_color,
+                    show_unconfigured_pattern: is_relivanow_color_option,
+                    label: product_option_value.name
                   %}
+                  {% if is_relivanow_color_option %}
+                    <span class="relivanow-color-swatch__check" aria-hidden="true">✓</span>
+                    {% if product_color_display_mode == 'swatch_and_name' %}
+                      <span class="relivanow-color-swatch__name" aria-hidden="true">
+                        {{- product_option_value.name | escape -}}
+                      </span>
+                    {% endif %}
+                  {% endif %}
+                {% elsif variant_style == 'style_card' %}
+                  {% liquid
+                    assign style_variant = product_option_value.variant
+                    assign style_card_image = style_variant.metafields.relivanow.style_card_image.value
+                    if style_card_image == blank
+                      assign style_card_image = style_variant.featured_media.preview_image
+                    endif
+                    assign style_card_alt = style_card_image.alt | default: product_option_value.name
+
+                    assign style_badge = style_variant.metafields.relivanow.style_badge.value | strip
+                    assign style_badge_normalized = style_badge | downcase
+                    assign has_approved_style_badge = false
+                    case style_badge_normalized
+                      when 'recommended', 'coming soon', 'best value'
+                        assign has_approved_style_badge = true
+                    endcase
+                  %}
+
+                  <span class="variant-style-card__media" aria-hidden="true">
+                    {% if style_card_image != blank %}
+                      {{
+                        style_card_image
+                        | image_url: width: 320
+                        | image_tag:
+                          widths: '128, 192, 256, 320',
+                          sizes: '160px',
+                          loading: 'lazy',
+                          alt: style_card_alt,
+                          class: 'variant-style-card__image'
+                      }}
+                    {% else %}
+                      {{ 'product-apparel-1' | placeholder_svg_tag: 'variant-style-card__placeholder' }}
+                    {% endif %}
+                  </span>
+
+                  <span class="variant-style-card__content">
+                    <span
+                      class="variant-style-card__title"
+                      title="{{ product_option_value.name | escape }}"
+                    >
+                      {{- product_option_value.name | escape -}}
+                    </span>
+                  </span>
+
+                  <span class="variant-style-card__meta">
+                    <span class="variant-style-card__badge-slot">
+                      {% if block_settings.show_style_badges and has_approved_style_badge %}
+                        <span class="variant-style-card__badge">{{ style_badge | escape }}</span>
+                      {% endif %}
+                    </span>
+
+                    <span class="variant-style-card__price">
+                      {% if block_settings.show_style_price and style_variant.price != blank %}
+                        <span>{{ style_variant.price | money }}</span>
+                        {% if block_settings.show_style_compare_at and style_variant.compare_at_price > style_variant.price %}
+                          <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
+                          <s>{{ style_variant.compare_at_price | money }}</s>
+                        {% endif %}
+                      {% endif %}
+                    </span>
+
+                    <span class="variant-style-card__availability-slot">
+                      {% if product_option_value.available == false %}
+                        <span class="variant-style-card__availability">{{ 'products.product.sold_out' | t }}</span>
+                      {% endif %}
+                    </span>
+                  </span>
                 {% else %}
                   {% if product_option_value.available == true %}
                     <span

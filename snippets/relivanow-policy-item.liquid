@@ -1,0 +1,39 @@
+{% doc %}
+  Renders one approved public policy summary from the RELIVANOW policy model.
+
+  @param {metaobject} policy - Referenced relivanow_policy record.
+  @param {string} expected_kind - Required policy_kind value.
+  @param {string} [policy_url] - Native Shopify policy URL when one exists.
+{% enddoc %}
+
+{% liquid
+  assign policy_status = policy.verification_status.value | upcase
+  assign policy_kind = policy.policy_kind.value | downcase
+  assign policy_title = policy.title.value
+  assign policy_summary = policy.summary.value
+  assign policy_icon = 'lock'
+  case expected_kind
+    when 'shipping'
+      assign policy_icon = 'truck'
+    when 'return'
+      assign policy_icon = 'return'
+  endcase
+%}
+
+{% if policy != blank
+  and policy_status == 'CONFIRMED'
+  and policy_kind == expected_kind
+  and policy_title != blank
+  and policy_summary != blank
+%}
+  <li class="relivanow-purchase-trust__item">
+    <svg class="relivanow-purchase-trust__icon" viewBox="0 0 20 20" aria-hidden="true">
+      {% render 'icon', icon: policy_icon %}
+    </svg>
+    {% if policy_url != blank %}
+      <a class="relivanow-purchase-trust__title" href="{{ policy_url }}">{{ policy_title | escape }}</a>
+    {% else %}
+      <strong class="relivanow-purchase-trust__title">{{ policy_title | escape }}</strong>
+    {% endif %}
+  </li>
+{% endif %}

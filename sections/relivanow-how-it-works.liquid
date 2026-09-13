@@ -1,0 +1,185 @@
+{% liquid
+  assign approved_step_count = 0
+%}
+
+{% capture approved_steps %}
+  {% for block in section.blocks %}
+    {% liquid
+      assign step_status = block.settings.verification_status | upcase
+      if step_status != 'CONFIRMED' or block.settings.title == blank or block.settings.description == blank
+        continue
+      endif
+      assign approved_step_count = approved_step_count | plus: 1
+      assign step_number = block.settings.number | default: approved_step_count
+      assign step_alt = block.settings.image_alt | default: block.settings.title
+    %}
+    <li class="relivanow-how-it-works__step" {{ block.shopify_attributes }}>
+      <div class="relivanow-how-it-works__marker" aria-hidden="true">{{ step_number | escape }}</div>
+      <div class="relivanow-how-it-works__media">
+        {% if block.settings.image != blank %}
+          {{ block.settings.image | image_url: width: 640 | image_tag: widths: '240, 360, 480, 640', sizes: '(min-width: 750px) 22vw, 88px', loading: 'lazy', alt: step_alt }}
+        {% elsif block.settings.icon != 'none' %}
+          <svg viewBox="0 0 20 20" aria-hidden="true">{% render 'icon', icon: block.settings.icon %}</svg>
+        {% endif %}
+      </div>
+      <div class="relivanow-how-it-works__content">
+        <h3>{{ block.settings.title | escape }}</h3>
+        <p>{{ block.settings.description | escape }}</p>
+      </div>
+    </li>
+  {% endfor %}
+{% endcapture %}
+
+{% assign approved_steps = approved_steps | strip %}
+{% if section.settings.enable_section and approved_step_count >= 3 and approved_step_count <= 4 and approved_steps != blank %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section class="relivanow-how-it-works section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style{% if section.settings.show_line %} relivanow-how-it-works--line{% endif %}" style="{% render 'spacing-style', settings: section.settings %} --step-count: {{ approved_step_count }};">
+    {% render 'relivanow-section-header', eyebrow: section.settings.eyebrow, heading: section.settings.heading, text: section.settings.intro, alignment: section.settings.alignment %}
+    <ol class="relivanow-how-it-works__list">{{ approved_steps }}</ol>
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'How It Works — configure three or four confirmed steps' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-how-it-works__list {
+    display: grid;
+    gap: var(--gap-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .relivanow-how-it-works__step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 40px 72px minmax(0, 1fr);
+    gap: var(--gap-sm);
+    min-width: 0;
+  }
+
+  .relivanow-how-it-works__marker {
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--color-background);
+    background: var(--color-brand);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .relivanow-how-it-works--line .relivanow-how-it-works__step:not(:last-child)::after {
+    position: absolute;
+    inset-block-start: 40px;
+    inset-block-end: calc(-1 * var(--gap-lg));
+    inset-inline-start: 19px;
+    width: 1px;
+    background: var(--color-border);
+    content: '';
+  }
+
+  .relivanow-how-it-works__media {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border-radius: var(--style-border-radius-sm);
+    color: var(--color-brand);
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+
+  .relivanow-how-it-works__media :is(img, svg) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .relivanow-how-it-works__media svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .relivanow-how-it-works__content h3,
+  .relivanow-how-it-works__content p {
+    margin-block: 0;
+  }
+
+  .relivanow-how-it-works__content p {
+    margin-block-start: var(--margin-3xs);
+    color: var(--color-muted);
+  }
+
+  @media screen and (min-width: 750px) {
+    .relivanow-how-it-works__list {
+      grid-template-columns: repeat(var(--step-count), minmax(0, 1fr));
+      gap: var(--gap-md);
+    }
+
+    .relivanow-how-it-works__step {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: 48px auto auto;
+    }
+
+    .relivanow-how-it-works__marker {
+      width: 48px;
+      height: 48px;
+    }
+
+    .relivanow-how-it-works--line .relivanow-how-it-works__step:not(:last-child)::after {
+      inset-block-start: 23px;
+      inset-block-end: auto;
+      inset-inline-start: 48px;
+      width: calc(100% + var(--gap-md) - 48px);
+      height: 1px;
+    }
+
+    .relivanow-how-it-works__media {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 3;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW how it works",
+  "max_blocks": 4,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "How it works" },
+    { "type": "richtext", "id": "intro", "label": "Introductory text" },
+    { "type": "checkbox", "id": "show_line", "label": "Show decorative timeline", "default": true },
+    { "type": "select", "id": "alignment", "label": "Header alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "center" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFFFFF" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Verification status", "options": [{ "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }, { "value": "UNVERIFIED", "label": "Unverified" }], "default": "PROVISIONAL" },
+        { "type": "text", "id": "number", "label": "Number" },
+        { "type": "select", "id": "icon", "label": "Icon", "options": [{ "value": "none", "label": "None" }, { "value": "box", "label": "Fill" }, { "value": "stopwatch", "label": "Schedule" }, { "value": "serving_dish", "label": "Serve" }, { "value": "washing", "label": "Clean" }], "default": "serving_dish" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW how it works", "category": "Product" }]
+}
+{% endschema %}

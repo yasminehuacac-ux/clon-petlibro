@@ -1,0 +1,171 @@
+{% liquid
+  assign verified_metric_count = 0
+%}
+
+{% capture verified_metrics %}
+  {% for block in section.blocks %}
+    {% liquid
+      assign metric_status = block.settings.verification_status | upcase
+      assign metric_label = block.settings.label | strip
+      assign metric_value = blank
+
+      if metric_status == 'CONFIRMED'
+        case block.settings.value_source
+          when 'meals_per_day'
+            assign minimum = product.metafields.relivanow.meals_per_day_min.value
+            assign maximum = product.metafields.relivanow.meals_per_day_max.value
+            if minimum != blank and maximum != blank and maximum >= minimum
+              assign metric_value = minimum | append: '–' | append: maximum
+            endif
+          when 'portions_per_meal'
+            assign minimum = product.metafields.relivanow.portions_per_meal_min.value
+            assign maximum = product.metafields.relivanow.portions_per_meal_max.value
+            if minimum != blank and maximum != blank and maximum >= minimum
+              assign metric_value = minimum | append: '–' | append: maximum
+            endif
+          when 'manual'
+            assign metric_value = block.settings.value | strip
+        endcase
+      endif
+
+      if metric_label == blank or metric_value == blank
+        continue
+      endif
+
+      assign verified_metric_count = verified_metric_count | plus: 1
+      if verified_metric_count > 4
+        break
+      endif
+    %}
+    <article class="relivanow-precise-feeding__metric" {{ block.shopify_attributes }}>
+      {% if block.settings.icon != 'none' %}
+        <svg class="relivanow-precise-feeding__icon" viewBox="0 0 20 20" aria-hidden="true">
+          {% render 'icon', icon: block.settings.icon %}
+        </svg>
+      {% endif %}
+      <div class="relivanow-precise-feeding__metric-copy">
+        <span class="relivanow-precise-feeding__label">{{ metric_label | escape }}</span>
+        <strong class="relivanow-precise-feeding__value">{{ metric_value | escape }}</strong>
+        {% if block.settings.description != blank %}
+          <p>{{ block.settings.description | escape }}</p>
+        {% endif %}
+      </div>
+    </article>
+  {% endfor %}
+{% endcapture %}
+
+{% assign verified_metrics = verified_metrics | strip %}
+{% if section.settings.enable_section and section.settings.heading != blank and verified_metric_count >= 2 and verified_metrics != blank %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section
+    class="relivanow-precise-feeding relivanow-precise-feeding--image-{{ section.settings.image_position }} section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style{% if section.settings.image == blank %} relivanow-precise-feeding--no-image{% endif %}"
+    style="{% render 'spacing-style', settings: section.settings %}"
+  >
+    <div class="relivanow-precise-feeding__layout">
+      {% if section.settings.image != blank %}
+        <div class="relivanow-precise-feeding__media">
+          {% assign image_alt = section.settings.image_alt | default: section.settings.image.alt | default: section.settings.heading %}
+          {{ section.settings.image | image_url: width: 1600 | image_tag: widths: '480, 750, 1000, 1250, 1600', sizes: '(min-width: 750px) 50vw, 100vw', loading: 'lazy', alt: image_alt }}
+        </div>
+      {% endif %}
+      <div class="relivanow-precise-feeding__content">
+        {% render 'relivanow-section-header', eyebrow: section.settings.eyebrow, heading: section.settings.heading, text: section.settings.text, alignment: section.settings.alignment %}
+        <div class="relivanow-precise-feeding__metrics">{{ verified_metrics }}</div>
+      </div>
+    </div>
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Precise Feeding — configure a heading and two to four confirmed metrics' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-precise-feeding__layout,
+  .relivanow-precise-feeding__content,
+  .relivanow-precise-feeding__metrics {
+    display: grid;
+    min-width: 0;
+  }
+
+  .relivanow-precise-feeding__layout { gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .relivanow-precise-feeding__content { gap: var(--gap-md); }
+  .relivanow-precise-feeding__content .relivanow-section-header { margin-block-end: 0; }
+  .relivanow-precise-feeding__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap-sm); }
+
+  .relivanow-precise-feeding__media {
+    min-width: 0;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--style-border-radius-sm);
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+
+  .relivanow-precise-feeding__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  .relivanow-precise-feeding__metric {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--gap-xs);
+    min-width: 0;
+    padding: var(--padding-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-border-radius-sm);
+    background: var(--color-background);
+  }
+
+  .relivanow-precise-feeding__icon { width: 24px; height: 24px; color: var(--color-brand); }
+  .relivanow-precise-feeding__metric-copy { display: grid; gap: var(--gap-3xs); min-width: 0; }
+  .relivanow-precise-feeding__label { color: var(--color-muted); font-size: var(--font-paragraph-small--size); }
+  .relivanow-precise-feeding__value { font-size: clamp(1.5rem, 4vw, 2.5rem); line-height: 1; }
+  .relivanow-precise-feeding__metric p { margin: 0; color: var(--color-muted); overflow-wrap: anywhere; }
+
+  @media screen and (max-width: 479px) {
+    .relivanow-precise-feeding__metrics { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  @media screen and (min-width: 750px) {
+    .relivanow-precise-feeding__layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .relivanow-precise-feeding--image-right .relivanow-precise-feeding__media { order: 2; }
+    .relivanow-precise-feeding--no-image .relivanow-precise-feeding__layout { grid-template-columns: minmax(0, 1fr); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW precise feeding",
+  "max_blocks": 4,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Precise feeding, shaped around the routine" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "image_picker", "id": "image", "label": "Main image" },
+    { "type": "text", "id": "image_alt", "label": "Main image alt text" },
+    { "type": "select", "id": "image_position", "label": "Image position", "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }], "default": "left" },
+    { "type": "select", "id": "alignment", "label": "Header alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "left" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFFFFF" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "metric",
+      "name": "Verified metric",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Verification status", "options": [{ "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }, { "value": "UNVERIFIED", "label": "Unverified" }], "default": "PROVISIONAL" },
+        { "type": "select", "id": "value_source", "label": "Value source", "options": [{ "value": "meals_per_day", "label": "Product meals per day range" }, { "value": "portions_per_meal", "label": "Product portions per meal range" }, { "value": "manual", "label": "Verified manual value" }], "default": "manual" },
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "value", "label": "Manual value", "visible_if": "{{ block.settings.value_source == 'manual' }}" },
+        { "type": "textarea", "id": "description", "label": "Description" },
+        { "type": "select", "id": "icon", "label": "Icon", "options": [{ "value": "none", "label": "None" }, { "value": "stopwatch", "label": "Schedule" }, { "value": "serving_dish", "label": "Feeding" }, { "value": "check_box", "label": "Check" }], "default": "none" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW precise feeding", "category": "Product" }]
+}
+{% endschema %}

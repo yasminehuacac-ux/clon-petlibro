@@ -1,0 +1,172 @@
+{% liquid
+  assign feature_records = product.metafields.relivanow.features.value
+  assign confirmed_feature_count = 0
+%}
+
+{% capture feature_cards %}
+  {% for feature in feature_records %}
+    {% liquid
+      assign feature_status = feature.verification_status.value | upcase
+      assign feature_title = feature.title.value
+      assign feature_body = feature.body
+      if feature_status != 'CONFIRMED' or feature_title == blank or feature_body == blank
+        continue
+      endif
+
+      assign confirmed_feature_count = confirmed_feature_count | plus: 1
+      if confirmed_feature_count > 6
+        break
+      endif
+
+      assign feature_image = feature.media.value.preview_image
+      if feature_image == blank
+        assign feature_image = feature.icon.value.preview_image
+      endif
+      assign feature_alt = feature.accessibility_label.value | default: feature_title
+      assign feature_link = feature.link.value
+    %}
+    <article class="relivanow-product-features__card">
+      {% if section.settings.show_media %}
+        <div class="relivanow-product-features__media{% if feature_image == blank %} relivanow-product-features__media--icon{% endif %}">
+          {% if feature_image != blank %}
+            {{ feature_image | image_url: width: 900 | image_tag: widths: '240, 360, 540, 720, 900', sizes: '(min-width: 990px) 30vw, (min-width: 560px) 50vw, 100vw', loading: 'lazy', alt: feature_alt }}
+          {% else %}
+            <svg viewBox="0 0 20 20" aria-hidden="true">{% render 'icon', icon: 'check_box' %}</svg>
+          {% endif %}
+        </div>
+      {% endif %}
+      <div class="relivanow-product-features__body">
+        <h3>{{ feature_title | escape }}</h3>
+        <div class="rte">{{ feature_body | metafield_tag }}</div>
+        {% if section.settings.show_links and feature_link != blank %}
+          <a href="{{ feature_link | escape }}">{{ section.settings.link_label | escape }}</a>
+        {% endif %}
+      </div>
+    </article>
+  {% endfor %}
+{% endcapture %}
+
+{% assign feature_cards = feature_cards | strip %}
+{% if section.settings.enable_section and confirmed_feature_count >= 3 and feature_cards != blank %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section class="relivanow-product-features section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style" style="{% render 'spacing-style', settings: section.settings %} --feature-columns: {{ section.settings.columns }};">
+    {% render 'relivanow-section-header', eyebrow: section.settings.eyebrow, heading: section.settings.heading, text: section.settings.intro, alignment: section.settings.alignment %}
+    <div class="relivanow-product-features__grid">{{ feature_cards }}</div>
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Product Features — link at least three confirmed relivanow.features records with title and body' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-product-features__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--gap-md);
+  }
+
+  .relivanow-product-features__card {
+    display: grid;
+    min-width: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-border-radius-sm);
+    background: var(--color-background);
+    overflow: hidden;
+  }
+
+  .relivanow-product-features__media {
+    aspect-ratio: 4 / 3;
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+
+  .relivanow-product-features__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .relivanow-product-features__media--icon {
+    display: grid;
+    place-items: center;
+    aspect-ratio: auto;
+    min-height: 112px;
+    color: var(--color-brand);
+  }
+
+  .relivanow-product-features__media--icon svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .relivanow-product-features__body {
+    display: grid;
+    gap: var(--gap-xs);
+    padding: var(--padding-md);
+  }
+
+  .relivanow-product-features__body h3,
+  .relivanow-product-features__body .metafield-rich_text_field > :first-child,
+  .relivanow-product-features__body .metafield-rich_text_field > :last-child {
+    margin-block: 0;
+  }
+
+  .relivanow-product-features__body .rte {
+    color: var(--color-muted);
+  }
+
+  .relivanow-product-features__body a {
+    width: fit-content;
+    min-height: 44px;
+    color: var(--color-brand);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  @media screen and (min-width: 560px) {
+    .relivanow-product-features__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .relivanow-product-features__grid {
+      grid-template-columns: repeat(var(--feature-columns), minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW features",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Features built around the daily routine" },
+    { "type": "richtext", "id": "intro", "label": "Introductory text" },
+    { "type": "checkbox", "id": "show_media", "label": "Show feature media", "default": true },
+    { "type": "checkbox", "id": "show_links", "label": "Show approved links", "default": false },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Learn more", "visible_if": "{{ section.settings.show_links }}" },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Desktop columns",
+      "options": [
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+    { "type": "select", "id": "alignment", "label": "Header alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "center" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#F7F7F4" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "presets": [{ "name": "RELIVANOW features", "category": "Product" }]
+}
+{% endschema %}

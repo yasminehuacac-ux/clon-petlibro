@@ -1,0 +1,42 @@
+{% capture review_app_blocks %}
+  {% if section.settings.enable_section %}{% content_for 'blocks' %}{% endif %}
+{% endcapture %}
+{% assign review_app_blocks = review_app_blocks | strip %}
+
+{% if section.settings.enable_section and review_app_blocks != blank %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section class="relivanow-reviews section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-section-header', eyebrow: section.settings.eyebrow, heading: section.settings.heading, text: section.settings.text, alignment: section.settings.alignment %}
+    <div class="relivanow-reviews__app">{{ review_app_blocks }}</div>
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Reviews / Social Proof — add the Judge.me app block after the approved installation' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-reviews__app { min-width: 0; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW reviews",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Optional heading", "default": "Customer reviews" },
+    { "type": "richtext", "id": "text", "label": "Optional text" },
+    { "type": "select", "id": "alignment", "label": "Header alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "center" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFFFFF" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "RELIVANOW reviews", "category": "Product" }]
+}
+{% endschema %}

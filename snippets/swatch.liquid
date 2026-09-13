@@ -5,6 +5,11 @@
   @param {object} [variant_image] - an alternate image when there is no swatch value
   @param {string} [mode] - one of 'unscaled', 'filter', 'pill'
   @param {string} [label] - visually-hidden accessible label for the swatch (e.g. the color name)
+  @param {object} [product_swatch_image] - product-configured metaobject image used after native swatch data
+  @param {string} [product_swatch_color] - product-configured metaobject color used after native swatch data
+  @param {string} [fallback_color] - variant metafield color used after product-specific swatch data
+  @param {string} [mapped_color] - merchant-configured Theme Editor color used as the final configured fallback
+  @param {boolean} [show_unconfigured_pattern] - use a neutral pattern when no swatch data resolves
 
   @example
   {% render 'swatch', swatch: swatch, variant_image: variant_image, mode: 'unscaled', label: option_value.name %}
@@ -23,6 +28,16 @@
     assign swatch_value = 'url(' | append: swatch_image_url | append: ')'
   elsif swatch.color
     assign swatch_value = 'rgb(' | append: swatch.color.rgb | append: ')'
+  elsif product_swatch_image != blank
+    assign product_swatch_image_url = product_swatch_image | image_url: width: 80
+    assign swatch_value = 'url(' | append: product_swatch_image_url | append: ')'
+    assign extra_classes = extra_classes | append: ' swatch--product-image'
+  elsif product_swatch_color != blank
+    assign swatch_value = product_swatch_color
+  elsif fallback_color != blank
+    assign swatch_value = fallback_color
+  elsif mapped_color != blank
+    assign swatch_value = mapped_color
   endif
 
   case mode
@@ -39,11 +54,11 @@
   class="
     swatch
     {{ extra_classes }}
-    {% if swatch_value == null %} swatch--unavailable{% endif %}
+    {% if swatch_value == null %}{% if show_unconfigured_pattern %} swatch--unconfigured{% else %} swatch--unavailable{% endif %}{% endif %}
   "
   style="
     --swatch-background: {{ swatch_value }};
-    {% if swatch.image and settings.show_variant_image == false %} --swatch-focal-point: {{ swatch.image.presentation.focal_point }};{% endif %}
+    {% if swatch.image and settings.show_variant_image == false %} --swatch-focal-point: {{ swatch.image.presentation.focal_point }};{% elsif product_swatch_image != blank %} --swatch-focal-point: {{ product_swatch_image.presentation.focal_point }};{% endif %}
   "
 >
 </span>

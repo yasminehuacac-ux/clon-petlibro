@@ -1,0 +1,108 @@
+{% liquid
+  assign approved_image_count = 0
+%}
+
+{% capture approved_images %}
+  {% for block in section.blocks %}
+    {% liquid
+      assign image_status = block.settings.verification_status | upcase
+      if image_status != 'CONFIRMED' or block.settings.image == blank
+        continue
+      endif
+      assign approved_image_count = approved_image_count | plus: 1
+      if approved_image_count > 3
+        break
+      endif
+      assign image_alt = block.settings.alt_text | default: block.settings.image.alt | default: block.settings.caption | default: section.settings.heading
+    %}
+    <figure class="relivanow-app-experience__card" {{ block.shopify_attributes }}>
+      <div class="relivanow-app-experience__media">
+        {{ block.settings.image | image_url: width: 1000 | image_tag: widths: '240, 360, 540, 720, 1000', sizes: '(min-width: 990px) 30vw, (min-width: 560px) 50vw, 100vw', loading: 'lazy', alt: image_alt }}
+      </div>
+      {% if block.settings.caption != blank %}<figcaption>{{ block.settings.caption | escape }}</figcaption>{% endif %}
+    </figure>
+  {% endfor %}
+{% endcapture %}
+
+{% assign approved_images = approved_images | strip %}
+{% if section.settings.enable_section and section.settings.heading != blank and approved_image_count > 0 and approved_images != blank %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section class="relivanow-app-experience relivanow-app-experience--{{ approved_image_count }} section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style" style="{% render 'spacing-style', settings: section.settings %} --app-image-ratio: {{ section.settings.image_ratio }};">
+    {% render 'relivanow-section-header', eyebrow: section.settings.eyebrow, heading: section.settings.heading, text: section.settings.description, alignment: section.settings.alignment %}
+    <div class="relivanow-app-experience__grid">{{ approved_images }}</div>
+    {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+      <div class="relivanow-app-experience__action relivanow-app-experience__action--{{ section.settings.alignment }}">
+        <a class="button" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label | escape }}</a>
+      </div>
+    {% endif %}
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'App Experience — add one to three approved, confirmed screenshots with accurate alt text' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-app-experience__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--gap-md);
+    max-width: 72rem;
+    margin-inline: auto;
+  }
+
+  .relivanow-app-experience__card { min-width: 0; margin: 0; }
+  .relivanow-app-experience__media { aspect-ratio: var(--app-image-ratio); border-radius: var(--style-border-radius-sm); background: var(--color-surface); overflow: hidden; }
+  .relivanow-app-experience__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .relivanow-app-experience__card figcaption { margin-block-start: var(--margin-xs); color: var(--color-muted); text-align: center; }
+  .relivanow-app-experience__action { display: flex; margin-block-start: var(--margin-lg); }
+  .relivanow-app-experience__action--left { justify-content: flex-start; }
+  .relivanow-app-experience__action--center { justify-content: center; }
+  .relivanow-app-experience__action .button { min-height: 44px; }
+
+  @media screen and (min-width: 560px) {
+    .relivanow-app-experience--2 .relivanow-app-experience__grid,
+    .relivanow-app-experience--3 .relivanow-app-experience__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media screen and (min-width: 990px) {
+    .relivanow-app-experience--3 .relivanow-app-experience__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW app experience",
+  "max_blocks": 3,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A clear app experience" },
+    { "type": "richtext", "id": "description", "label": "Description" },
+    { "type": "select", "id": "image_ratio", "label": "Screenshot ratio", "options": [{ "value": "9 / 16", "label": "Portrait" }, { "value": "1 / 1", "label": "Square" }, { "value": "4 / 3", "label": "Landscape" }], "default": "9 / 16" },
+    { "type": "text", "id": "cta_label", "label": "Optional CTA label" },
+    { "type": "url", "id": "cta_link", "label": "Optional CTA link" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "center" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#F7F7F4" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "screenshot",
+      "name": "Approved screenshot",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Verification status", "options": [{ "value": "UNVERIFIED", "label": "Unverified" }, { "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNVERIFIED" },
+        { "type": "image_picker", "id": "image", "label": "Screenshot" },
+        { "type": "text", "id": "alt_text", "label": "Alt text" },
+        { "type": "text", "id": "caption", "label": "Caption" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW app experience", "category": "Product" }]
+}
+{% endschema %}

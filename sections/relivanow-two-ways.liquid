@@ -1,0 +1,163 @@
+{% assign approved_card_count = 0 %}
+{% capture approved_cards %}
+  {% for block in section.blocks %}
+    {% assign card_status = block.settings.verification_status | upcase %}
+    {% if card_status != 'CONFIRMED' or block.settings.title == blank or block.settings.description == blank %}
+      {% continue %}
+    {% endif %}
+    {% assign approved_card_count = approved_card_count | plus: 1 %}
+    <article class="relivanow-two-ways__card" {{ block.shopify_attributes }}>
+      <div class="relivanow-two-ways__card-icon">
+        {% if block.settings.image != blank %}
+          {% assign card_alt = block.settings.image_alt | default: block.settings.title %}
+          {{ block.settings.image | image_url: width: 160 | image_tag: widths: '80, 120, 160', sizes: '64px', loading: 'lazy', alt: card_alt }}
+        {% elsif block.settings.icon != 'none' %}
+          <svg viewBox="0 0 20 20" aria-hidden="true">{% render 'icon', icon: block.settings.icon %}</svg>
+        {% endif %}
+      </div>
+      <div>
+        <h3>{{ block.settings.title | escape }}</h3>
+        <p>{{ block.settings.description | escape }}</p>
+      </div>
+    </article>
+  {% endfor %}
+{% endcapture %}
+{% assign approved_cards = approved_cards | strip %}
+
+{% if section.settings.enable_section and section.settings.image != blank and section.settings.heading != blank and approved_card_count == 2 %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section class="relivanow-two-ways relivanow-two-ways--image-{{ section.settings.image_position }} section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    <div class="relivanow-two-ways__layout">
+      <div class="relivanow-two-ways__media">
+        {% assign image_alt = section.settings.image_alt | default: section.settings.heading %}
+        {{ section.settings.image | image_url: width: 1600 | image_tag: widths: '480, 750, 1000, 1250, 1600', sizes: '(min-width: 750px) 50vw, 100vw', loading: 'lazy', alt: image_alt }}
+      </div>
+      <div class="relivanow-two-ways__content">
+        {% render 'relivanow-section-header', eyebrow: section.settings.eyebrow, heading: section.settings.heading, text: section.settings.subheading, alignment: section.settings.alignment %}
+        <div class="relivanow-two-ways__cards">{{ approved_cards }}</div>
+      </div>
+    </div>
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Two Ways to Feed — add a main image, heading, and exactly two confirmed cards' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-two-ways__layout {
+    display: grid;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+
+  .relivanow-two-ways__media {
+    min-width: 0;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--style-border-radius-sm);
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+
+  .relivanow-two-ways__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .relivanow-two-ways__content,
+  .relivanow-two-ways__cards {
+    display: grid;
+    gap: var(--gap-md);
+    min-width: 0;
+  }
+
+  .relivanow-two-ways__content .relivanow-section-header {
+    margin-block-end: 0;
+  }
+
+  .relivanow-two-ways__card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--gap-sm);
+    padding-block-start: var(--padding-md);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .relivanow-two-ways__card-icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    color: var(--color-brand);
+    background: var(--color-brand-soft);
+    overflow: hidden;
+  }
+
+  .relivanow-two-ways__card-icon :is(svg, img) {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+  }
+
+  .relivanow-two-ways__card h3,
+  .relivanow-two-ways__card p {
+    margin-block: 0;
+  }
+
+  .relivanow-two-ways__card p {
+    margin-block-start: var(--margin-3xs);
+    color: var(--color-muted);
+  }
+
+  @media screen and (min-width: 750px) {
+    .relivanow-two-ways__layout {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .relivanow-two-ways--image-right .relivanow-two-ways__media {
+      order: 2;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW two ways",
+  "max_blocks": 2,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Two ways to support their routine" },
+    { "type": "richtext", "id": "subheading", "label": "Subheading" },
+    { "type": "image_picker", "id": "image", "label": "Main image" },
+    { "type": "text", "id": "image_alt", "label": "Main image alt text" },
+    { "type": "select", "id": "image_position", "label": "Image position", "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }], "default": "left" },
+    { "type": "select", "id": "alignment", "label": "Text alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "left" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFFFFF" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "way",
+      "name": "Feeding method",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Verification status", "options": [{ "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }, { "value": "UNVERIFIED", "label": "Unverified" }], "default": "PROVISIONAL" },
+        { "type": "select", "id": "icon", "label": "Icon", "options": [{ "value": "none", "label": "None" }, { "value": "stopwatch", "label": "Schedule" }, { "value": "serving_dish", "label": "Feeding" }, { "value": "lightning_bolt", "label": "Connected control" }, { "value": "paw_print", "label": "Pet" }], "default": "serving_dish" },
+        { "type": "image_picker", "id": "image", "label": "Icon image" },
+        { "type": "text", "id": "image_alt", "label": "Icon image alt text" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW two ways", "category": "Product" }]
+}
+{% endschema %}

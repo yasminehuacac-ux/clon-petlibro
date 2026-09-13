@@ -1,0 +1,186 @@
+<script src="{{ 'copy-to-clipboard.js' | asset_url }}" type="module"></script>
+
+{% liquid
+  assign promotion_enabled = block.settings.enable_promotion
+  assign discount_label = block.settings.discount_label | strip
+  assign promotional_message = block.settings.promotional_message | strip
+  assign discount_code = block.settings.discount_code | strip
+  assign supporting_text = block.settings.supporting_text | strip
+
+  assign promotion_configured = false
+  if promotion_enabled and discount_label != blank and promotional_message != blank and discount_code != blank
+    assign promotion_configured = true
+  endif
+%}
+
+{% if promotion_configured %}
+  <aside
+    class="relivanow-promotion spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    aria-label="{{ discount_label | escape }}"
+    {{ block.shopify_attributes }}
+  >
+    <p class="relivanow-promotion__label">{{ discount_label | escape }}</p>
+    <p class="relivanow-promotion__message">{{ promotional_message | escape }}</p>
+    <copy-to-clipboard-component
+      class="relivanow-promotion__code-row"
+      text-to-copy="{{ discount_code | escape }}"
+    >
+      <code class="relivanow-promotion__code">{{ discount_code | escape }}</code>
+      {% if block.settings.show_copy_button %}
+        <button class="relivanow-promotion__copy button-unstyled" type="button" on:click="/copyToClipboard">
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            {% render 'icon', icon: 'clipboard' %}
+          </svg>
+          <span>Copy code</span>
+        </button>
+        <span class="visually-hidden" role="status" aria-live="polite" ref="copySuccessMessage">Code copied</span>
+        <span class="visually-hidden" role="alert" ref="copyErrorMessage">Code could not be copied</span>
+      {% endif %}
+    </copy-to-clipboard-component>
+    {% if supporting_text != blank %}
+      <p class="relivanow-promotion__supporting">{{ supporting_text | escape }}</p>
+    {% endif %}
+  </aside>
+{% elsif request.design_mode %}
+  <div
+    class="relivanow-promotion spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    {% render 'relivanow-preview-placeholder', label: 'Optional promotion preview' %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-promotion {
+    display: grid;
+    gap: var(--gap-xs);
+    padding: var(--padding-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-border-radius-sm);
+    background: var(--color-brand-soft);
+  }
+
+  .relivanow-promotion__label,
+  .relivanow-promotion__message,
+  .relivanow-promotion__supporting {
+    margin: 0;
+  }
+
+  .relivanow-promotion__label {
+    color: var(--color-brand);
+    font-size: var(--font-paragraph-small--size);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .relivanow-promotion__code-row {
+    display: flex;
+    gap: var(--gap-xs);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .relivanow-promotion__code {
+    overflow-wrap: anywhere;
+    color: var(--color-ink);
+    font-family: var(--font-body--family);
+    font-weight: 600;
+  }
+
+  .relivanow-promotion__copy {
+    display: inline-flex;
+    gap: var(--gap-3xs);
+    align-items: center;
+    min-height: 44px;
+    padding-inline: var(--padding-xs);
+    color: var(--color-brand);
+    font-weight: 600;
+  }
+
+  .relivanow-promotion__copy svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .relivanow-promotion__supporting {
+    color: var(--color-muted);
+    font-size: var(--font-paragraph-small--size);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW promotion",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_promotion",
+      "label": "Enable promotion",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "discount_label",
+      "label": "Discount label",
+      "visible_if": "{{ block.settings.enable_promotion }}"
+    },
+    {
+      "type": "text",
+      "id": "promotional_message",
+      "label": "Promotional message",
+      "visible_if": "{{ block.settings.enable_promotion }}"
+    },
+    {
+      "type": "text",
+      "id": "discount_code",
+      "label": "Discount code",
+      "visible_if": "{{ block.settings.enable_promotion }}"
+    },
+    {
+      "type": "text",
+      "id": "supporting_text",
+      "label": "Expiration or supporting text",
+      "visible_if": "{{ block.settings.enable_promotion }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_copy_button",
+      "label": "Show copy button",
+      "default": true,
+      "visible_if": "{{ block.settings.enable_promotion }}"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "RELIVANOW promotion"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,188 @@
+{% liquid
+  assign product_resource = closest.product
+  assign benefits = product_resource.metafields.relivanow.key_benefits.value
+%}
+
+{% liquid
+  assign confirmed_benefit_count = 0
+%}
+
+{% capture primary_benefit_items %}
+  {% for benefit in benefits %}
+    {% liquid
+      assign verification_status = benefit.verification_status.value | upcase
+      assign benefit_title = benefit.title.value
+
+      if verification_status != 'CONFIRMED' or benefit_title == blank
+        continue
+      endif
+
+      assign confirmed_benefit_count = confirmed_benefit_count | plus: 1
+    %}
+    {% if confirmed_benefit_count <= 3 %}
+      {% render 'relivanow-benefit-item', benefit: benefit, show_body: block.settings.show_body %}
+    {% endif %}
+  {% endfor %}
+{% endcapture %}
+
+{% capture additional_benefit_item %}
+  {% assign additional_scan_count = 0 %}
+  {% for benefit in benefits %}
+    {% liquid
+      assign verification_status = benefit.verification_status.value | upcase
+      assign benefit_title = benefit.title.value
+
+      if verification_status != 'CONFIRMED' or benefit_title == blank
+        continue
+      endif
+
+      assign additional_scan_count = additional_scan_count | plus: 1
+    %}
+    {% if additional_scan_count == 4 %}
+      {% render 'relivanow-benefit-item', benefit: benefit, show_body: block.settings.show_body %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endcapture %}
+
+{% assign primary_benefit_items = primary_benefit_items | strip %}
+{% assign additional_benefit_item = additional_benefit_item | strip %}
+
+{% if confirmed_benefit_count >= 3 and primary_benefit_items != blank %}
+  <div
+    class="relivanow-key-benefits spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    <ul class="relivanow-key-benefits__list" role="list">
+      {{ primary_benefit_items }}
+    </ul>
+    {% if additional_benefit_item != blank %}
+      <details class="relivanow-key-benefits__disclosure">
+        <summary>
+          <span class="relivanow-key-benefits__more">View more</span>
+          <span class="relivanow-key-benefits__less">View less</span>
+        </summary>
+        <ul class="relivanow-key-benefits__list relivanow-key-benefits__list--additional" role="list">
+          {{ additional_benefit_item }}
+        </ul>
+      </details>
+    {% endif %}
+  </div>
+{% elsif request.design_mode %}
+  <div
+    class="relivanow-key-benefits spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    {% render 'relivanow-preview-placeholder', label: 'Three or four confirmed features preview' %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-key-benefits__list {
+    display: grid;
+    gap: var(--gap-sm);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .relivanow-key-benefits__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--gap-xs);
+    align-items: start;
+  }
+
+  .relivanow-key-benefits__item::before {
+    content: '';
+    width: 0.55rem;
+    height: 0.55rem;
+    margin-top: 0.45em;
+    border-radius: 50%;
+    background: var(--color-brand);
+  }
+
+  .relivanow-key-benefits__title,
+  .relivanow-key-benefits__body {
+    grid-column: 2;
+  }
+
+  .relivanow-key-benefits__body :first-child {
+    margin-block-start: 0;
+  }
+
+  .relivanow-key-benefits__body :last-child {
+    margin-block-end: 0;
+  }
+
+  .relivanow-key-benefits__disclosure {
+    margin-block-start: var(--margin-xs);
+  }
+
+  .relivanow-key-benefits__disclosure summary {
+    width: fit-content;
+    min-height: 44px;
+    color: var(--color-brand);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .relivanow-key-benefits__less,
+  .relivanow-key-benefits__disclosure[open] .relivanow-key-benefits__more {
+    display: none;
+  }
+
+  .relivanow-key-benefits__disclosure[open] .relivanow-key-benefits__less {
+    display: inline;
+  }
+
+  .relivanow-key-benefits__list--additional {
+    margin-block-start: var(--margin-xs);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW key benefits",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_body",
+      "label": "Show supporting text",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "RELIVANOW key benefits"
+    }
+  ]
+}
+{% endschema %}

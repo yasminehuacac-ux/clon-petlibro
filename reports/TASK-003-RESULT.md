@@ -8,7 +8,7 @@
 
 Work approved TASK-003 and its Shopify-native data architecture for the RELIVANOW Smart Automatic Pet Feeder. Native Product/Variant fields remain authoritative for commerce; typed `relivanow` metafields hold product facts; publishable/translatable metaobjects hold ordered reusable content; Shopify Markets, Judge.me, Shopify Bundles, and `product.media` retain their native responsibilities.
 
-This task changed documentation only. It created no Shopify definitions or records, products, variants, inventory, Markets, shipping zones, bundles, apps, media, Liquid, CSS, JavaScript, or JSON theme configuration. TASK-002 and TASK-003 are `DONE`; TASK-004 remains `DRAFT` and unstarted.
+This task changed documentation only. It created no Shopify definitions or records, products, variants, inventory, Markets, shipping zones, bundles, apps, media, Liquid, CSS, JavaScript, or JSON theme configuration. TASK-002 and TASK-003 are `DONE`. At this report's close, TASK-004 remained `DRAFT`; a later Work authorization moved it to `IN PROGRESS`.
 
 ## Source-of-truth model
 
@@ -124,4 +124,4 @@ No image was generated, edited, downloaded, copied, uploaded, or assigned. No me
 
 ## Closure
 
-Work approved TASK-003. TASK-004 remains `DRAFT` and may not start until final assets, the primary hero color, the default color/variant, and final native `product.media`-to-variant associations are approved. Approval of TASK-003 did not authorize remote Shopify creation or configuration.
+Work approved TASK-003. At this report's close, TASK-004 remained `DRAFT` pending final assets, the primary hero color, the default color/variant, and final native `product.media`-to-variant associations. Work later approved Cloud White as the primary/default direction and authorized local TASK-004 implementation; it did not authorize remote Shopify creation or configuration.

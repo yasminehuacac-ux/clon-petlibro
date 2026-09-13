@@ -1,0 +1,381 @@
+{% liquid
+  assign product_resource = closest.product
+  assign related_models = product_resource.metafields.relivanow.related_models.value
+  assign renderable_model_count = 0
+  assign has_current_model = false
+
+  for related_product in related_models
+    assign related_model_status = related_product.metafields.relivanow.verification_status.value | upcase
+    if related_product != blank and related_product.url != blank and related_product.title != blank and related_model_status == 'CONFIRMED'
+      assign renderable_model_count = renderable_model_count | plus: 1
+      if related_product.id == product_resource.id
+        assign has_current_model = true
+      endif
+    endif
+  endfor
+
+  assign can_render_selector = false
+  if renderable_model_count >= 2 and has_current_model
+    assign can_render_selector = true
+  endif
+%}
+
+{% if can_render_selector %}
+  <div
+    class="relivanow-model-selector spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    <div class="relivanow-model-selector__header">
+      <h2 class="relivanow-model-selector__heading">{{ block.settings.heading | escape }}</h2>
+      {% if block.settings.show_compare_link and block.settings.compare_url != blank %}
+        <a class="relivanow-model-selector__compare" href="{{ block.settings.compare_url }}">
+          {{ block.settings.compare_label | escape }}
+        </a>
+      {% endif %}
+    </div>
+
+    <ul class="relivanow-model-selector__list" role="list">
+      {% for related_product in related_models %}
+        {% assign related_model_status = related_product.metafields.relivanow.verification_status.value | upcase %}
+        {% if related_product == blank or related_product.url == blank or related_product.title == blank or related_model_status != 'CONFIRMED' %}
+          {% continue %}
+        {% endif %}
+
+        {% liquid
+          assign is_current_model = false
+          if related_product.id == product_resource.id
+            assign is_current_model = true
+          endif
+
+          assign model_image = related_product.featured_media.preview_image
+          assign model_image_alt = model_image.alt | default: related_product.title
+          assign model_badge = related_product.metafields.relivanow.model_badge.value | strip
+          assign model_badge_normalized = model_badge | downcase
+          assign has_approved_badge = false
+          case model_badge_normalized
+            when 'recommended', 'coming soon', 'best value'
+              assign has_approved_badge = true
+          endcase
+        %}
+
+        <li class="relivanow-model-selector__item">
+          <a
+            class="relivanow-model-card{% if is_current_model %} relivanow-model-card--current{% endif %}{% unless related_product.available %} relivanow-model-card--unavailable{% endunless %}"
+            href="{{ related_product.url }}"
+            {% if is_current_model %}aria-current="page"{% endif %}
+          >
+            <div class="relivanow-model-card__media">
+              {% if model_image != blank %}
+                {{
+                  model_image
+                  | image_url: width: 480
+                  | image_tag:
+                    widths: '120, 180, 240, 360, 480',
+                    sizes: '(max-width: 749px) 88px, 112px',
+                    loading: 'lazy',
+                    alt: model_image_alt,
+                    class: 'relivanow-model-card__image'
+                }}
+              {% else %}
+                {{ 'product-apparel-1' | placeholder_svg_tag: 'relivanow-model-card__placeholder' }}
+              {% endif %}
+            </div>
+
+            <div class="relivanow-model-card__content">
+              <span
+                class="relivanow-model-card__title"
+                title="{{ related_product.title | escape }}"
+              >
+                {{- related_product.title | escape -}}
+              </span>
+            </div>
+
+            <div class="relivanow-model-card__meta">
+              <span class="relivanow-model-card__badge-slot">
+                {% if block.settings.show_badges and has_approved_badge %}
+                  <span class="relivanow-model-card__badge">{{ model_badge | escape }}</span>
+                {% endif %}
+              </span>
+
+              <span class="relivanow-model-card__price">
+                {% if block.settings.show_price %}
+                  <span>{{ related_product.price | money }}</span>
+                  {% if block.settings.show_compare_at and related_product.compare_at_price > related_product.price %}
+                    <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
+                    <s>{{ related_product.compare_at_price | money }}</s>
+                  {% endif %}
+                {% endif %}
+              </span>
+
+              <span class="relivanow-model-card__availability-slot">
+                {% unless related_product.available %}
+                  <span class="relivanow-model-card__availability">{{ 'products.product.sold_out' | t }}</span>
+                {% endunless %}
+              </span>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-model-selector {
+    display: grid;
+    gap: var(--gap-sm);
+  }
+
+  .relivanow-model-selector__header {
+    display: flex;
+    gap: var(--gap-sm);
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .relivanow-model-selector__heading {
+    margin: 0;
+    font-family: var(--font-body--family);
+    font-size: var(--font-paragraph--size);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .relivanow-model-selector__compare {
+    color: currentcolor;
+    font-size: var(--font-paragraph-small--size);
+    text-underline-offset: 0.2em;
+  }
+
+  .relivanow-model-selector__list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--gap-sm);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .relivanow-model-card {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) max-content;
+    column-gap: var(--gap-sm);
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 112px;
+    padding: var(--padding-sm);
+    border: 2px solid var(--color-border);
+    border-radius: var(--style-border-radius-sm);
+    color: currentcolor;
+    background: var(--color-background);
+    text-decoration: none;
+  }
+
+  .relivanow-model-card:hover {
+    border-color: var(--color-brand);
+    background: var(--color-brand-soft);
+  }
+
+  .relivanow-model-card:focus-visible {
+    border-color: currentcolor;
+    outline: var(--focus-outline-width) solid currentcolor;
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .relivanow-model-card--current {
+    border-color: var(--color-brand);
+  }
+
+  .relivanow-model-card--unavailable {
+    background: var(--color-surface);
+  }
+
+  .relivanow-model-card__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    margin: 0;
+    border-radius: var(--style-border-radius-xs);
+    overflow: hidden;
+    background: var(--color-surface);
+    flex-shrink: 0;
+  }
+
+  .relivanow-model-card__image,
+  .relivanow-model-card__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    margin: 0;
+  }
+
+  .relivanow-model-card__content {
+    display: block;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .relivanow-model-card__title {
+    display: -webkit-box;
+    height: 2.5em;
+    margin: 0;
+    overflow: hidden;
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .relivanow-model-card__meta {
+    display: grid;
+    grid-template-rows: 1.3em auto 1.3em;
+    align-items: center;
+    align-self: center;
+    min-width: max-content;
+    margin: 0;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .relivanow-model-card__badge-slot,
+  .relivanow-model-card__availability-slot {
+    display: flex;
+    min-height: 1.3em;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .relivanow-model-card__badge {
+    padding: 0.2em 0.55em;
+    border-radius: 999px;
+    color: var(--color-ink);
+    background: var(--color-brand-soft);
+    font-size: var(--font-paragraph-small--size);
+    line-height: 1.2;
+  }
+
+  .relivanow-model-card__price {
+    display: flex;
+    min-height: 1.5em;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    line-height: 1.2;
+  }
+
+  .relivanow-model-card__price s,
+  .relivanow-model-card__availability {
+    color: var(--color-muted);
+    font-size: var(--font-paragraph-small--size);
+  }
+
+  @media screen and (max-width: 749px) {
+    .relivanow-model-card {
+      grid-template-columns: 64px minmax(0, 1fr) max-content;
+      column-gap: var(--gap-xs);
+      height: 104px;
+      padding: var(--padding-xs);
+    }
+
+    .relivanow-model-card__media {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .relivanow-model-card {
+      transition: background-color var(--animation-speed) var(--animation-easing),
+        border-color var(--animation-speed) var(--animation-easing);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW models",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Choose Model"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare_link",
+      "label": "Show comparison link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "compare_label",
+      "label": "Comparison link label",
+      "default": "Compare all models",
+      "visible_if": "{{ block.settings.show_compare_link }}"
+    },
+    {
+      "type": "url",
+      "id": "compare_url",
+      "label": "Comparison page",
+      "visible_if": "{{ block.settings.show_compare_link }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show price",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare_at",
+      "label": "Show compare-at price",
+      "default": true,
+      "visible_if": "{{ block.settings.show_price }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show approved badges",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "RELIVANOW models"
+    }
+  ]
+}
+{% endschema %}

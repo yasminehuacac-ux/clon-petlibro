@@ -1,0 +1,148 @@
+{% liquid
+  assign verified_benefit_count = 0
+%}
+
+{% capture verified_benefits %}
+  {% for block in section.blocks %}
+    {% liquid
+      assign benefit_status = block.settings.verification_status | upcase
+      if benefit_status != 'CONFIRMED' or block.settings.title == blank or block.settings.description == blank
+        continue
+      endif
+      assign verified_benefit_count = verified_benefit_count | plus: 1
+      if verified_benefit_count > 4
+        break
+      endif
+    %}
+    <li class="relivanow-remote-control__benefit" {{ block.shopify_attributes }}>
+      {% if block.settings.icon != 'none' %}
+        <svg viewBox="0 0 20 20" aria-hidden="true">{% render 'icon', icon: block.settings.icon %}</svg>
+      {% endif %}
+      <div>
+        <h3>{{ block.settings.title | escape }}</h3>
+        <p>{{ block.settings.description | escape }}</p>
+      </div>
+    </li>
+  {% endfor %}
+{% endcapture %}
+
+{% assign verified_benefits = verified_benefits | strip %}
+{% assign product_image_status = section.settings.product_image_verification_status | upcase %}
+{% assign app_image_status = section.settings.app_image_verification_status | upcase %}
+{% assign has_verified_app_image = false %}
+{% if section.settings.app_image != blank and app_image_status == 'CONFIRMED' %}
+  {% assign has_verified_app_image = true %}
+{% endif %}
+
+{% if section.settings.enable_section and section.settings.heading != blank and section.settings.product_image != blank and product_image_status == 'CONFIRMED' and verified_benefit_count >= 2 and verified_benefits != blank %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section
+    class="relivanow-remote-control relivanow-remote-control--{{ section.settings.layout }} section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %}"
+  >
+    <div class="relivanow-remote-control__layout">
+      <div class="relivanow-remote-control__visuals{% if has_verified_app_image %} relivanow-remote-control__visuals--paired{% endif %}">
+        <figure class="relivanow-remote-control__product-media">
+          {% assign product_image_alt = section.settings.product_image_alt | default: section.settings.product_image.alt | default: product.title %}
+          {{ section.settings.product_image | image_url: width: 1400 | image_tag: widths: '360, 540, 750, 1000, 1400', sizes: '(min-width: 750px) 45vw, 100vw', loading: 'lazy', alt: product_image_alt }}
+        </figure>
+        {% if has_verified_app_image %}
+          <figure class="relivanow-remote-control__app-media">
+            {% assign app_image_alt = section.settings.app_image_alt | default: section.settings.app_image.alt | default: section.settings.heading %}
+            {{ section.settings.app_image | image_url: width: 900 | image_tag: widths: '240, 360, 540, 720, 900', sizes: '(min-width: 750px) 20vw, 45vw', loading: 'lazy', alt: app_image_alt }}
+          </figure>
+        {% endif %}
+      </div>
+      <div class="relivanow-remote-control__content">
+        {% render 'relivanow-section-header', eyebrow: section.settings.eyebrow, heading: section.settings.heading, text: section.settings.description, alignment: section.settings.alignment %}
+        <ul class="relivanow-remote-control__benefits" role="list">{{ verified_benefits }}</ul>
+        {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+          <a class="button" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label | escape }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Remote Control — add a confirmed product image and two to four verified benefits; app imagery must also be confirmed' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-remote-control__layout,
+  .relivanow-remote-control__visuals,
+  .relivanow-remote-control__content,
+  .relivanow-remote-control__benefits { display: grid; min-width: 0; }
+  .relivanow-remote-control__layout { gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .relivanow-remote-control__visuals { position: relative; }
+  .relivanow-remote-control__content { gap: var(--gap-md); }
+  .relivanow-remote-control__content .relivanow-section-header { margin-block-end: 0; }
+  .relivanow-remote-control__product-media,
+  .relivanow-remote-control__app-media { margin: 0; border-radius: var(--style-border-radius-sm); background: var(--color-surface); overflow: hidden; }
+  .relivanow-remote-control__product-media { aspect-ratio: 1; }
+  .relivanow-remote-control__app-media { position: absolute; inset-block-end: var(--padding-sm); inset-inline-end: var(--padding-sm); width: min(38%, 13rem); aspect-ratio: 9 / 16; border: 4px solid var(--color-background); }
+  .relivanow-remote-control__visuals img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .relivanow-remote-control__benefits { gap: var(--gap-sm); margin: 0; padding: 0; list-style: none; }
+
+  .relivanow-remote-control__benefit {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--gap-sm);
+    padding-block-start: var(--padding-sm);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .relivanow-remote-control__benefit svg { width: 28px; height: 28px; color: var(--color-brand); }
+  .relivanow-remote-control__benefit h3,
+  .relivanow-remote-control__benefit p { margin: 0; }
+  .relivanow-remote-control__benefit p { margin-block-start: var(--margin-3xs); color: var(--color-muted); }
+  .relivanow-remote-control__content .button { width: fit-content; min-height: 44px; }
+
+  @media screen and (min-width: 750px) {
+    .relivanow-remote-control__layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .relivanow-remote-control--content-first .relivanow-remote-control__visuals { order: 2; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW remote control",
+  "max_blocks": 4,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Control that fits the daily routine" },
+    { "type": "richtext", "id": "description", "label": "Description" },
+    { "type": "image_picker", "id": "product_image", "label": "Approved product image" },
+    { "type": "select", "id": "product_image_verification_status", "label": "Product image status", "options": [{ "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }, { "value": "UNVERIFIED", "label": "Unverified" }], "default": "UNVERIFIED" },
+    { "type": "text", "id": "product_image_alt", "label": "Product image alt text" },
+    { "type": "image_picker", "id": "app_image", "label": "Approved app screenshot or mockup" },
+    { "type": "select", "id": "app_image_verification_status", "label": "App image status", "options": [{ "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }, { "value": "UNVERIFIED", "label": "Unverified" }], "default": "UNVERIFIED" },
+    { "type": "text", "id": "app_image_alt", "label": "App image alt text" },
+    { "type": "text", "id": "cta_label", "label": "Optional CTA label" },
+    { "type": "url", "id": "cta_link", "label": "Optional CTA link" },
+    { "type": "select", "id": "layout", "label": "Layout", "options": [{ "value": "media-first", "label": "Media first" }, { "value": "content-first", "label": "Content first" }], "default": "media-first" },
+    { "type": "select", "id": "alignment", "label": "Header alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "left" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFFFFF" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Verified benefit",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Verification status", "options": [{ "value": "UNVERIFIED", "label": "Unverified" }, { "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNVERIFIED" },
+        { "type": "select", "id": "icon", "label": "Icon", "options": [{ "value": "none", "label": "None" }, { "value": "lightning_bolt", "label": "Connected control" }, { "value": "stopwatch", "label": "Schedule" }, { "value": "serving_dish", "label": "Feeding" }, { "value": "check_box", "label": "Check" }], "default": "none" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW remote control", "category": "Product" }]
+}
+{% endschema %}

@@ -204,15 +204,29 @@ class ProductFormComponent extends Component {
   /** @type {Array<{variantId: string, quantity: number}>} */
   #addToCartQueue = [];
 
+  /** @type {boolean} */
+  #addToCartInProgress = false;
+
+  /** @type {string | undefined} */
+  #submittedVariantId;
+
+  /** @type {AddToCartComponent[]} */
+  #enabledAddToCartContainers = [];
+
+  /** @type {HTMLButtonElement[]} */
+  #enabledStickyAddToCartButtons = [];
+
   connectedCallback() {
     super.connectedCallback();
 
     const { signal } = this.#abortController;
     const target = this.closest('.shopify-section, dialog, product-card');
     target?.addEventListener(StandardEvents.productSelect, this.#onProductSelect, { signal });
+    target?.addEventListener('change', this.#onAddOnSelectionChange, { signal });
 
     // Listen for cart updates to sync data-cart-quantity
     document.addEventListener(StandardEvents.cartLinesUpdate, this.#onCartUpdate, { signal });
+    this.#syncAcceleratedCheckoutWithAddOns();
   }
 
   disconnectedCallback() {
@@ -299,30 +313,217 @@ class ProductFormComponent extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    if (this.#addToCartInProgress || (this.#variantChangeInProgress && this.#addToCartQueue.length > 0)) return;
+
     if (this.#variantChangeInProgress) {
       const intendedVariantId = this.#getIntendedVariantId();
       const quantity = this.#getQuantity();
 
       if (intendedVariantId) {
-        this.#addToCartQueue.push({ variantId: intendedVariantId, quantity });
+        this.#addToCartQueue = this.#getSubmissionItems(intendedVariantId, quantity);
       }
 
       this.refs.addToCartButtonContainer?.animateAddToCart?.();
       return;
     }
 
-    this.#processAddToCart(undefined, undefined, event);
+    const intendedVariantId = this.#getIntendedVariantId();
+    const submissionItems = intendedVariantId ? this.#getSubmissionItems(intendedVariantId, this.#getQuantity()) : [];
+
+    if (!this.#validateQuantity()) return;
+
+    if (submissionItems.length > 1) {
+      this.#processBatchAddToCart(submissionItems, event);
+    } else {
+      this.#processAddToCart(undefined, undefined, event);
+    }
   }
 
   /** @returns {string | undefined} */
   #getIntendedVariantId() {
-    return new URL(window.location.href).searchParams.get('variant') || this.refs.variantId?.value || undefined;
+    const productContext = this.closest('.shopify-section, dialog, product-card');
+    const selectedVariant = /** @type {HTMLInputElement | null} */ (
+      productContext?.querySelector('variant-picker input[type="radio"]:checked')
+    );
+
+    return (
+      new URL(window.location.href).searchParams.get('variant') ||
+      this.refs.variantId?.value ||
+      selectedVariant?.dataset.variantId ||
+      undefined
+    );
+  }
+
+  /**
+   * Prevents concurrent cart requests and exposes an accessible loading state.
+   * @param {string} variantId
+   * @returns {boolean}
+   */
+  #beginAddToCart(variantId) {
+    if (this.#addToCartInProgress) return false;
+
+    this.#addToCartInProgress = true;
+    this.#submittedVariantId = variantId;
+
+    const { addToCartTextError } = this.refs;
+    if (addToCartTextError) addToCartTextError.classList.add('hidden');
+    this.#clearLiveRegionText();
+
+    this.#enabledAddToCartContainers = Array.from(this.querySelectorAll('add-to-cart-component')).filter(
+      (container) => !container.refs.addToCartButton?.disabled
+    );
+
+    const productSection = this.closest('.shopify-section');
+    this.#enabledStickyAddToCartButtons = Array.from(
+      productSection?.querySelectorAll('sticky-add-to-cart [ref="addToCartButton"]') ?? []
+    ).filter((button) => button instanceof HTMLButtonElement && !button.disabled);
+
+    for (const container of this.#enabledAddToCartContainers) {
+      container.disable();
+      container.refs.addToCartButton?.setAttribute('aria-busy', 'true');
+    }
+
+    for (const button of this.#enabledStickyAddToCartButtons) {
+      button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
+    }
+
+    return true;
+  }
+
+  #finishAddToCart() {
+    const currentVariantId = this.#getIntendedVariantId();
+
+    for (const container of this.querySelectorAll('add-to-cart-component')) {
+      container.refs.addToCartButton?.removeAttribute('aria-busy');
+    }
+
+    const productSection = this.closest('.shopify-section');
+    for (const button of productSection?.querySelectorAll('sticky-add-to-cart [ref="addToCartButton"]') ?? []) {
+      button.removeAttribute('aria-busy');
+    }
+
+    if (!this.#submittedVariantId || currentVariantId === this.#submittedVariantId) {
+      for (const container of this.#enabledAddToCartContainers) {
+        if (container.isConnected) container.enable();
+      }
+
+      for (const button of this.#enabledStickyAddToCartButtons) {
+        if (button.isConnected) button.disabled = false;
+      }
+    }
+
+    this.#enabledAddToCartContainers = [];
+    this.#enabledStickyAddToCartButtons = [];
+    this.#submittedVariantId = undefined;
+    this.#addToCartInProgress = false;
   }
 
   /** @returns {number} */
   #getQuantity() {
     return Number(this.refs.quantitySelector?.getValue?.()) || Number(this.dataset.quantityDefault) || 1;
   }
+
+  /** @returns {boolean} */
+  #validateQuantity() {
+    if (!this.refs.quantitySelector?.canAddToCart) return true;
+
+    const validation = this.refs.quantitySelector.canAddToCart();
+    if (validation.canAdd) return true;
+
+    const allAddToCartContainers = /** @type {NodeListOf<AddToCartComponent>} */ (
+      this.querySelectorAll('add-to-cart-component')
+    );
+    for (const container of allAddToCartContainers) container.disable();
+
+    const errorTemplate = this.dataset.quantityErrorMax || '';
+    const errorMessage = errorTemplate.replace('{{ maximum }}', validation.maxQuantity?.toString() || '');
+    this.#showAddToCartError(errorMessage);
+
+    setTimeout(() => {
+      for (const container of allAddToCartContainers) container.enable();
+    }, ERROR_BUTTON_REENABLE_DELAY);
+
+    return false;
+  }
+
+  /** @param {string} message */
+  #showAddToCartError(message) {
+    const errorMessage = message || 'Add to cart failed';
+    const { addToCartTextError } = this.refs;
+
+    if (this.#timeout) clearTimeout(this.#timeout);
+
+    if (addToCartTextError) {
+      addToCartTextError.classList.remove('hidden');
+      const textNode = addToCartTextError.childNodes[2];
+      if (textNode) {
+        textNode.textContent = errorMessage;
+      } else {
+        addToCartTextError.appendChild(document.createTextNode(errorMessage));
+      }
+    }
+
+    this.#setLiveRegionText(errorMessage);
+    this.#timeout = setTimeout(() => {
+      addToCartTextError?.classList.add('hidden');
+      this.#clearLiveRegionText();
+    }, ERROR_MESSAGE_DISPLAY_DURATION);
+  }
+
+  /** @returns {Array<{variantId: string, quantity: number}>} */
+  #getSelectedAddOns() {
+    const productContext = this.closest('.shopify-section, dialog, product-card');
+    const selectedAddOns = /** @type {NodeListOf<HTMLInputElement>} */ (
+      productContext?.querySelectorAll(
+        '[data-relivanow-add-on] input[data-addon-variant-id][data-addon-available="true"]:checked:not(:disabled)'
+      ) ?? []
+    );
+    const seenVariantIds = new Set();
+
+    return Array.from(selectedAddOns).flatMap((input) => {
+      const variantId = input.dataset.addonVariantId;
+      if (!variantId || seenVariantIds.has(variantId)) return [];
+      seenVariantIds.add(variantId);
+      return [{ variantId, quantity: 1 }];
+    });
+  }
+
+  /**
+   * @param {string} mainVariantId
+   * @param {number} quantity
+   * @returns {Array<{variantId: string, quantity: number}>}
+   */
+  #getSubmissionItems(mainVariantId, quantity) {
+    return [
+      { variantId: mainVariantId, quantity },
+      ...this.#getSelectedAddOns().filter((item) => item.variantId !== mainVariantId),
+    ];
+  }
+
+  #syncAcceleratedCheckoutWithAddOns() {
+    const acceleratedCheckout = this.refs.acceleratedCheckoutButtonContainer;
+    if (!acceleratedCheckout) return;
+
+    const hasSelectedAddOns = this.#getSelectedAddOns().length > 0;
+    if (hasSelectedAddOns) {
+      acceleratedCheckout.dataset.relivanowAddOnSuppressed = 'true';
+      acceleratedCheckout.setAttribute('hidden', 'true');
+      return;
+    }
+
+    if (acceleratedCheckout.dataset.relivanowAddOnSuppressed === 'true') {
+      delete acceleratedCheckout.dataset.relivanowAddOnSuppressed;
+      if (!this.refs.addToCartButtonContainer?.refs.addToCartButton?.disabled) {
+        acceleratedCheckout.removeAttribute('hidden');
+      }
+    }
+  }
+
+  #onAddOnSelectionChange = (event) => {
+    if (!(event.target instanceof HTMLInputElement) || !event.target.matches('[data-addon-variant-id]')) return;
+    this.#syncAcceleratedCheckoutWithAddOns();
+  };
 
   /**
    * @param {string} [overrideVariantId]
@@ -348,51 +549,13 @@ class ProductFormComponent extends Component {
     const form = this.querySelector('form');
     if (!form) throw new Error('Product form element missing');
 
-    if (!overrideVariantId && this.refs.quantitySelector?.canAddToCart) {
-      const validation = this.refs.quantitySelector.canAddToCart();
-
-      if (!validation.canAdd) {
-        for (const container of allAddToCartContainers) {
-          container.disable();
-        }
-
-        const errorTemplate = this.dataset.quantityErrorMax || '';
-        const errorMessage = errorTemplate.replace('{{ maximum }}', validation.maxQuantity?.toString() || '');
-        if (addToCartTextError) {
-          addToCartTextError.classList.remove('hidden');
-
-          const textNode = addToCartTextError.childNodes[2];
-          if (textNode) {
-            textNode.textContent = errorMessage;
-          } else {
-            const newTextNode = document.createTextNode(errorMessage);
-            addToCartTextError.appendChild(newTextNode);
-          }
-
-          this.#setLiveRegionText(errorMessage);
-
-          if (this.#timeout) clearTimeout(this.#timeout);
-          this.#timeout = setTimeout(() => {
-            if (!addToCartTextError) return;
-            addToCartTextError.classList.add('hidden');
-            this.#clearLiveRegionText();
-          }, ERROR_MESSAGE_DISPLAY_DURATION);
-        }
-
-        setTimeout(() => {
-          for (const container of allAddToCartContainers) {
-            container.enable();
-          }
-        }, ERROR_BUTTON_REENABLE_DELAY);
-
-        return;
-      }
-    }
-
     const formData = new FormData(form);
 
     if (overrideVariantId) {
       formData.set('id', overrideVariantId);
+    } else if (!formData.get('id')) {
+      const intendedVariantId = this.#getIntendedVariantId();
+      if (intendedVariantId) formData.set('id', intendedVariantId);
     }
     if (overrideQuantity !== undefined) {
       formData.set('quantity', overrideQuantity.toString());
@@ -406,6 +569,9 @@ class ProductFormComponent extends Component {
       }
       formData.append('sections', cartItemComponentsSectionIds.join(','));
     });
+
+    const submittedVariantId = String(formData.get('id') || '');
+    if (!submittedVariantId || !this.#beginAddToCart(submittedVariantId)) return;
 
     const itemCount = Number(formData.get('quantity')) || Number(this.dataset.quantityDefault);
     const deferredEventPromise = CartLinesUpdateEvent.createPromise();
@@ -541,23 +707,34 @@ class ProductFormComponent extends Component {
         console.error(error);
         deferredEventPromise.reject(error);
 
+        const errorMessage = error?.message || 'Network error during add to cart';
+
         this.dispatchEvent(
           new CartErrorEvent({
-            error: error?.message || 'Network error during add to cart',
+            error: errorMessage,
             code: 'SERVICE_UNAVAILABLE',
           })
         );
+        this.#showAddToCartError(errorMessage);
       })
       .finally(() => {
+        this.#finishAddToCart();
+
         if (event) {
           cartPerformance.measureFromEvent('add:user-action', event);
         }
       });
   }
 
-  /** @param {Array<{variantId: string, quantity: number}>} items */
-  #processBatchAddToCart(items) {
+  /**
+   * @param {Array<{variantId: string, quantity: number}>} items
+   * @param {Event} [event]
+   */
+  #processBatchAddToCart(items, event) {
     if (items.length === 0) return;
+
+    const submittedVariantId = items[0]?.variantId;
+    if (!submittedVariantId || !this.#beginAddToCart(submittedVariantId)) return;
 
     const { addToCartTextError } = this.refs;
 
@@ -685,12 +862,20 @@ class ProductFormComponent extends Component {
         console.error(error);
         deferredEventPromise.reject(error);
 
+        const errorMessage = error?.message || 'Network error during add to cart';
+
         this.dispatchEvent(
           new CartErrorEvent({
-            error: error?.message || 'Network error during add to cart',
+            error: errorMessage,
             code: 'SERVICE_UNAVAILABLE',
           })
         );
+
+        this.#showAddToCartError(errorMessage);
+      })
+      .finally(() => {
+        this.#finishAddToCart();
+        if (event) cartPerformance.measureFromEvent('add:user-action', event);
       });
   }
 
@@ -795,6 +980,7 @@ class ProductFormComponent extends Component {
           acceleratedCheckoutButtonContainer?.removeAttribute('hidden');
         }
       }
+      this.#syncAcceleratedCheckoutWithAddOns();
 
       // Set the data attribute for the product variant media if it exists
       if (resource) {
@@ -901,7 +1087,14 @@ class ProductFormComponent extends Component {
         if (this.#addToCartQueue.length > 0) {
           const queuedItems = [...this.#addToCartQueue];
           this.#addToCartQueue = [];
-          this.#processBatchAddToCart(queuedItems);
+          if (!this.#validateQuantity()) return;
+
+          if (queuedItems.length > 1) {
+            this.#processBatchAddToCart(queuedItems);
+          } else {
+            const [queuedItem] = queuedItems;
+            if (queuedItem) this.#processAddToCart(queuedItem.variantId, queuedItem.quantity);
+          }
         }
       }
     }

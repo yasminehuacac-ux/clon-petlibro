@@ -6,17 +6,21 @@ import { Component } from '@theme/component';
  * @extends {Component}
  */
 class CopyToClipboardComponent extends Component {
-  copyToClipboard() {
+  async copyToClipboard() {
     const copyContent = this.getAttribute('text-to-copy');
 
     if (!copyContent) return;
 
-    navigator.clipboard.writeText(copyContent);
-
     const copySuccessMessage = this.refs.copySuccessMessage;
+    const copyErrorMessage = this.refs.copyErrorMessage;
 
-    if (copySuccessMessage instanceof Element) {
-      copySuccessMessage.classList.remove('visually-hidden');
+    try {
+      await navigator.clipboard.writeText(copyContent);
+      if (copyErrorMessage instanceof Element) copyErrorMessage.classList.add('visually-hidden');
+      if (copySuccessMessage instanceof Element) copySuccessMessage.classList.remove('visually-hidden');
+    } catch {
+      if (copySuccessMessage instanceof Element) copySuccessMessage.classList.add('visually-hidden');
+      if (copyErrorMessage instanceof Element) copyErrorMessage.classList.remove('visually-hidden');
     }
   }
 }

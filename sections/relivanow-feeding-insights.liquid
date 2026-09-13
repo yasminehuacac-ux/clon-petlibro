@@ -1,0 +1,129 @@
+{% liquid
+  assign insight_count = 0
+%}
+
+{% capture insight_cards %}
+  {% for block in section.blocks %}
+    {% liquid
+      assign insight_status = block.settings.verification_status | upcase
+      if insight_status != 'CONFIRMED' or block.settings.label == blank or block.settings.description == blank
+        continue
+      endif
+      assign insight_count = insight_count | plus: 1
+      if insight_count > 4
+        break
+      endif
+    %}
+    <article class="relivanow-feeding-insights__card" {{ block.shopify_attributes }}>
+      {% if block.settings.icon != 'none' %}
+        <svg class="relivanow-feeding-insights__icon" viewBox="0 0 20 20" aria-hidden="true">
+          {% render 'icon', icon: block.settings.icon %}
+        </svg>
+      {% endif %}
+      <div>
+        <h3>{{ block.settings.label | escape }}</h3>
+        {% if block.settings.value != blank %}<strong>{{ block.settings.value | escape }}</strong>{% endif %}
+        <p>{{ block.settings.description | escape }}</p>
+      </div>
+    </article>
+  {% endfor %}
+{% endcapture %}
+
+{% assign insight_cards = insight_cards | strip %}
+{% assign image_status = section.settings.image_verification_status | upcase %}
+{% if section.settings.enable_section and section.settings.heading != blank and section.settings.image != blank and image_status == 'CONFIRMED' and insight_count >= 2 and insight_cards != blank %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section class="relivanow-feeding-insights section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-section-header', eyebrow: section.settings.eyebrow, heading: section.settings.heading, text: section.settings.text, alignment: section.settings.alignment %}
+    <div class="relivanow-feeding-insights__layout">
+      <div class="relivanow-feeding-insights__media">
+        {% assign image_alt = section.settings.image_alt | default: section.settings.image.alt | default: section.settings.heading %}
+        {{ section.settings.image | image_url: width: 1600 | image_tag: widths: '480, 750, 1000, 1250, 1600', sizes: '(min-width: 750px) 50vw, 100vw', loading: 'lazy', alt: image_alt }}
+      </div>
+      <div class="relivanow-feeding-insights__cards">{{ insight_cards }}</div>
+    </div>
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Preview only — configure verified feeding insight data' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-feeding-insights__layout,
+  .relivanow-feeding-insights__cards { display: grid; min-width: 0; gap: var(--gap-md); }
+
+  .relivanow-feeding-insights__media {
+    min-width: 0;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--style-border-radius-sm);
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+
+  .relivanow-feeding-insights__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .relivanow-feeding-insights__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .relivanow-feeding-insights__card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--gap-xs);
+    min-width: 0;
+    padding: var(--padding-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-border-radius-sm);
+    background: var(--color-background);
+  }
+
+  .relivanow-feeding-insights__icon { width: 24px; height: 24px; color: var(--color-brand); }
+  .relivanow-feeding-insights__card h3,
+  .relivanow-feeding-insights__card p { margin: 0; }
+  .relivanow-feeding-insights__card strong { display: block; margin-block: var(--margin-3xs); font-size: 1.25rem; }
+  .relivanow-feeding-insights__card p { color: var(--color-muted); overflow-wrap: anywhere; }
+
+  @media screen and (max-width: 479px) {
+    .relivanow-feeding-insights__cards { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  @media screen and (min-width: 750px) {
+    .relivanow-feeding-insights__layout { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: start; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW feeding data",
+  "max_blocks": 4,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Feeding insights" },
+    { "type": "richtext", "id": "text", "label": "Introductory text" },
+    { "type": "image_picker", "id": "image", "label": "Approved image or screenshot" },
+    { "type": "select", "id": "image_verification_status", "label": "Image verification status", "options": [{ "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }, { "value": "UNVERIFIED", "label": "Unverified" }], "default": "UNVERIFIED" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "select", "id": "alignment", "label": "Header alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "center" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }], "default": "page-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#F7F7F4" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "insight",
+      "name": "Verified insight",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Verification status", "options": [{ "value": "UNVERIFIED", "label": "Unverified" }, { "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNVERIFIED" },
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "value", "label": "Optional value" },
+        { "type": "textarea", "id": "description", "label": "Description" },
+        { "type": "select", "id": "icon", "label": "Icon", "options": [{ "value": "none", "label": "None" }, { "value": "check_box", "label": "Check" }, { "value": "stopwatch", "label": "Time" }, { "value": "serving_dish", "label": "Feeding" }], "default": "none" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW feeding data", "category": "Product" }]
+}
+{% endschema %}

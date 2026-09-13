@@ -1,6 +1,6 @@
 # Shopify data model
 
-**Status:** TASK-003 approved architecture. No remote definitions or records were created.
+**Status:** TASK-003 approved architecture; TASK-004 closure created only the five confirmed Product definitions documented below. All other planned definitions/records remain uncreated.
 
 ## Data authority and classification
 
@@ -26,6 +26,23 @@ Source priority is supplier-confirmed evidence, approved RELIVANOW decisions, Sh
 | Shopify Bundles | Fixed bundle product and component inventory relationships | Create only after every component product/SKU exists and commercial approval is recorded. |
 | Judge.me | Average rating, review count, verified reviews, customer photos/videos, review structured data | Planned single review authority. Do not create parallel manual rating/count metafields or duplicate Product review schema. |
 
+## TASK-004 Phase 2 section-owned data
+
+Phase 2 adds no metafield or metaobject definition. It composes the existing typed Product ranges with explicit Theme Editor verification gates and native Shopify objects:
+
+| Module | Data ownership | Validation rule |
+|---|---|---|
+| Precise Feeding | Existing typed Product min/max metafields; optional manual section metrics | Complete ranges with max ≥ min; every block must be `CONFIRMED`; 2–4 renderable metrics |
+| Feeding Insights | Section image plus 2–4 insight blocks | Image and every visible card must be `CONFIRMED`; values are optional but labels/descriptions are required |
+| Remote Control | Section product image, optional app image, 2–4 benefit blocks | Product image and visible benefits must be `CONFIRMED`; app image has an independent confirmation gate |
+| Product Comparison | Section Product picker blocks and row blocks | Two to four distinct public Products; Product-level and relationship status both `CONFIRMED`; row content independently `CONFIRMED` |
+| Smart-feeding comparison | Section row blocks | Three to six complete `CONFIRMED` rows; no Product/Variant state is created |
+| App Experience | Section screenshot blocks | One to three `CONFIRMED` image blocks with real `image_picker` assets |
+| Reviews | Shopify `@app` blocks | Rendered app content only; Judge.me retains full review/rating/schema authority |
+| Final CTA | Native Product featured image or section image, native optional price, section copy | Image approval must be explicitly `CONFIRMED`; CTA owns no Variant ID or product form |
+
+Section verification settings are publication gates for merchant-entered editorial content, not replacements for Product governance. Missing or non-confirmed section data is never copied into another browser or Shopify data store.
+
 ## Product metafield definitions
 
 Namespace: `relivanow`. Translatable text uses Shopify's translation workflow; reference fields rely on translations of the referenced record. Definition validations enforce only constraints Shopify can express directly. Cross-field comparisons, evidence review, file MIME checks, policy-kind matching, and "not in the future" checks are procedural validation in the merchant checklist.
@@ -34,7 +51,7 @@ The copy examples below are staging values, not live values. A simple text metaf
 
 | Visible name | Namespace and key | Owner | Shopify type | Cardinality | Validation | Feeder example | Source status | Future storefront use | Translatable |
 |---|---|---|---|---|---|---|---|---|---|
-| Product subtitle | `relivanow.subtitle` | Product | `single_line_text_field` | Single | 1–120 chars | Smart feeding for a more predictable daily routine. | PROVISIONAL | PDP subtitle/cards; keep blank until approved | Yes |
+| Product subtitle | `relivanow.product_subtitle` | Product | `single_line_text_field` | Single | 1–120 chars | Smart feeding for a more predictable daily routine. | PROVISIONAL | PDP subtitle; keep blank until approved | Yes |
 | Short value proposition | `relivanow.short_value_proposition` | Product | `multi_line_text_field` | Single | 1–300 chars | Set 1 to 10 meals a day, choose 1 to 12 portions per meal, and use supported mobile app controls. | PROVISIONAL COPY | PDP purchase summary; keep blank until approved | Yes |
 | Key benefits | `relivanow.key_benefits` | Product | `list.metaobject_reference` | List, max 6 | Definition `relivanow_feature`; only ACTIVE, confirmed records | Portion control, app support, dual power | Mixed; per record | Benefit strip/overview | Via records |
 | Capacity | `relivanow.capacity` | Product | `volume` | Single | > 0; display unit L | 2 L | CONFIRMED | Specs and comparison | No |
@@ -50,6 +67,7 @@ The copy examples below are staging values, not live values. A simple text metaf
 | Power source | `relivanow.power_source` | Product | `list.single_line_text_field` | List, max 3 | Approved sources only | Power adapter | CONFIRMED | Specs | Yes |
 | Backup power | `relivanow.backup_power` | Product | `single_line_text_field` | Single | No battery-life implication | Three batteries | CONFIRMED | Specs | Yes |
 | Box contents | `relivanow.box_contents` | Product | `list.single_line_text_field` | List, max 20 | One item per entry | Pet feeder ×1; Power adapter ×1; Instruction manual ×1 | CONFIRMED | Accessible box-contents list | Yes |
+| Box item references | `relivanow.box_items` | Product | `list.metaobject_reference` | List, max 20 | Definition `relivanow_box_item`; confirmed records only | Feeder; adapter; manual | PENDING definition/data | Visual box-content cards with quantity and optional media; falls back to `box_contents` | Via records |
 | Care instructions | `relivanow.care_instructions` | Product | `rich_text_field` | Single | Approved manual-based instructions only | [No live value until manual review] | PROVISIONAL | Care section; keep blank until approved | Yes |
 | Compatibility notes | `relivanow.compatibility_notes` | Product | `rich_text_field` | Single | Must not imply 5 GHz support | Requires a 2.4 GHz Wi-Fi network for connected controls. | CONFIRMED | PDP compatibility notice | Yes |
 | App name | `relivanow.app_name` | Product | `single_line_text_field` | Single | Render only after official-name verification | [No value] | UNVERIFIED | App download module | Yes |
@@ -63,10 +81,17 @@ The copy examples below are staging values, not live values. A simple text metaf
 | Return policy | `relivanow.return_policy` | Product | `metaobject_reference` | Single | Definition `relivanow_policy`; procedural `policy_kind=return` check | 30-day return window | PROVISIONAL | PDP policy summary | Via record |
 | Warranty policy | `relivanow.warranty_policy` | Product | `metaobject_reference` | Single | Definition `relivanow_policy`; procedural `policy_kind=warranty` check | 24-month limited warranty | PROVISIONAL | PDP policy summary | Via record |
 | Bundle offers | `relivanow.bundle_offers` | Product | `list.metaobject_reference` | List, max 8 | Definition `relivanow_bundle_offer`; ACTIVE confirmed offers only | Daily Feeding; Complete Feeding | PROVISIONAL | Bundle selector/upsell | Via records |
-| Compatible add-ons | `relivanow.compatible_addons` | Product | `list.product_reference` | List, max 12 | Real active products only; every listed product must be approved for all current Single Bowl color variants | [No products linked] | UNVERIFIED | PDP add-ons/cart cross-sell | Product content translates normally |
+| Add-on products | `relivanow.add_on_products` | Product | `list.product_reference` | List, max 12 | Ordered real, CONFIRMED products only; exclude the parent Product; current quick-add UI requires one native default Variant and approved compatibility with all current Single Bowl colors | [No products linked] | PENDING definition/data | Fail-closed PDP add-on selector; native Product/Variant data remains authoritative | Product content translates normally |
+| Purchase badge | `relivanow.purchase_badge` | Product | `single_line_text_field` | Single | Optional enum: Recommended, Best value; populate only after merchandising approval | [No value] | PENDING | Optional badge when this Product is rendered as an add-on; blank or unknown values omit | Yes |
+| Related models | `relivanow.related_models` | Product | `list.product_reference` | List, max 6 | Ordered public, CONFIRMED products; include the current product and at least one other real model | [No products linked] | PENDING | TASK-004 model selector; hides unless at least two confirmed public references resolve and one is current | Product content translates normally |
+| Model selector badge | `relivanow.model_badge` | Product | `single_line_text_field` | Single | Optional enum: Recommended, Coming soon, Best value; populate only after merchandising approval | [No value] | PENDING | Optional badge on a referenced model card; blank or unknown values omit | Yes |
+| Color swatches | `relivanow.color_swatches` | Product | `list.metaobject_reference` | List | Reference definition `relivanow_color_swatch`; match ordered records to native Color values by normalized `option_value_name` | [No records linked] | PENDING definition/data | Product-owned Color appearance; first valid normalized match wins | No |
+| Color display mode | `relivanow.color_display_mode` | Product | `single_line_text_field` | Single | Choices: `swatch_only`, `swatch_and_name` | [No value; storefront falls back to Variant Picker setting] | PENDING definition/data | Product-owned Color selector presentation | No |
 | Verification status | `relivanow.verification_status` | Product | `single_line_text_field` | Single | Enum: CONFIRMED, PROVISIONAL, UNVERIFIED, NOT APPLICABLE | CONFIRMED | CONFIRMED | Internal overall governance; never use it to approve every field | No |
 | Last verification date | `relivanow.last_verification_date` | Product | `date` | Single | ISO date; not future | [Date of evidence review] | UNVERIFIED until entered | Internal governance | No |
 | Source reference | `relivanow.source_reference` | Product | `multi_line_text_field` | Single | Internal citation/version; no credentials | [No source revision entered] | UNVERIFIED until entered | Internal provenance | No |
+
+TASK-003 closed with 33 planned product metafields. TASK-004 renamed the planning keys `subtitle` and `compatible_addons` to the implemented `product_subtitle` and `add_on_products`; those corrections do not add definitions. The visual extensions add `related_models`, `model_badge`, `color_swatches`, `color_display_mode`, and `purchase_badge`; long-form Phase 1 adds `box_items`, bringing the documented product-metafield model to 39. The Color and box-item definitions require storefront access enabled. None of these additions replaces native option values or commerce fields. `option_value_name` is only a normalized lookup key: visible names always come from the native Product option. TASK-004 closure created only `meals_per_day_min`, `meals_per_day_max`, `portions_per_meal_min`, `portions_per_meal_max`, and `box_contents`, with the confirmed current-Product values recorded in the TASK-004 result; every other planned definition/value remains absent.
 
 `relivanow.last_verification_date` and `relivanow.source_reference` are admin-only definitions with Storefront API access disabled. `relivanow.verification_status` is also governance data and is never customer-facing. `key_benefits` is an optional ordered subset of the same `relivanow_feature` records linked by `features`; never clone a feature record merely to place it in both lists.
 
@@ -78,6 +103,7 @@ The copy examples below are staging values, not live values. A simple text metaf
 | Product/variant media | Native `Product.media` and variant featured media | Preserves Horizon gallery, variant selection, Shopify CDN, alt text, and editor behavior. |
 | Price and compare-at price | Native Variant fields | Prevents price divergence and supports Markets/catalogs. |
 | Finish display label | Native `Color` option value | `Cloud White` and `Graphite` are already the customer-facing option values; a `finish_display_label` metafield would duplicate them and could drift. |
+| Related-model title, URL, availability, price, compare-at price and featured media | Referenced native Product fields | `relivanow.related_models` contains references only. Never copy these values into relationship metadata. |
 | Title, handle, description, SKU, barcode, inventory, option values | Native Product/Variant fields | Existing Shopify responsibilities; no duplicate metafields. |
 
 ## Variant metafield definitions
@@ -89,6 +115,9 @@ These fields exist only when the value genuinely differs by SKU. Internal fields
 | Supplier SKU | `relivanow.supplier_sku` | Product variant | `single_line_text_field` | Single | Only when different from native SKU | UNVERIFIED | Internal only | No |
 | Supplier cost | `relivanow.supplier_cost` | Product variant | `money` | Single | ≥ 0; procurement currency explicit | UNVERIFIED | Internal only | No |
 | Supplier color name | `relivanow.supplier_color_name` | Product variant | `single_line_text_field` | Single | `white` or `black` for confirmed launch colors | CONFIRMED | Internal only | No |
+| Variant swatch color | `relivanow.swatch_color` | Product variant | `color` | Single | Merchant-selected color; Cloud White `#FFFFFF`, Graphite `#323433` only after variant confirmation | PENDING definition/data | Storefront enabled | No |
+| Style card image | `relivanow.style_card_image` | Product variant | `file_reference` | Single | Accept images only; use when the style card needs a crop distinct from native featured media | PENDING definition/data | Storefront enabled | No |
+| Style badge | `relivanow.style_badge` | Product variant | `single_line_text_field` | Single | Optional enum: Recommended, Coming soon, Best value; populate only after merchandising approval | PENDING definition/data | Storefront enabled | Yes |
 | Bowl configuration status | `relivanow.bowl_configuration_status` | Product variant | `single_line_text_field` | Single | Enum: CONFIRMED, PROVISIONAL, UNVERIFIED, NOT APPLICABLE | Single Bowl: CONFIRMED; Dual Bowl: UNVERIFIED | Internal render gate | No |
 | Variant box contents | `relivanow.box_contents_override` | Product variant | `list.single_line_text_field` | List, max 20 | Populate only if contents differ | NOT APPLICABLE until a difference is confirmed | Storefront when approved | Yes |
 | Variant delivery note | `relivanow.delivery_note_override` | Product variant | `rich_text_field` | Single | Populate only for a real SKU-specific exception | NOT APPLICABLE until an exception is confirmed | Storefront when approved | Yes |
@@ -96,15 +125,29 @@ These fields exist only when the value genuinely differs by SKU. Internal fields
 | Verification source | `relivanow.verification_source` | Product variant | `multi_line_text_field` | Single | Internal evidence reference; e.g. supplier color sheet with recorded revision | UNVERIFIED until entered | Internal only | No |
 | Last verification date | `relivanow.last_verification_date` | Product variant | `date` | Single | ISO date, not future; enter final verification date | UNVERIFIED until entered | Internal only | No |
 
+TASK-003 closed with 9 variant metafields. The TASK-004 visual corrections add `swatch_color`, `style_card_image`, and `style_badge`, bringing the current documented variant-metafield model to 12. All three describe real SKU-dependent presentation and do not duplicate native option names, price, compare-at price, SKU, inventory, availability, or featured media. No remote definition was created.
+
 ## Metaobject definitions
 
-All definitions use `access.storefront=NONE`, `capabilities.publishable.enabled=true`, and `capabilities.translatable.enabled=true`. Liquid themes can read referenced entries with storefront access `NONE`; `PUBLIC_READ` is reserved for a future headless Storefront API use case and requires a separate privacy audit. Access is definition-level, not field-level: every field is Liquid-addressable, so TASK-004 must serialize only the explicit public fields named below and never output provenance/governance fields. Only records with `verification_status=CONFIRMED` may be set `ACTIVE`; `PROVISIONAL`, `UNVERIFIED`, and supplier-asset-only records remain `DRAFT`, which resolves to `nil` in Liquid. The merchant-controlled order of product reference lists is authoritative; no duplicate `sort_order` field is used.
+TASK-003 closed with seven metaobject definitions. TASK-004 adds the documented `relivanow_color_swatch` and `relivanow_box_item` definitions, bringing the planned total to nine. The seven TASK-003 content/governance definitions retain `access.storefront=NONE`, publishable/translatable capabilities, explicit public-field allowlists and their existing DRAFT/ACTIVE verification gates. The TASK-004 Color Swatch definition is a merchant presentation record with storefront access enabled and no public claims or governance fields; Box Item is publishable/translatable and renders only confirmed active records. No definition or record has been created remotely.
+
+### `relivanow_color_swatch`
+
+- Name: RELIVANOW Color Swatch; type: `relivanow_color_swatch`; display name: `option_value_name`.
+- Storefront access: enabled. Translation is not required.
+- `option_value_name`: `single_line_text_field`, required. It must correspond to a real native Color option value such as White, Black, Cloud White, or Graphite.
+- `color`: Shopify `color`, optional when `swatch_image` exists.
+- `swatch_image`: image-only `file_reference`, optional and higher priority than `color` within the same record.
+- `internal_label`: `single_line_text_field`, optional administrative label; the theme never renders it.
+- Product relationship: ordered references from `relivanow.color_swatches`. Matching uses `strip | handleize`; comparison is case-insensitive and independent of Variant IDs. The first matching record that contains an image or color wins. A later duplicate is ignored and must be corrected as invalid merchant configuration.
+
+After separately authorized remote definitions exist, Shopify Admin will expose **Color swatches** and **Color display mode** in each Product's metafield area. The merchant edits native Color option values, selects the corresponding swatch records, chooses a display mode, and saves the Product. Liquid cannot inject these controls into Shopify's native option editor, and this architecture does not claim otherwise.
 
 ### `relivanow_feature`
 
 - Display name: `title`.
 - Translation: title, eyebrow, body, accessibility label.
-- Public fields: `title` (`single_line_text_field`, required, 1–80 chars); `eyebrow` (`single_line_text_field`, optional); `body` (`rich_text_field`, required); `icon` (`file_reference`, optional); `media` (`file_reference`, optional supporting media only); `accessibility_label` (`single_line_text_field`, optional).
+- Public fields: `title` (`single_line_text_field`, required, 1–80 chars); `eyebrow` (`single_line_text_field`, optional); `body` (`rich_text_field`, required); `icon` (`file_reference`, optional); `media` (`file_reference`, optional supporting media only); `accessibility_label` (`single_line_text_field`, optional); `link` (`url`, optional approved destination).
 - Governance fields, never serialized: `verification_status` (`single_line_text_field`, required enum); `source_reference` (`multi_line_text_field`, no credentials).
 - Product relationship: referenced by `relivanow.key_benefits` and `relivanow.features`.
 - Example: “Plan up to 10 meals a day” uses `verification_status=PROVISIONAL` and a `CONFIRMED BY SUPPLIER ASSET` source qualifier until manual review. Anti-stuck mechanism records use the same gate.
@@ -144,6 +187,15 @@ TASK-004 implements an explicit Liquid `case` on `value_source`; arbitrary dynam
 - Governance fields, never serialized: `verification_status` (`single_line_text_field`, required enum); `source_reference` (`multi_line_text_field`, no credentials).
 - Product relationship: referenced by `relivanow.specification_groups`.
 - Example: “Feeding” containing Capacity 2 L, Meals/day 1–10, Portions/meal 1–12.
+
+### `relivanow_box_item`
+
+- Display name: `title`.
+- Translation: title and alt text.
+- Public fields: `title` (`single_line_text_field`, required); `quantity` (`number_integer`, required, minimum 1); `image` (image-only `file_reference`, optional); `icon` (image-only `file_reference`, optional fallback); `alt_text` (`single_line_text_field`, optional but required procedurally when media is informative).
+- Governance fields, never serialized: `verification_status` (`single_line_text_field`, required enum); `source_reference` (`multi_line_text_field`, no credentials).
+- Product relationship: ordered references from `relivanow.box_items`. Only confirmed active records with a title and positive quantity render. If no valid records exist, the long-form section may use the existing confirmed `relivanow.box_contents` text list without parsing or inventing additional items.
+- Initial confirmed records, once remotely authorized: Pet feeder ×1; Power adapter ×1; Instruction manual ×1. Batteries, cables, extra bowls, fountains, and accessories remain absent unless separately confirmed.
 
 ### `relivanow_faq`
 
@@ -185,22 +237,32 @@ TASK-004 implements an explicit Liquid `case` on `value_source`; arbitrary dynam
 
 | Color | Supplier color | Bowl configuration | Price | Publication | Media assignment | Status |
 |---|---|---|---:|---|---|---|
-| Cloud White | White | Single Bowl | USD 129 | Confirmed model; operationally pending actual SKU/inventory entry | Native variant featured media when approved assets exist | CONFIRMED definition; not yet a launch-ready record |
-| Graphite | Black | Single Bowl | USD 129 | Confirmed model; operationally pending actual SKU/inventory entry | Native variant featured media when approved assets exist | CONFIRMED definition; not yet a launch-ready record |
+| Cloud White | White | Single Bowl | USD 129 | Confirmed default model; keep first in native variant order | `01-pdp-product-cloud-white.png` is the approved visual candidate for native featured media after authorized upload | CONFIRMED definition; remote SKU/inventory/media entry still pending |
+| Graphite | Black | Single Bowl | USD 129 | Confirmed second model; do not hide or disable | No final dedicated gallery yet; native empty featured media falls back to general `product.media` | CONFIRMED definition; remote SKU/inventory entry still pending |
 | Sky Blue | Not confirmed | Single Bowl | Not set | Do not create/publish | None | UNVERIFIED |
 | Cloud White | White | Dual Bowl | USD 159 | Do not create/publish until physical SKU, cost, inventory, and media are confirmed | None | UNVERIFIED; provisional price |
 | Graphite | Black | Dual Bowl | USD 159 | Do not create/publish until physical SKU, cost, inventory, and media are confirmed | None | UNVERIFIED; provisional price |
 
 Initial public Option 1 is `Color` with `Cloud White` and `Graphite`. `Single Bowl` is the only commercial configuration and therefore is not initially exposed as a redundant option.
 
+Cloud White is the approved initial selection. This is implemented through Shopify's native first-available variant order, not through a second Liquid/JavaScript preference state. A direct `?variant=` URL always wins. If Graphite has no native featured-media association, the PDP retains the complete general `product.media` gallery as its safe fallback.
+
+The visual Color selector uses the real native `Color` option values and radio inputs. Resolution order is native `option_value.swatch.image`, native `option_value.swatch.color`, the first valid normalized match in Product `relivanow.color_swatches` (metaobject image before metaobject color), the currently resolved Variant `relivanow.swatch_color`, a matching Theme Editor mapping, then a neutral diagonal pattern. Product matching uses `strip | handleize`; the eight global mappings remain typed Shopify `color` settings and legacy fallback only.
+
+Presentation comes from Product `relivanow.color_display_mode`: `swatch_only` renders the compact circle with hidden/accessibly named native value, while `swatch_and_name` renders a uniform rectangular radio-label card with the circle and the native option value visible. A blank or invalid Product value falls back to Variant Picker `default_color_display_mode`, then `swatch_only`. Sky Blue and Dual Bowl remain absent from published product data rather than being hidden by Variant IDs or theme filters.
+
+Options whose real name matches the merchant-configurable Style/Model/Configuration allowlist render as visual cards inside the same native variant picker. Each card uses `option_value.variant`, resolving the active multi-option combination, and reads its image from `relivanow.style_card_image`, then native variant featured media, then a Shopify placeholder. Name, price, compare-at, availability, option value ID, and Variant ID remain native. This selector never links to another Product and does not create a second variant state.
+
+Physically different Wi-Fi, camera, bowl, or hardware configurations are independent Shopify Products, never Color variants. The model selector reads only `relivanow.related_models`; it renders no card until the ordered list resolves at least two public products with `relivanow.verification_status=CONFIRMED` and includes the current product. Camera-related products and copy remain excluded until real products and supplier-confirmed functions exist. A lens-like visual detail does not authorize camera, HD video, night vision, cloud recording, AI detection, or pet-recognition language.
+
 ### Add-on compatibility rule
 
-`relivanow.compatible_addons` is executable only as an approved intersection: each referenced add-on must be compatible with both current Cloud White/Single Bowl and Graphite/Single Bowl variants. Because color does not change compatibility in the confirmed initial model, one product-level ordered list is sufficient and avoids duplicate variant data. Leave it empty until every relationship is approved and the add-on product is active. If a future Bowl Configuration changes compatibility, do not reuse this field ambiguously: introduce an approved relation metaobject containing the exact parent variant references, add-on variant reference, and verification status before exposing the new bowl option.
+`relivanow.add_on_products` is executable only as an approved intersection: each referenced add-on must be a real, public, `CONFIRMED` Product compatible with both current Cloud White/Single Bowl and Graphite/Single Bowl variants. Because color does not change compatibility in the confirmed initial model, one product-level ordered list is sufficient and avoids duplicate variant data. The current checkbox quick-add also requires exactly one native default Variant; a multi-Variant referenced Product is omitted rather than choosing a configuration for the customer. Leave the list empty until every relationship is approved. If a future Bowl Configuration changes compatibility, do not reuse this field ambiguously: introduce an approved relation metaobject containing the exact parent variant references, add-on variant reference, and verification status before exposing the new bowl option.
 
 | Parent variant | Initial compatible-add-on source | Current state |
 |---|---|---|
-| Cloud White / Single Bowl | Product `relivanow.compatible_addons` | Empty; no approved add-on relationship |
-| Graphite / Single Bowl | Product `relivanow.compatible_addons` | Empty; no approved add-on relationship |
+| Cloud White / Single Bowl | Product `relivanow.add_on_products` | Empty; no approved add-on relationship |
+| Graphite / Single Bowl | Product `relivanow.add_on_products` | Empty; no approved add-on relationship |
 
 ### Safe migration to Color + Bowl Configuration
 
@@ -235,7 +297,7 @@ Shopify Markets owns actual catalogs, availability, currencies, domains, and tra
 ## Reviews authority
 
 - Judge.me is the planned sole future source for average rating, review count, verified reviews, customer media, and review structured data.
-- The adapter must read Judge.me's standard `reviews.rating` rating object and `reviews.rating_count` integer. Render only when count is a non-negative integer and rating has numeric `value`, `scale_min`, and `scale_max` with `scale_max > scale_min` and value inside that range; use the supplied scale rather than assuming five. Missing or malformed input hides rating UI/schema. A true zero count may show a neutral no-reviews state without stars or AggregateRating.
+- The adapter must read Judge.me's standard `reviews.rating` rating object and `reviews.rating_count` integer. Render only when count is a non-negative integer and the rating object has numeric `rating`, `scale_min`, and `scale_max` with `scale_max > scale_min` and rating inside that range; use the supplied scale rather than assuming five. Missing or malformed input hides rating UI/schema. A true zero count may show a neutral no-reviews state without stars or AggregateRating.
 - Audit Horizon's existing `product | structured_data` output and Judge.me JSON-LD together. Enable exactly one aggregate-rating/review schema source; visible stars/count and schema must resolve from the same Judge.me values.
 - Do not create manual rating or review-count metafields, invent reviews, import PETLIBRO reviews, or enable duplicate Product/review schema.
 - Installation and configuration require separate authorization. Until then, review-dependent UI must hide or degrade gracefully.
@@ -256,10 +318,11 @@ Use Shopify Bundles for fixed bundles after product/SKU creation and profitabili
 
 - Native purchase-critical data (selected variant, price, availability, SKU, quantity and media) always uses Horizon's native Shopify path; never substitute metafield placeholders.
 - Empty subtitle/value proposition: omit its text block. For every reference list, filter `nil`, `DRAFT`, invalid-status, and unavailable records first; if no renderable records remain, omit the whole section and navigation anchor. Omit a specification group that has no renderable rows. Empty policy reference: omit that policy item. Empty user manual: omit the download link. Never print placeholder labels, `undefined`, blank wrappers, or invented values.
-- Empty `product.media`: preserve Horizon's native Theme Editor/design-mode placeholder, but block production publication of the product until at least one approved native medium exists. Never create a metafield or external-URL fallback gallery.
+- Empty `product.media`: preserve Horizon's native Theme Editor/design-mode placeholder, but block production publication of the product until at least one approved native medium exists. Never create a metafield or external-URL fallback gallery. A real variant with no featured media, including Graphite at TASK-004 start, falls back to the complete general `product.media` collection.
 - Reviews without an active Judge.me source: hide rating summary, review count, review list and review structured data together; a neutral “No reviews yet” message is allowed only if Judge.me confirms a real zero count.
 - App name/links: omit the entire download module until the official name, platform compatibility, and destination URLs are verified; generic confirmed app-control copy may remain.
-- Compatible add-ons: filter unavailable/missing products individually and render the remaining approved list; omit the module only when none remain. A product may enter the list only after compatibility with both confirmed Single Bowl colors is approved. Add-on cards link to the add-on PDP; quick add is allowed only for a single available variant, otherwise require native variant selection. Never infer a variant or hardcode a handle.
+- Add-on products: filter missing, parent-self, unconfirmed, and multi-Variant Products individually; render a sold-out single-Variant Product as disabled and omit the module when none remain. A Product may enter the list only after compatibility with both confirmed Single Bowl colors is approved. The checkbox submits the one real default Variant as a separate cart line item; never infer a configuration, duplicate price/inventory, or hardcode a handle/Variant ID.
+- Box contents: prefer confirmed `relivanow.box_items` records for item-level quantity/media/alt; when none render, use existing `relivanow.box_contents` text values as a text-only fallback. Never merge both sources, parse untrusted quantities, or add batteries/accessories by implication.
 - Bundle offers: `INACTIVE`, missing, invalid, or `DRAFT` records are hidden. `ACTIVE` records render from the referenced native bundle variant. If that variant is unavailable, the card may remain visible with a disabled CTA and approved `unavailable_message`; if blank, use Horizon's localized sold-out label. There is no duplicated sold-out enum: native variant/component availability is authoritative.
 - Market delivery: missing, `DRAFT`, ineligible, invalid-status, or incomplete min/max records render no delivery estimate. Both bounds are required and must satisfy max ≥ min. Shipping eligibility is enforced by Markets/shipping zones, never inferred from whether copy rendered.
 - Status gate: merchant entry is the approval boundary for simple fields—PROVISIONAL/UNVERIFIED values remain blank, and TASK-004 may treat a valid nonblank simple value as approved for rendering. Metaobject records in those states remain `DRAFT`; only confirmed `ACTIVE` records render. Never treat overall product status as approval for a field or referenced record.
@@ -269,6 +332,8 @@ Use Shopify Bundles for fixed bundles after product/SKU creation and profitabili
 - Future variants: preserve existing variant IDs and native relationships, then validate URLs, media, commerce state, Markets, and analytics.
 - Reviews migration: one provider active at a time for UI and structured data.
 - Horizon compatibility: use dynamic sources and existing blocks/components; missing data must not require forks of product, variant, gallery, or cart logic.
+- Phase 2 editorial modules: an absent minimum dataset emits no storefront wrapper, heading, placeholder, table, image, or spacing. Design-mode guidance is the only fallback. Product comparison rejects duplicate/missing/unconfirmed Products, and reviews rejects the concept of a manual fallback entirely.
+- Final CTA: the optional price reads native Product output, the link carries no Variant ID, and its enhancement only locates the existing purchase panel. If that panel cannot be found or JavaScript is unavailable, the ordinary `#MainContent` link remains the fallback.
 
 ## Merchant entry order
 

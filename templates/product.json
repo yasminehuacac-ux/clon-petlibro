@@ -34,20 +34,20 @@
           "type": "_product-media-gallery",
           "static": true,
           "settings": {
-            "media_presentation": "grid",
-            "media_columns": "two",
-            "image_gap": 4,
+            "media_presentation": "carousel",
+            "media_columns": "one",
+            "image_gap": 12,
             "large_first_image": false,
-            "icons_style": "none",
-            "slideshow_controls_style": "counter",
+            "icons_style": "arrow",
+            "slideshow_controls_style": "thumbnails",
             "slideshow_mobile_controls_style": "dots",
-            "thumbnail_position": "right",
-            "thumbnail_width": 44,
-            "thumbnail_radius": 0,
-            "aspect_ratio": "adapt",
-            "constrain_to_viewport": true,
+            "thumbnail_position": "left",
+            "thumbnail_width": 56,
+            "thumbnail_radius": 8,
+            "aspect_ratio": "1",
+            "constrain_to_viewport": false,
             "media_fit": "contain",
-            "media_radius": 0,
+            "media_radius": 12,
             "extend_media": false,
             "zoom": true,
             "video_loop": false,
@@ -125,6 +125,19 @@
                 "padding-inline-end": 0
               },
               "blocks": {
+                "review_RELI04": {
+                  "type": "review",
+                  "name": "Product rating",
+                  "settings": {
+                    "stars_style": "shaded",
+                    "show_number": true,
+                    "text_color": "",
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left"
+                  },
+                  "blocks": {}
+                },
                 "text_xrnftG": {
                   "type": "text",
                   "name": "Product title",
@@ -151,13 +164,22 @@
                   },
                   "blocks": {}
                 },
+                "value_prop_RELI04": {
+                  "type": "relivanow-value-proposition",
+                  "name": "Product subtitle",
+                  "settings": {
+                    "padding-block-start": 0,
+                    "padding-block-end": 0
+                  },
+                  "blocks": {}
+                },
                 "price_tVjtKg": {
                   "type": "price",
                   "settings": {
                     "show_sale_price_first": true,
-                    "show_installments": false,
-                    "show_tax_info": false,
-                    "type_preset": "paragraph",
+                    "show_installments": true,
+                    "show_tax_info": true,
+                    "type_preset": "h4",
                     "width": "100%",
                     "alignment": "left",
                     "font": "var(--font-body--family)",
@@ -175,18 +197,41 @@
                 }
               },
               "block_order": [
+                "review_RELI04",
                 "text_xrnftG",
+                "value_prop_RELI04",
                 "price_tVjtKg"
               ]
             },
-            "divider_VJhene": {
-              "type": "_divider",
-              "name": "t:names.divider",
+            "trust_RELI04": {
+              "type": "relivanow-purchase-trust",
+              "name": "Purchase trust",
               "settings": {
-                "thickness": 1,
-                "corner_radius": "square",
-                "divider_color": "{{ settings.color_palette.color2 }}",
-                "width_percent": 100,
+                "padding-block-start": 0,
+                "padding-block-end": 0
+              },
+              "blocks": {}
+            },
+            "benefits_RELI04": {
+              "type": "relivanow-key-benefits",
+              "name": "Key benefits",
+              "settings": {
+                "show_body": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0
+              },
+              "blocks": {}
+            },
+            "promotion_RELI04": {
+              "type": "relivanow-promotion",
+              "name": "Promotional offer",
+              "settings": {
+                "enable_promotion": false,
+                "discount_label": "",
+                "promotional_message": "",
+                "discount_code": "",
+                "supporting_text": "",
+                "show_copy_button": true,
                 "padding-block-start": 0,
                 "padding-block-end": 0
               },
@@ -196,7 +241,31 @@
               "type": "variant-picker",
               "settings": {
                 "variant_style": "buttons",
-                "show_swatches": false,
+                "show_swatches": true,
+                "enable_visual_color_swatches": true,
+                "enable_visual_style_cards": true,
+                "visual_style_option_names": "Style, Model, Configuration",
+                "show_style_price": true,
+                "show_style_compare_at": true,
+                "show_style_badges": true,
+                "style_card_image_size": 96,
+                "default_color_display_mode": "swatch_only",
+                "color_swatch_name_1": "White",
+                "color_swatch_color_1": "#FFFFFF",
+                "color_swatch_name_2": "Black",
+                "color_swatch_color_2": "#000000",
+                "color_swatch_name_3": "Cloud White",
+                "color_swatch_color_3": "#FFFFFF",
+                "color_swatch_name_4": "Graphite",
+                "color_swatch_color_4": "#323433",
+                "color_swatch_name_5": "",
+                "color_swatch_color_5": "",
+                "color_swatch_name_6": "",
+                "color_swatch_color_6": "",
+                "color_swatch_name_7": "",
+                "color_swatch_color_7": "",
+                "color_swatch_name_8": "",
+                "color_swatch_color_8": "",
                 "option_label_text_color": "",
                 "variant_style_class": "default",
                 "custom_variant_background": "{{ settings.color_palette.background }}",
@@ -211,6 +280,20 @@
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "add_ons_RELI04": {
+              "type": "relivanow-add-ons",
+              "name": "Choose Add-ons",
+              "settings": {
+                "heading": "Choose Add-ons",
+                "show_price": true,
+                "show_compare_at": true,
+                "show_badges": true,
+                "show_delivery_note": true,
+                "padding-block-start": 0,
+                "padding-block-end": 0
               },
               "blocks": {}
             },
@@ -274,25 +357,21 @@
               },
               "block_order": []
             },
-            "text_aEtTtq": {
-              "type": "text",
-              "name": "Product description",
+            "delivery_RELI04": {
+              "type": "relivanow-delivery",
+              "name": "Market delivery",
               "settings": {
-                "text": "{{ closest.product.description }}",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-primary--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0
+              },
+              "blocks": {}
+            },
+            "payment_icons_RELI04": {
+              "type": "payment-icons",
+              "name": "Payment methods",
+              "settings": {
+                "horizontal_alignment": "flex-start",
+                "gap": 8,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -303,10 +382,14 @@
           },
           "block_order": [
             "group_icgrde",
-            "divider_VJhene",
+            "trust_RELI04",
+            "benefits_RELI04",
+            "promotion_RELI04",
             "variant_picker_R3rGDr",
+            "add_ons_RELI04",
             "buy_buttons_eYQEYi",
-            "text_aEtTtq"
+            "delivery_RELI04",
+            "payment_icons_RELI04"
           ]
         }
       },
@@ -323,6 +406,454 @@
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 0,
         "padding-block-end": 0
+      }
+    },
+    "trust_benefits_RELI04": {
+      "type": "relivanow-benefits-bar",
+      "blocks": {
+        "shipping_RELI04": {
+          "type": "benefit",
+          "settings": {
+            "source": "shipping",
+            "verification_status": "PROVISIONAL",
+            "icon": "truck",
+            "title": "",
+            "text": "",
+            "link": ""
+          }
+        },
+        "returns_RELI04": {
+          "type": "benefit",
+          "settings": {
+            "source": "return",
+            "verification_status": "PROVISIONAL",
+            "icon": "return",
+            "title": "",
+            "text": "",
+            "link": ""
+          }
+        },
+        "warranty_RELI04": {
+          "type": "benefit",
+          "settings": {
+            "source": "warranty",
+            "verification_status": "PROVISIONAL",
+            "icon": "lock",
+            "title": "",
+            "text": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": ["shipping_RELI04", "returns_RELI04", "warranty_RELI04"],
+      "name": "Trust / Benefits Bar",
+      "settings": {
+        "enable_section": true,
+        "accessibility_label": "Product benefits",
+        "section_width": "page-width",
+        "background_color": "{{ settings.color_palette.background }}",
+        "padding-block-start": 32,
+        "padding-block-end": 32
+      }
+    },
+    "two_ways_RELI04": {
+      "type": "relivanow-two-ways",
+      "blocks": {
+        "scheduled_RELI04": {
+          "type": "way",
+          "settings": {
+            "verification_status": "PROVISIONAL",
+            "icon": "stopwatch",
+            "image": "",
+            "image_alt": "",
+            "title": "Scheduled feeding",
+            "description": "Set a consistent feeding routine once the scheduling workflow is approved for this product."
+          }
+        },
+        "app_control_RELI04": {
+          "type": "way",
+          "settings": {
+            "verification_status": "PROVISIONAL",
+            "icon": "lightning_bolt",
+            "image": "",
+            "image_alt": "",
+            "title": "App-controlled feeding",
+            "description": "Manage supported feeding controls after the exact app workflow is verified."
+          }
+        }
+      },
+      "block_order": ["scheduled_RELI04", "app_control_RELI04"],
+      "name": "Two Ways to Feed",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "Flexible routines",
+        "heading": "Two ways to support their routine",
+        "subheading": "",
+        "image": "",
+        "image_alt": "",
+        "image_position": "left",
+        "alignment": "left",
+        "section_width": "page-width",
+        "background_color": "{{ settings.color_palette.background }}",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "precise_feeding_RELI04": {
+      "type": "relivanow-precise-feeding",
+      "blocks": {
+        "meals_RELI04": {
+          "type": "metric",
+          "settings": {
+            "verification_status": "CONFIRMED",
+            "value_source": "meals_per_day",
+            "label": "Meals per day",
+            "value": "",
+            "description": "Set the daily meal range that fits the routine.",
+            "icon": "stopwatch"
+          }
+        },
+        "portions_RELI04": {
+          "type": "metric",
+          "settings": {
+            "verification_status": "CONFIRMED",
+            "value_source": "portions_per_meal",
+            "label": "Portions per meal",
+            "value": "",
+            "description": "Choose a supported portion count for each meal.",
+            "icon": "serving_dish"
+          }
+        }
+      },
+      "block_order": ["meals_RELI04", "portions_RELI04"],
+      "name": "Precise Feeding",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "Flexible portions",
+        "heading": "Precise feeding, shaped around the routine",
+        "text": "",
+        "image": "",
+        "image_alt": "",
+        "image_position": "left",
+        "alignment": "left",
+        "section_width": "page-width",
+        "background_color": "#FFFFFF",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "feeding_insights_RELI04": {
+      "type": "relivanow-feeding-insights",
+      "blocks": {},
+      "block_order": [],
+      "name": "Feeding Insights",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "",
+        "heading": "Feeding insights",
+        "text": "",
+        "image": "",
+        "image_verification_status": "UNVERIFIED",
+        "image_alt": "",
+        "alignment": "center",
+        "section_width": "page-width",
+        "background_color": "#F7F7F4",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "remote_control_RELI04": {
+      "type": "relivanow-remote-control",
+      "blocks": {},
+      "block_order": [],
+      "name": "Remote Control",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "",
+        "heading": "Control that fits the daily routine",
+        "description": "",
+        "product_image": "",
+        "product_image_verification_status": "UNVERIFIED",
+        "product_image_alt": "",
+        "app_image": "",
+        "app_image_verification_status": "UNVERIFIED",
+        "app_image_alt": "",
+        "cta_label": "",
+        "cta_link": "",
+        "layout": "media-first",
+        "alignment": "left",
+        "section_width": "page-width",
+        "background_color": "#FFFFFF",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "features_RELI04": {
+      "type": "relivanow-product-features",
+      "name": "Product Features",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "Everyday essentials",
+        "heading": "Features built around the daily routine",
+        "intro": "",
+        "show_media": true,
+        "show_links": false,
+        "link_label": "Learn more",
+        "columns": "3",
+        "alignment": "center",
+        "section_width": "page-width",
+        "background_color": "#F7F7F4",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "how_works_RELI04": {
+      "type": "relivanow-how-it-works",
+      "blocks": {
+        "fill_RELI04": {
+          "type": "step",
+          "settings": {
+            "verification_status": "PROVISIONAL",
+            "number": "1",
+            "icon": "box",
+            "image": "",
+            "image_alt": "",
+            "title": "Fill the feeder",
+            "description": "Add food only after compatibility and care guidance are confirmed."
+          }
+        },
+        "schedule_RELI04": {
+          "type": "step",
+          "settings": {
+            "verification_status": "PROVISIONAL",
+            "number": "2",
+            "icon": "stopwatch",
+            "image": "",
+            "image_alt": "",
+            "title": "Set the feeding schedule",
+            "description": "Configure the routine after the exact scheduling workflow is verified."
+          }
+        },
+        "serve_RELI04": {
+          "type": "step",
+          "settings": {
+            "verification_status": "PROVISIONAL",
+            "number": "3",
+            "icon": "serving_dish",
+            "image": "",
+            "image_alt": "",
+            "title": "Serve controlled portions",
+            "description": "Choose the approved portion range for each configured meal."
+          }
+        },
+        "clean_RELI04": {
+          "type": "step",
+          "settings": {
+            "verification_status": "PROVISIONAL",
+            "number": "4",
+            "icon": "washing",
+            "image": "",
+            "image_alt": "",
+            "title": "Clean detachable parts",
+            "description": "Follow the approved product manual before cleaning."
+          }
+        }
+      },
+      "block_order": ["fill_RELI04", "schedule_RELI04", "serve_RELI04", "clean_RELI04"],
+      "name": "How It Works",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "A simple routine",
+        "heading": "How it works",
+        "intro": "",
+        "show_line": true,
+        "alignment": "center",
+        "section_width": "page-width",
+        "background_color": "{{ settings.color_palette.background }}",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "lifestyle_RELI04": {
+      "type": "relivanow-lifestyle",
+      "name": "Lifestyle / Product in Use",
+      "settings": {
+        "enable_section": true,
+        "image_one": "",
+        "image_one_alt": "",
+        "image_two": "",
+        "image_two_alt": "",
+        "reverse_images": false,
+        "aspect_ratio": "4 / 5",
+        "heading": "Designed for life together",
+        "text": "",
+        "cta_label": "",
+        "cta_link": "",
+        "content_position": "bottom",
+        "alignment": "left",
+        "overlay_color": "#171817",
+        "overlay_opacity": 35,
+        "text_color": "#FFFFFF",
+        "section_width": "full-width",
+        "background_color": "{{ settings.color_palette.background }}",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "product_comparison_RELI04": {
+      "type": "relivanow-product-comparison",
+      "blocks": {},
+      "block_order": [],
+      "name": "Product Comparison",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "",
+        "heading": "Compare feeders",
+        "text": "",
+        "feature_column_label": "Feature",
+        "yes_label": "Yes",
+        "no_label": "No",
+        "not_available_label": "Not available",
+        "available_label": "Available",
+        "recommended_label": "Recommended",
+        "best_value_label": "Best value",
+        "scroll_instruction": "Swipe or scroll horizontally to view all products.",
+        "alignment": "center",
+        "section_width": "page-width",
+        "background_color": "#FFFFFF",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "smart_feeding_RELI04": {
+      "type": "relivanow-smart-feeding",
+      "blocks": {},
+      "block_order": [],
+      "name": "Why Choose Smart Feeding",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "",
+        "heading": "Why choose smart feeding",
+        "text": "",
+        "traditional_heading": "Traditional feeder",
+        "relivanow_heading": "RELIVANOW Smart Feeder",
+        "alignment": "center",
+        "section_width": "page-width",
+        "background_color": "#F7F7F4",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "app_experience_RELI04": {
+      "type": "relivanow-app-experience",
+      "blocks": {},
+      "block_order": [],
+      "name": "App Experience",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "",
+        "heading": "A clear app experience",
+        "description": "",
+        "image_ratio": "9 / 16",
+        "cta_label": "",
+        "cta_link": "",
+        "alignment": "center",
+        "section_width": "page-width",
+        "background_color": "#F7F7F4",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "specs_RELI04": {
+      "type": "relivanow-specifications",
+      "name": "Product Specifications",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "Product details",
+        "heading": "Product specifications",
+        "intro": "",
+        "yes_label": "Yes",
+        "no_label": "No",
+        "net_weight_note": "Product net weight; not packaged shipping weight.",
+        "alignment": "left",
+        "section_width": "page-width",
+        "background_color": "#F7F7F4",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "box_RELI04": {
+      "type": "relivanow-box-contents",
+      "name": "What’s in the Box",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "Included",
+        "heading": "What’s in the box",
+        "intro": "",
+        "overview_image": "",
+        "overview_image_alt": "",
+        "alignment": "left",
+        "section_width": "page-width",
+        "background_color": "{{ settings.color_palette.background }}",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "faq_RELI04": {
+      "type": "relivanow-faq",
+      "name": "FAQ",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "Helpful answers",
+        "heading": "Frequently asked questions",
+        "intro": "",
+        "allow_multiple": false,
+        "open_first": false,
+        "enable_schema": false,
+        "alignment": "center",
+        "section_width": "page-width",
+        "background_color": "#F7F7F4",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "reviews_RELI04": {
+      "type": "relivanow-reviews",
+      "blocks": {},
+      "block_order": [],
+      "name": "Reviews / Social Proof",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "",
+        "heading": "Customer reviews",
+        "text": "",
+        "alignment": "center",
+        "section_width": "page-width",
+        "background_color": "#FFFFFF",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "final_cta_RELI04": {
+      "type": "relivanow-final-cta",
+      "name": "Final CTA",
+      "settings": {
+        "enable_section": true,
+        "image_source": "product",
+        "image": "",
+        "image_verification_status": "UNVERIFIED",
+        "image_alt": "",
+        "image_position": "left",
+        "eyebrow": "",
+        "heading": "Bring more consistency to every mealtime",
+        "benefit": "",
+        "show_price": false,
+        "cta_label": "Choose your feeder",
+        "alignment": "left",
+        "section_width": "page-width",
+        "background_color": "#DDE7D3",
+        "padding-block-start": 80,
+        "padding-block-end": 80
       }
     },
     "product_recommendations_qggXJq": {
@@ -470,6 +1001,22 @@
   },
   "order": [
     "main",
+    "trust_benefits_RELI04",
+    "two_ways_RELI04",
+    "precise_feeding_RELI04",
+    "feeding_insights_RELI04",
+    "remote_control_RELI04",
+    "features_RELI04",
+    "how_works_RELI04",
+    "lifestyle_RELI04",
+    "product_comparison_RELI04",
+    "smart_feeding_RELI04",
+    "app_experience_RELI04",
+    "specs_RELI04",
+    "box_RELI04",
+    "faq_RELI04",
+    "reviews_RELI04",
+    "final_cta_RELI04",
     "product_recommendations_qggXJq"
   ]
 }
