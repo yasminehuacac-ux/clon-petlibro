@@ -1,6 +1,6 @@
 # Analytics plan
 
-**Status:** Technical foundation validated on development theme `193260781938`; provider stack, consent rules and remote platform configuration are pending.
+**Status:** TASK-009 complete. Technical foundation is validated on development theme `193260781938`; the approved launch baseline intentionally has no analytics/advertising provider, pixel, paid campaign, or GA4. Remote launch gates are documented below.
 
 ## Event taxonomy
 
@@ -38,10 +38,10 @@
 - Refund rate.
 - ROAS, CPA, CTR by campaign and creative in the marketing stack.
 
-## Pending decisions
+## Conditional future decisions
 
-- GA4, Meta, TikTok, Clarity, Google Ads, Bing, or other providers.
-- Consent platform/mode.
+- Any later GA4, Meta, TikTok, Clarity, Google Ads, Bing, or other provider; none is approved for the current baseline.
+- Provider-specific consent mode and regional gating if a non-essential provider is later approved; the current Shopify privacy admin baseline is settled below.
 - Attribution conventions.
 - Server-side/CAPI ownership.
 - Market-specific restrictions.
@@ -59,13 +59,13 @@ The theme does not load an analytics provider. It exposes two layers that future
 | `GalleryInteraction` | User-initiated `slideshow:select` and `zoom-media:selected` inside Product media | COVERED | `relivanow:analytics`; allowlisted Product ID, media type/index and interaction type only. |
 | `VariantSelected` | `shopify:product:select` plus its resolved Variant promise | PARTIAL | Map only the resolved selection; preserve Shopify amount/currency. |
 | `AddOnSelected` | Confirmed eligible add-on checkbox change | COVERED | `relivanow:analytics`; Product ID, add-on Variant ID and boolean selected state only. |
-| `BundleSelected` | No approved bundle selector exists | BLOCKED BY BUSINESS DECISION | Add only with a real Shopify Bundle and approved selector. |
+| `BundleSelected` | No approved bundle selector exists | DEFERRED — NOT IN CURRENT BASELINE | Add only with a real Shopify Bundle and approved selector. |
 | `AddToCart` | `shopify:cart:lines-update` action `add` plus resolved result and `didError=false` | PARTIAL | Map only after the promise resolves successfully; never use button click as success. |
-| `CartUpsellAdded` | No cart upsell exists | BLOCKED BY BUSINESS DECISION | Do not fabricate an upsell event or payload. |
-| `BeginCheckout` | Shopify Customer Events `checkout_started` | BLOCKED BY EXTERNAL CONFIGURATION | Configure in the approved custom/app pixel, not as an unconfirmed theme click. |
-| `Purchase` | Shopify Customer Events checkout-completed event | BLOCKED BY EXTERNAL CONFIGURATION | Shopify checkout/order state is authoritative; never emit Purchase from the theme. |
+| `CartUpsellAdded` | No cart upsell exists | DEFERRED — NOT IN CURRENT BASELINE | Do not fabricate an upsell event or payload. |
+| `BeginCheckout` | Shopify Customer Events `checkout_started` | DEFERRED — NO PROVIDER APPROVED | Configure only in a future approved custom/app pixel, not as an unconfirmed theme click. |
+| `Purchase` | Shopify Customer Events checkout-completed event | DEFERRED — NO PROVIDER APPROVED | Shopify checkout/order state is authoritative; never emit Purchase from the theme. |
 | `FAQOpened` | Opening a confirmed RELIVANOW FAQ disclosure | COVERED | `relivanow:analytics`; Product ID, FAQ handle/index and category only. |
-| `ReviewInteraction` | Judge.me-owned UI | BLOCKED BY EXTERNAL CONFIGURATION | Use approved provider integration; do not scrape or duplicate Judge.me behavior. Authentic populated behavior also remains gated by TASK-007. |
+| `ReviewInteraction` | Judge.me-owned UI | DEFERRED — TASK-007 CONTENT GATE | Use approved provider integration; do not scrape or duplicate Judge.me behavior. Authentic populated behavior remains gated by TASK-007. |
 
 ### Payload and privacy boundary
 
@@ -74,10 +74,20 @@ The theme does not load an analytics provider. It exposes two layers that future
 - The hook installs once and emits no provider request. Until an approved consent-aware mapping subscribes, it has no external side effect.
 - Existing Shopify standard events retain native amount/currency/item semantics; future mapping must use their resolved server state.
 
-### External completion gates
+### External baseline — 2026-09-20
 
-- Approved provider list and account/property IDs.
-- Consent platform, legal categories, regional defaults and mode behavior.
+- Shopify Customer Privacy admin settings are active with an automated regional cookie banner, equal-access Accept/Decline controls, and editable consent categories; release QA must still verify regional storefront cookies and requests.
+- Shopify Network Intelligence remains active by explicit Work decision because deactivation would delete Messaging sender/branding/default data and stop affected automations/campaigns.
+- No Meta Pixel, TikTok Pixel, GA4, Google Ads, GTM, or other advertising transport is configured.
+- Search Console domain ownership for `relivanow.com` is verified by Cloudflare TXT. The native sitemap was submitted; `/sitemap.xml` returned HTTP 404 while `/` redirected to `/password`, so a post-release fetch must be tested without treating the redirect as proven causation.
+- Merchant Center account `5857724399` exists under the approved account, with no product/feed/free-listing/Ads/remarketing/campaign configuration.
+- United States remains active; Canada and the approved four-country EU market are draft. Additional legacy UK and Australia/New Zealand markets are draft. English is published; German, Spanish, French, and Dutch are unpublished and unassigned.
+
+### Required decisions before any future provider mapping or public activation
+
+- Any future provider list and its real account/property IDs; no provider is approved for the current launch baseline.
+- Revalidation of consent categories, regional defaults, and provider gating for the specific future provider.
 - Attribution and server-side/CAPI ownership.
-- Search Console and Merchant Center account/domain/feed access.
-- Authorized Markets, currency/pricing, locale and domain configuration.
+- Merchant feed/free-listing ownership and completion of launch policies/address/country setup.
+- CAD/EUR activation, translated content, delivery/returns/legal approval, domain assignment, and public Market/language activation.
+- Post-release country/language selector, localized URL/currency, cookie-preference, external-request, Judge.me, Home, PDP, and Cart Drawer regression checks.

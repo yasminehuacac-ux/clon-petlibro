@@ -1,8 +1,8 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** TASK-009 technical foundation validated on development; external configuration pending
-**Active task:** TASK-007 and TASK-009 are `IN PROGRESS` under their independent gates
+**Stage:** TASK-009 complete; TASK-007 authentic-content gate remains
+**Active task:** TASK-007 is `IN PROGRESS`; TASK-009 is `DONE`
 **Last updated:** 2026-09-20
 
 ## Verified baseline facts
@@ -79,6 +79,11 @@
 - TASK-009 also corrects native SEO boundaries: one Search H1, localized Open Graph metadata, social image alt/Twitter image metadata, stable Organization URL/context, route-aware breadcrumbs, and guards against blank or duplicate Product JSON-LD from featured-product sections.
 - Native canonical, robots, sitemap, Product/Variant price and availability, active currency, localization forms, and `routes.*` remain authoritative. The footer no longer ships generic social-network homepage links, and the remaining cart fallback now consumes the localized Shopify route.
 - Only the 13 TASK-009 theme files were uploaded to development theme `193260781938`. Home/PDP responsive checks, Search H1, Product/Organization/Breadcrumb schema, metadata, console/resources, Theme Editor, authentic Judge.me state, and read-only Cart Drawer passed. Shopify still reports `192527597938` as `live` and `193260781938` as `development`; no publish occurred.
+- TASK-009 external closure preserves the active United States market and keeps Canada, the approved Germany/Belgium/Spain/France EU scope, United Kingdom, and Australia/New Zealand in draft. CAD/EUR remain gated by Shopify Payments multi-currency setup; shipping estimates and complete legal policies remain launch gates.
+- English remains published. German, Spanish, French, and Dutch are added without translations, domain assignment, or publication. No partial commercial/legal translation was exposed.
+- Shopify Customer Privacy admin settings retain the automated regional cookie banner with Manage preferences, Accept, Decline, and editable consent categories. Work declined destructive Network Intelligence deactivation after Shopify disclosed Messaging data deletion and automation impact. Judge.me remains `Always active`; regional cookie/request behavior requires release QA. No Meta/TikTok pixel, GA4, Google Ads, or paid campaign was enabled.
+- Search Console domain ownership for `relivanow.com` is verified by Cloudflare TXT. The native sitemap was submitted; `/sitemap.xml` returned HTTP 404 while `/` redirected to `/password`. Google currently cannot fetch it, and the relationship must be retested after release rather than treated as proven causation.
+- Merchant Center account `Relivanow` (`5857724399`, Peru) exists under the approved account. Business address, target countries, products, feed, free listings, Ads, remarketing, campaigns, paid plans, and charges remain unset.
 
 ## Current blockers
 
@@ -93,7 +98,7 @@
 - TASK-004's visual addendum is implemented locally, but exact Color-swatch and related-model acceptance is blocked until Cloud White/Graphite and at least two public, `CONFIRMED` Products are connected through the documented `relivanow.related_models` definition. No remote definition or sample model was created.
 - The current legacy feeder now exercises one-column Style cards plus Theme Editor-mapped Black/White Color swatches through Horizon's native multi-option picker. Native swatch image/color, Variant `swatch_color`, `style_card_image`, approved style badges, sold-out combinations, and final Cloud White/Graphite states still require representative remote data.
 - Judge.me is installed and technically integrated on the development theme; its exact plan tier remains unverified because no plan or charge was accepted. Authentic populated review data is still required for the remaining TASK-007 acceptance cases. Shopify Bundles products remain separately gated; subscriptions, financing, analytics/consent, and operational Markets setup are not frozen.
-- TASK-009 cannot be completed without approved provider/account identifiers, consent/legal behavior, Search Console and Merchant Center access, and authorized Markets/currency/language/domain decisions. The theme-owned implementation and development-preview gate are complete.
+- TASK-009 is complete under the approved no-tracker baseline. CAD/EUR, human-reviewed translations, shipping/delivery/legal policy completion, storefront release plus sitemap HTTP 200, Merchant onboarding/feed eligibility, and activation-time regional consent/localization regression remain launch gates.
 - Exact live product, variant, cart, app, and commercial-flow behavior still requires task-specific validation with representative store data.
 - The TASK-001 audit remains a historical static audit; its tooling and runtime limitations accurately describe that audit session, not the current environment.
 - TASK-005 is closed. Representative properties/uploads, selling plans, discounts, app/bundle-controlled lines, Markets money, nested live dialogs, and quick-add/app overlap remain conditional on future real data or integrations; they were not fabricated and do not block the completed drawer-only task.
@@ -101,4 +106,4 @@
 
 ## Active task
 
-TASK-007 remains `IN PROGRESS`: its Judge.me infrastructure is validated on unpublished theme `193260781938`, while populated-review acceptance requires authentic content. TASK-009 is independently `IN PROGRESS`: its code, tests, static audit, Theme Check, and development-preview validation pass, while external provider/consent/platform/Markets decisions remain pending. TASK-002 through TASK-006 and TASK-008 are `DONE`; TASK-010 must not begin. Active theme `192527597938` remains protected and unchanged.
+TASK-007 remains `IN PROGRESS`: its Judge.me infrastructure is validated on unpublished theme `193260781938`, while populated-review acceptance requires authentic content. TASK-009 is `DONE`: its code, tests, development preview, authorized Markets/privacy/language baseline, Search Console ownership, and Merchant account setup are recorded, with incomplete launch inputs isolated as gates. TASK-002 through TASK-006, TASK-008, and TASK-009 are `DONE`; TASK-010 must not begin until TASK-007 and release prerequisites are satisfied. Active theme `192527597938` remains protected and unchanged.

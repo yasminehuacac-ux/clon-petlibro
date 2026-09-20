@@ -1,6 +1,6 @@
 # TASK-009 — Analytics, SEO, and markets
 
-**Status:** IN PROGRESS
+**Status:** DONE
 **Depends on:** Storefront stable; providers, consent, markets, currencies, and locales approved  
 **Gate owner:** ChatGPT Work
 
@@ -35,33 +35,35 @@ Instrument the approved semantic events, ensure structured-data consistency, and
 
 ## Acceptance criteria
 
-- [ ] Events fire once and only after the defined successful action.
-- [ ] Currency/value/item payloads match Shopify state.
-- [ ] Consent prevents non-essential trackers when required.
-- [ ] Visible product/FAQ/rating information matches structured data.
-- [ ] No hardcoded market data leaks across locales.
-- [ ] SEO and accessibility heading requirements pass.
+- [ ] Events fire once and only after the defined successful action — PARTIAL; provider/checkout delivery is conditional future work.
+- [ ] Currency/value/item payloads match Shopify state — PARTIAL; no external provider mapping is approved.
+- [ ] Consent prevents non-essential trackers when required — PARTIAL; admin settings are verified, regional runtime enforcement is a release gate.
+- [ ] Visible product/FAQ/rating information matches structured data — PARTIAL; populated authentic reviews remain TASK-007-gated.
+- [x] No hardcoded market data leaks across locales — the code boundary passes; draft-market selectors/URLs/currency remain a separate release-validation gate.
+- [x] SEO and accessibility heading requirements pass.
+
+`DONE` records completion of the authorized safe baseline, not full public-release acceptance. Unchecked criteria are explicitly retained as conditional future or launch-validation gates below and in the result report.
 
 ## Technical checkpoint â€” 2026-09-20
 
 | Criterion | Status | Evidence / remaining gate |
 |---|---|---|
 | Native titles and descriptions | COVERED | `page_title` and `page_description` remain the native sources in `meta-tags`; no administrative SEO value was fabricated. |
-| Canonical, robots and sitemap | COVERED | `canonical_url` remains authoritative; no custom `robots.txt.liquid` or sitemap replacement was added, so Shopify owns crawl directives and sitemap generation. |
+| Canonical, robots and sitemap | PARTIAL / LAUNCH GATE | `canonical_url` remains authoritative and no custom robots/sitemap replacement was added. The native sitemap is submitted to Search Console but returns HTTP 404 while the storefront redirects to `/password`; re-test after release. |
 | Open Graph and social metadata | COVERED | Native page title/description/image now include active locale plus image alt and Twitter image metadata. Generic social-network homepage links were removed from the footer configuration. |
 | Product / Organization / breadcrumb schema | COVERED | Native Product JSON-LD is guarded against blank/duplicate featured Products; Organization uses a stable HTTPS schema context and shop origin; route-aware BreadcrumbList output uses native canonical URLs. |
 | FAQ and review schema consistency | PARTIAL | FAQ JSON-LD remains off by default and reads the same confirmed records when enabled. Judge.me remains the only review authority; the authentic zero-review state emits no `AggregateRating`. Populated review consistency remains owned by TASK-007's authentic-content gate. |
 | Headings and media SEO | PARTIAL | Current Home/PDP/core templates retain one H1, and Search now has an H1. Theme image paths preserve native/approved alt sources; final Product/media alt administration is still pending approved assets and is not changed here. |
-| Markets/localization compatibility | PARTIAL | Native localization forms, `routes.*`, active currency output and canonical URLs are preserved; the last `/cart` fallback is now localized. Actual Markets, currencies, domains and languages remain unmodified and require approved remote configuration. |
+| Markets/localization compatibility | PARTIAL / LAUNCH GATE | `relivanow.com` is the connected primary domain. United States remains active and unchanged. Canada, European Union (restricted to Germany, Belgium, Spain, and France), United Kingdom, and Australia/New Zealand are draft. German, Spanish, French, and Dutch exist without translations, domains, or publication. CAD/EUR remain blocked by Shopify Payments multi-currency setup, so no incomplete market was activated. |
 | Semantic analytics hooks | PARTIAL | Shopify standard storefront events cover page/Product/Variant/cart views and successful cart results. Provider-neutral `GalleryInteraction`, `AddOnSelected` and `FAQOpened` hooks emit only allowlisted primitive values and have no network/storage transport. Bundle/upsell UI does not exist; provider mapping is pending. |
-| Checkout and Purchase | BLOCKED BY EXTERNAL CONFIGURATION | Map Shopify Customer Events/custom pixels only after provider and consent approval; no theme click proxy or purchase event was invented. |
-| Consent and third parties | BLOCKED BY BUSINESS DECISION | No advertising/analytics script, ID, cookie or provider transport was added. Consent platform, legal mode and provider permissions remain undecided. |
+| Checkout and Purchase | COVERED SAFE BASELINE / CONDITIONAL FUTURE | Shopify remains authoritative and no theme click proxy or purchase event was invented. Configure Customer Events/custom pixels only if a provider is approved later; none is approved for the current baseline. |
+| Consent and third parties | PARTIAL / LAUNCH VALIDATION GATE | Shopify's automated privacy policy, cookie banner, equal-access Accept/Decline controls, and editable categories are active in admin. No Meta, TikTok, GA4, or Google Ads tracker is installed. Work declined Shopify's destructive Network Intelligence deactivation, and Judge.me is `Always active`; regional storefront cookie/request behavior requires release validation. |
 | Script/schema duplication | COVERED | No manual tracker exists. Judge.me retains one core loader and one PDP widget script; no parallel review JSON-LD was introduced. |
-| Search Console / Merchant Center | BLOCKED BY EXTERNAL CONFIGURATION | Domain verification, feeds, account access and platform setup are outside the repository and remain untouched. |
+| Search Console / Merchant Center | PARTIAL / LAUNCH GATE | The `relivanow.com` domain property is DNS-verified in Search Console and Shopify's sitemap was submitted. It currently returns HTTP 404 while the storefront redirects to `/password`, so Google reports that it cannot fetch it. Merchant Center account `5857724399` (`Relivanow`, Peru) exists under the approved account; address, countries, products, feed, free listings, Ads, remarketing, and campaigns remain unset. |
 | Development preview | COVERED | Only the 13 TASK-009 theme files were uploaded to development theme `193260781938`. Home/PDP/Search/Collection/Page, responsive layouts, metadata/schema, console/resources, Theme Editor, Judge.me, and read-only Cart Drawer regressions pass; theme `192527597938` remains `live`. |
 
-TASK-009 remains `IN PROGRESS`; TASK-010 must not begin.
+TASK-009 is `DONE`. The remaining currency, translation, legal/shipping, sitemap-fetch, Merchant onboarding, and authentic-review items are documented launch gates; TASK-010 remains gated by TASK-007 and those launch prerequisites.
 
 ## Required handoff
 
-Create `reports/TASK-009-RESULT.md` with an event and schema test matrix. Do not begin TASK-010.
+The final event, schema, external-configuration, safety, and launch-gate evidence is recorded in `reports/TASK-009-RESULT.md`. Do not begin TASK-010 until its prerequisites are independently satisfied.

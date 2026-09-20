@@ -10,7 +10,7 @@
 | TASK-006 | PDP storytelling | DONE | TASK-004 reconciliation, navigation closure, and development-theme QA complete | Work |
 | TASK-007 | Reviews integration | IN PROGRESS | Technical integration validated; authentic populated reviews required for remaining acceptance | Work |
 | TASK-008 | Home | DONE | Development-theme QA, Theme Editor, PDP/Cart regression, and handoff complete | Work |
-| TASK-009 | Analytics and SEO | IN PROGRESS | Technical foundation validated on development; provider/consent/platform/Markets decisions pending | Work |
+| TASK-009 | Analytics and SEO | DONE | Technical baseline verified; authorized administrative baseline recorded; release gates documented | Work |
 | TASK-010 | Final QA and release | DRAFT | TASK-001–009 complete | Work |
 
 ## Status meanings
@@ -42,4 +42,4 @@ Judge.me's official core embed, Star Ratings block, and Review Widget are config
 
 ## TASK-009 gate
 
-Work explicitly authorized TASK-009 to proceed independently while TASK-007 remains `IN PROGRESS`. The theme now has the safe SEO/structured-data corrections, localized-route fallback and provider-neutral interaction hooks, validated only on development theme `193260781938`. No pixel, provider ID, domain, consent rule, Market, currency, language, account or commercial data was created. TASK-009 remains `IN PROGRESS` until the external provider, consent, Search Console, Merchant Center and Markets decisions are supplied.
+Work explicitly authorized TASK-009 to proceed independently while TASK-007 remains `IN PROGRESS`. The theme has the safe SEO/structured-data corrections, localized-route fallback, and provider-neutral interaction hooks validated on development theme `193260781938`. The authorized administrative baseline is recorded: US remains active; Canada and the approved four-country EU scope are draft; legacy UK and Australia/New Zealand markets are draft; English is published while German, Spanish, French, and Dutch remain untranslated/unassigned/unpublished; Customer Privacy settings are active; `relivanow.com` is DNS-verified in Search Console; and Merchant Center account `5857724399` exists without products, feeds, listings, Ads, campaigns, plans, or charges. CAD/EUR, delivery/legal content, post-release sitemap fetch, Merchant onboarding, regional consent/localization regression, and authentic review data are documented release gates. TASK-009 is `DONE`.

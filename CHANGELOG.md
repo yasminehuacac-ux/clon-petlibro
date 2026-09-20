@@ -6,6 +6,8 @@ All notable project changes are recorded here.
 
 ### Added
 
+- TASK-009 external closure: draft-safe Shopify Markets for Canada, the approved four-country EU scope, UK, and Australia/New Zealand; unpublished German, Spanish, French, and Dutch; DNS-verified Search Console ownership; submitted native sitemap; and Merchant Center account `5857724399` without products, feeds, listings, Ads, campaigns, plans, or charges.
+- Shopify installed its free first-party Translate & Adapt app immediately when its install control was selected, before permissions or a separate confirmation appeared. This authorization deviation is recorded; no translation, language publication, or automatic uninstall followed.
 - TASK-009 local analytics foundation: one provider-neutral, transport-free `relivanow:analytics` DOM boundary for Product-gallery, eligible add-on, and confirmed FAQ interactions, with event-specific primitive payload allowlists and single-install delegated listeners.
 - TASK-009 SEO foundation: route-aware breadcrumb JSON-LD, stable Organization context/origin, guarded native Product structured data, active-locale Open Graph metadata, social image alt/Twitter image fields, and a Search H1 correction.
 - Persistent TASK-009 contracts for custom-event idempotence/privacy, native commerce-event ownership, structured-data deduplication, metadata/headings, localized routes, tracker absence, Judge.me preservation, repository JSON/JSONC and Liquid schema parsing, and unique setting IDs.
@@ -49,6 +51,7 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- TASK-009 moved from `IN PROGRESS` to `DONE`. Remaining CAD/EUR, translation, delivery/legal, post-release sitemap-fetch, Merchant onboarding, regional runtime consent/localization regression, and authentic-review requirements are explicit release gates rather than fabricated configuration.
 - TASK-009 moved from `DRAFT` to `IN PROGRESS`. Local implementation, static validation, and unpublished-development-theme preview are complete; provider, consent, Search Console, Merchant Center, and Markets decisions remain external gates.
 - The cart action fallback now uses Shopify's localized `routes.cart_url`; footer defaults no longer link to generic social-network homepages. Native canonical, robots, sitemap, commerce money, localization, Judge.me, and standard Shopify event ownership remain unchanged.
 - TASK-007 moved from `DRAFT` to `IN PROGRESS`. The validated technical integration is retained, while populated-review filters, media, pagination, verified-buyer presentation, and populated rating/schema consistency remain `BLOCKED BY AUTHENTIC CONTENT`.
