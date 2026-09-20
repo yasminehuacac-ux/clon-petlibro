@@ -1,8 +1,8 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** TASK-007 Judge.me technical integration validated
-**Active task:** TASK-007 is `IN PROGRESS`; populated-review acceptance is blocked only by authentic content
+**Stage:** TASK-009 technical foundation validated on development; external configuration pending
+**Active task:** TASK-007 and TASK-009 are `IN PROGRESS` under their independent gates
 **Last updated:** 2026-09-20
 
 ## Verified baseline facts
@@ -75,6 +75,10 @@
 - TASK-007 uses Judge.me's official app blocks only on unpublished development theme `193260781938`: Star Ratings in the purchase header, Review Widget in the existing long-form app host, and the core app embed. The native rating block is disabled there to avoid a parallel visible source.
 - The current real product has zero authentic reviews. Judge.me renders its official `No reviews` / first-review CTA state, and the Product JSON-LD contains no false `AggregateRating` or review data. Populated filters, media, pagination, verified-buyer output, and populated schema remain `BLOCKED BY AUTHENTIC CONTENT`.
 - Live theme `192527597938` was checksummed before and after the work; `layout/theme.liquid`, `config/settings_data.json`, and `templates/product.json` remained byte-identical. No publish, paid-plan acceptance, Product/Variant/SEO/media mutation, or cart mutation occurred.
+- TASK-009 adds a provider-neutral, transport-free interaction layer for Product-gallery, add-on, and confirmed FAQ disclosure activity. Shopify standard events remain authoritative for Product, Variant, cart, checkout, and purchase state; no tracker, pixel ID, credential, cookie, storage, endpoint, or personal payload was added.
+- TASK-009 also corrects native SEO boundaries: one Search H1, localized Open Graph metadata, social image alt/Twitter image metadata, stable Organization URL/context, route-aware breadcrumbs, and guards against blank or duplicate Product JSON-LD from featured-product sections.
+- Native canonical, robots, sitemap, Product/Variant price and availability, active currency, localization forms, and `routes.*` remain authoritative. The footer no longer ships generic social-network homepage links, and the remaining cart fallback now consumes the localized Shopify route.
+- Only the 13 TASK-009 theme files were uploaded to development theme `193260781938`. Home/PDP responsive checks, Search H1, Product/Organization/Breadcrumb schema, metadata, console/resources, Theme Editor, authentic Judge.me state, and read-only Cart Drawer passed. Shopify still reports `192527597938` as `live` and `193260781938` as `development`; no publish occurred.
 
 ## Current blockers
 
@@ -89,6 +93,7 @@
 - TASK-004's visual addendum is implemented locally, but exact Color-swatch and related-model acceptance is blocked until Cloud White/Graphite and at least two public, `CONFIRMED` Products are connected through the documented `relivanow.related_models` definition. No remote definition or sample model was created.
 - The current legacy feeder now exercises one-column Style cards plus Theme Editor-mapped Black/White Color swatches through Horizon's native multi-option picker. Native swatch image/color, Variant `swatch_color`, `style_card_image`, approved style badges, sold-out combinations, and final Cloud White/Graphite states still require representative remote data.
 - Judge.me is installed and technically integrated on the development theme; its exact plan tier remains unverified because no plan or charge was accepted. Authentic populated review data is still required for the remaining TASK-007 acceptance cases. Shopify Bundles products remain separately gated; subscriptions, financing, analytics/consent, and operational Markets setup are not frozen.
+- TASK-009 cannot be completed without approved provider/account identifiers, consent/legal behavior, Search Console and Merchant Center access, and authorized Markets/currency/language/domain decisions. The theme-owned implementation and development-preview gate are complete.
 - Exact live product, variant, cart, app, and commercial-flow behavior still requires task-specific validation with representative store data.
 - The TASK-001 audit remains a historical static audit; its tooling and runtime limitations accurately describe that audit session, not the current environment.
 - TASK-005 is closed. Representative properties/uploads, selling plans, discounts, app/bundle-controlled lines, Markets money, nested live dialogs, and quick-add/app overlap remain conditional on future real data or integrations; they were not fabricated and do not block the completed drawer-only task.
@@ -96,4 +101,4 @@
 
 ## Active task
 
-TASK-007 is `IN PROGRESS`. Its Judge.me infrastructure is validated on unpublished theme `193260781938`; only acceptance cases that require authentic populated reviews remain blocked. TASK-002 through TASK-006 and TASK-008 are `DONE`; TASK-009 has not started. Active theme `192527597938` remains protected and unchanged.
+TASK-007 remains `IN PROGRESS`: its Judge.me infrastructure is validated on unpublished theme `193260781938`, while populated-review acceptance requires authentic content. TASK-009 is independently `IN PROGRESS`: its code, tests, static audit, Theme Check, and development-preview validation pass, while external provider/consent/platform/Markets decisions remain pending. TASK-002 through TASK-006 and TASK-008 are `DONE`; TASK-010 must not begin. Active theme `192527597938` remains protected and unchanged.

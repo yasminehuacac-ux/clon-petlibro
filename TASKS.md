@@ -10,7 +10,7 @@
 | TASK-006 | PDP storytelling | DONE | TASK-004 reconciliation, navigation closure, and development-theme QA complete | Work |
 | TASK-007 | Reviews integration | IN PROGRESS | Technical integration validated; authentic populated reviews required for remaining acceptance | Work |
 | TASK-008 | Home | DONE | Development-theme QA, Theme Editor, PDP/Cart regression, and handoff complete | Work |
-| TASK-009 | Analytics and SEO | DRAFT | Events/providers/markets frozen | Work |
+| TASK-009 | Analytics and SEO | IN PROGRESS | Technical foundation validated on development; provider/consent/platform/Markets decisions pending | Work |
 | TASK-010 | Final QA and release | DRAFT | TASK-001–009 complete | Work |
 
 ## Status meanings
@@ -39,3 +39,7 @@ The local Horizon 4.1.1 cart audit and implementation evidence are recorded in `
 ## TASK-007 gate
 
 Judge.me's official core embed, Star Ratings block, and Review Widget are configured only on unpublished development theme `193260781938`. The native rating block is disabled there, the existing long-form `@app` host is reused, the real zero-review state is coherent, and no false rating/review schema is emitted. Live theme `192527597938` is byte-identical across the protected snapshot surfaces. Responsive, keyboard, Theme Editor, script/schema duplication, and read-only regression checks pass. TASK-007 remains `IN PROGRESS` because no authentic reviews exist to validate populated filters, customer media, pagination, verified-buyer output, and populated visible/schema consistency.
+
+## TASK-009 gate
+
+Work explicitly authorized TASK-009 to proceed independently while TASK-007 remains `IN PROGRESS`. The theme now has the safe SEO/structured-data corrections, localized-route fallback and provider-neutral interaction hooks, validated only on development theme `193260781938`. No pixel, provider ID, domain, consent rule, Market, currency, language, account or commercial data was created. TASK-009 remains `IN PROGRESS` until the external provider, consent, Search Console, Merchant Center and Markets decisions are supplied.

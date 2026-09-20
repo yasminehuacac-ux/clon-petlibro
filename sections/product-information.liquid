@@ -1,8 +1,10 @@
 
 
-<script type="application/ld+json">
-  {{ closest.product | structured_data }}
-</script>
+{% if closest.product != blank %}
+  <script type="application/ld+json">
+    {{ closest.product | structured_data }}
+  </script>
+{% endif %}
 
 {% capture media_gallery %}
   {%- content_for 'block',

@@ -246,6 +246,14 @@ The header's former Home-only visually hidden shop-name H1 was removed because t
 - The provider currently loads one deferred core loader and one module review-widget script on the PDP. Home has only the core loader and no review widget. Core Product, Variant, form, sticky ATC, cart, Home, and navigation code are unchanged.
 - Development theme `193260781938` is the only integration target. Live theme `192527597938` remained byte-identical across the protected snapshot surfaces and was never published or overwritten.
 
+## TASK-009 analytics and SEO architecture
+
+- Shopify/Horizon standard events remain authoritative for page, Product, Variant, collection/search, and confirmed cart state. The theme does not emit parallel `ViewItem`, `VariantSelected`, `AddToCart`, `BeginCheckout`, or `Purchase` events.
+- `assets/relivanow-analytics.js` is a transport-free interaction boundary. It installs delegated listeners once and emits only `GalleryInteraction`, `AddOnSelected`, and `FAQOpened` as `relivanow:analytics` DOM events.
+- Each custom event has an explicit field allowlist and accepts only primitive string, number, or boolean values. The module has no network request, cookie, browser-storage, account, token, pixel ID, or customer/order object path.
+- Provider mapping, checkout/purchase measurement, consent enforcement, attribution, and server-side/CAPI ownership belong to approved Shopify Customer Events/custom pixels outside the theme and remain externally gated.
+- SEO stays Shopify-native: canonical URLs, titles, descriptions, Product data, money/currency, localization routes, robots, and sitemap remain native. The additive breadcrumb JSON-LD uses current route objects, while Product JSON-LD guards prevent blank or duplicate featured-product entities.
+
 ## Provenance and protection boundary
 
 - Theme metadata verifies the name Horizon, version 4.1.1, and Shopify authorship.

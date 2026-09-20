@@ -6,6 +6,11 @@ All notable project changes are recorded here.
 
 ### Added
 
+- TASK-009 local analytics foundation: one provider-neutral, transport-free `relivanow:analytics` DOM boundary for Product-gallery, eligible add-on, and confirmed FAQ interactions, with event-specific primitive payload allowlists and single-install delegated listeners.
+- TASK-009 SEO foundation: route-aware breadcrumb JSON-LD, stable Organization context/origin, guarded native Product structured data, active-locale Open Graph metadata, social image alt/Twitter image fields, and a Search H1 correction.
+- Persistent TASK-009 contracts for custom-event idempotence/privacy, native commerce-event ownership, structured-data deduplication, metadata/headings, localized routes, tracker absence, Judge.me preservation, repository JSON/JSONC and Liquid schema parsing, and unique setting IDs.
+- TASK-009 audit and checkpoint evidence across analytics, SEO, structured data, accessibility, performance boundaries, review/FAQ consistency, localization/Markets, consent, third parties, scripts, and external Search Console/Merchant Center gates.
+- TASK-009 development-theme evidence on `193260781938`: exact Home/PDP responsive viewports, Search H1, Product/Organization/Breadcrumb JSON-LD, social metadata, tracker/resource absence, clean Home/PDP console, Theme Editor Save-disabled state, authentic Judge.me zero-review output, and read-only Cart Drawer regression.
 - TASK-007 Judge.me infrastructure on unpublished development theme `193260781938`: official top rating and long-form review app blocks, the core app embed, an honest provider-owned zero-review state, and persistent contract tests for single-source configuration and RELIVANOW review colors.
 - TASK-007 safety and QA evidence covering live-theme before/after checksums, four responsive PDP viewports, keyboard/dialog behavior, Theme Editor hide/show, script/schema duplication, Home/PDP/Cart regressions, and the authentic-content gate.
 - TASK-006 reconciliation against the completed TASK-004 long-form PDP, including a fail-closed, merchant-editable sticky anchor navigation with active-location state and dynamic omission of unavailable destinations.
@@ -44,6 +49,8 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- TASK-009 moved from `DRAFT` to `IN PROGRESS`. Local implementation, static validation, and unpublished-development-theme preview are complete; provider, consent, Search Console, Merchant Center, and Markets decisions remain external gates.
+- The cart action fallback now uses Shopify's localized `routes.cart_url`; footer defaults no longer link to generic social-network homepages. Native canonical, robots, sitemap, commerce money, localization, Judge.me, and standard Shopify event ownership remain unchanged.
 - TASK-007 moved from `DRAFT` to `IN PROGRESS`. The validated technical integration is retained, while populated-review filters, media, pagination, verified-buyer presentation, and populated rating/schema consistency remain `BLOCKED BY AUTHENTIC CONTENT`.
 - The native Product rating block is disabled in the development template so Judge.me is the single visible review authority; the existing Reviews / Social Proof app host remains the only long-form review section.
 - TASK-006 moved from `DRAFT` to `DONE` after reconciling all official criteria with the 16 existing TASK-004 long-form sections, native Product Recommendations and Horizon media system. Installation video, camera/monitoring, freshness/reliability, cleaning/compatibility and ecosystem publication remain content-gated rather than fabricated.

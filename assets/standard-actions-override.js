@@ -1,7 +1,7 @@
 /**
  * Horizon overrides for Shopify.actions:
  * - updateCart: emit events from the cart drawer scope.
- * - openCart: open the cart drawer (fall back to /cart when absent).
+ * - openCart: open the cart drawer (fall back to Shopify's localized cart route when absent).
  */
 
 function init() {
@@ -19,8 +19,8 @@ function init() {
 
       if (drawer?.open) {
         drawer.open();
-      } else {
-        window.location.href = Theme.routes.cart_url || '/cart';
+      } else if (Theme.routes.cart_url) {
+        window.location.href = Theme.routes.cart_url;
       }
     },
   });

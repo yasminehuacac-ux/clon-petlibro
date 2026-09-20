@@ -1,8 +1,12 @@
 
 
-<script type="application/ld+json">
-  {{ section.settings.product | structured_data }}
-</script>
+{% if section.settings.product != blank %}
+  {% if request.page_type != 'product' or section.settings.product.id != product.id %}
+    <script type="application/ld+json">
+      {{ section.settings.product | structured_data }}
+    </script>
+  {% endif %}
+{% endif %}
 
 {% capture media_gallery %}
   {% content_for 'block',

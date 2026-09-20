@@ -1,0 +1,49 @@
+{% liquid
+  assign breadcrumb_name = blank
+  assign breadcrumb_parent_name = blank
+  assign breadcrumb_parent_url = blank
+
+  case request.page_type
+    when 'product', 'collection', 'page'
+      assign breadcrumb_name = page_title
+    when 'blog'
+      assign breadcrumb_name = blog.title
+    when 'article'
+      assign breadcrumb_name = article.title
+      assign breadcrumb_parent_name = blog.title
+      assign breadcrumb_parent_url = request.origin | append: blog.url
+  endcase
+
+  assign breadcrumb_home_url = request.origin | append: routes.root_url
+%}
+
+{% if breadcrumb_name != blank and canonical_url != blank %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": {{ shop.name | json }},
+          "item": {{ breadcrumb_home_url | json }}
+        },
+        {% if breadcrumb_parent_name != blank and breadcrumb_parent_url != blank %}
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": {{ breadcrumb_parent_name | json }},
+            "item": {{ breadcrumb_parent_url | json }}
+          },
+        {% endif %}
+        {
+          "@type": "ListItem",
+          "position": {% if breadcrumb_parent_name != blank %}3{% else %}2{% endif %},
+          "name": {{ breadcrumb_name | json }},
+          "item": {{ canonical_url | json }}
+        }
+      ]
+    }
+  </script>
+{% endif %}

@@ -25,6 +25,8 @@
       <details
         class="details"
         data-testid="accordion-details"
+        data-analytics-faq-id="{{ faq.system.handle | default: confirmed_faq_count | escape }}"
+        data-analytics-faq-category="{{ faq.category.value | escape }}"
         {% unless section.settings.allow_multiple %}name="relivanow-faq-{{ section.id }}"{% endunless %}
         {% if section.settings.open_first and confirmed_faq_count == 1 %}open{% endif %}
       >
@@ -43,7 +45,7 @@
 {% if section.settings.enable_section and confirmed_faq_count >= 6 and faq_items != blank %}
   {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
   <div class="section-background color-custom-{{ section.id }}"></div>
-  <section class="relivanow-faq section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+  <section class="relivanow-faq section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style" data-analytics-product-id="{{ product.id }}" style="{% render 'spacing-style', settings: section.settings %}">
     {% render 'relivanow-section-header', eyebrow: section.settings.eyebrow, heading: section.settings.heading, text: section.settings.intro, alignment: section.settings.alignment %}
     <div class="relivanow-faq__items accordion accordion--plus accordion--dividers">{{ faq_items }}</div>
   </section>

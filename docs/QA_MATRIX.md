@@ -1,5 +1,24 @@
 # QA matrix
 
+## TASK-009 analytics, SEO, and Markets checkpoint — 2026-09-20
+
+| Case | Result | Evidence / remaining gate |
+|---|---|---|
+| Intake and scope safety | PASS | Work began at the expected `main` commit with a clean tree. TASK-007 remains `IN PROGRESS`; no Product, Variant, price, inventory, SEO administration, Market, language, currency, app, plan, credential, live-theme, publish, or cart mutation was authorized or performed. |
+| Analytics event boundary | PASS local | Shopify standard events remain authoritative for Product, Variant and confirmed cart state. `GalleryInteraction`, `AddOnSelected`, and `FAQOpened` emit once through one provider-neutral DOM hook with no transport or storage; unsupported bundle/upsell/review behavior was not fabricated. |
+| Payload and privacy | PASS local | Event-specific allowlists admit only primitive values and drop unknown or nested fields. No email, phone, address, customer/order object, free-form input, identifier, cookie, storage, endpoint, account, token, or provider ID was added. |
+| Checkout, purchase, and consent | BLOCKED BY BUSINESS DECISION | Theme click proxies were deliberately not created. Provider choice, consent platform/legal mode, regional categories, attribution and server-side/CAPI ownership must be approved before Shopify Customer Events/custom pixels are configured. |
+| Canonical, robots, and sitemap | PASS | Native `canonical_url` remains authoritative on Home, PDP, Search, Collection, and Page; no custom robots or sitemap implementation was added. |
+| Metadata and social tags | PASS local | Existing native title/description/image sources now expose active Open Graph locale, image alt, Twitter image and Twitter image alt. Generic social-network homepage URLs were removed from footer defaults. |
+| Structured data | PASS local / TASK-007 CONTENT GATE | Route-aware breadcrumbs, stable Organization context/origin, and guarded Product JSON-LD are present. FAQ records share the visible confirmed source. Judge.me remains the only review authority; authentic populated-rating consistency stays gated by TASK-007. |
+| Headings and media SEO | PASS local / ADMIN DATA PENDING | Search now owns an H1 and current Home/PDP contracts retain one H1. Final Product/media alt completeness depends on approved administrative assets and values and was not fabricated. |
+| Markets and localization | PARTIAL | Native localization forms, active money/currency output, canonical URLs and `routes.*` are preserved, including the cart fallback. Actual Market availability, price lists, currencies, languages and domains remain unmodified pending authorization. |
+| Search Console / Merchant Center | BLOCKED BY EXTERNAL CONFIGURATION | Domain verification, accounts, feeds and platform settings are outside the repository and were not invented. |
+| Duplication and static quality | PASS | No manual GA/Meta/TikTok/Clarity/GTM transport was introduced; Judge.me ownership is unchanged. Node contracts, full JSON/JSONC/Liquid schema validation, unique setting IDs, JavaScript syntax, hardcoded-ID/URL scans, diff whitespace, and fresh Theme Check pass locally. |
+| Development preview | PASS | Only the exact 13 affected theme files were uploaded to development theme `193260781938`. Home/PDP passed 1440×900, 1024×768, 768×1024, 390×844, and 360×800 with one H1, zero root overflow, zero broken images, and clean console; Search H1, Collection/Page/PDP breadcrumbs, Theme Editor Save-disabled state, Judge.me zero-review state, and read-only Cart Drawer also passed. Theme list retained `192527597938` as `live`. |
+
+TASK-009 remains `IN PROGRESS`. The full criterion and event/schema reconciliation is in `reports/TASK-009-RESULT.md`; TASK-010 must not begin.
+
 ## TASK-007 Judge.me acceptance matrix — 2026-09-20
 
 | Case | Result | Evidence / remaining gate |
