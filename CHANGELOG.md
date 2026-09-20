@@ -6,6 +6,10 @@ All notable project changes are recorded here.
 
 ### Added
 
+- TASK-008 premium Home composition with a claim-gated responsive hero, confirmed-benefit strip, native New & Popular product grid, two Product-backed editorial stories, fail-closed reviews host, final CTA, announcement, newsletter, and footer copy.
+- Home-specific OS 2.0 sections for campaign media/copy and Product-backed storytelling, including independent desktop/mobile media, mobile focal control, an editor-controlled safe crop for fallback media with embedded supplier copy, first-image LCP priority, editor-only missing-data guidance, and public fail-closed output.
+- Persistent Node contract/structure tests for the Home sequence, editor controls, Product ownership, native product-card deferral, JSON/JSONC parsing, Liquid schema parsing, and setting-ID uniqueness.
+- TASK-008 development-theme evidence on theme `193260781938`: five exact responsive viewports, one-H1 semantics, image priority/alt/broken-media checks, Theme Editor controls/order, clean Home/PDP console, PDP read-only regression, and read-only Cart Drawer regression.
 - TASK-005 development-theme validation evidence on unpublished theme `193260781938`: real PDP add, distinct valid Variants, quantity/remove mutations, FIFO cross-line concurrency, cart count/subtotal, native `/cart`, Checkout handoff without purchase, accessibility, and exact 1440×900, 768×1024, 390×844, and 360×800 measurements.
 - TASK-005 local cart-drawer reliability layer inside Horizon's existing `CartItemsComponent`: per-line intent coalescing, FIFO server mutation serialization, authoritative overlap reconciliation, affected-row pending semantics, localized visible errors and one retained Retry action.
 - Matching error and Retry copy across all 31 storefront locales.
@@ -36,6 +40,9 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- TASK-008 moved from `DRAFT` through `IN PROGRESS` to `DONE`; TASK-006 remains `DRAFT` and its PDP scope/files were not changed.
+- The Home selects the real automatic-feeder Product for hero/story data instead of a collection-order fallback. Missing category collections, Judge.me output, promotion/bundle, ecosystem, UGC, press/testimonial, and dedicated manifesto assets remain fail-closed and documented rather than fabricated.
+- Horizon's Home-only hidden shop-name H1 was removed so the visible campaign heading is the single H1. Native product-list cards now expose an optional `defer_card_images` control; Home uses it so only the hero image is eager/high priority.
 - TASK-005 moved from `IN PROGRESS` to `DONE` after the final empty-cart closure passed in a manually authenticated, clean temporary Chrome profile. The isolated cart began at zero, received one valid feeder Variant, removed only that test line by its native line key, returned to authoritative zero state, and passed drawer, `/cart`, accessibility, console/network, and 1440×900, 390×844, and 360×800 checks. The shared cart was untouched and all temporary processes/profile data were removed.
 - Runtime fallback error copy now prefers the already-decoded locale value and uses single HTML escaping, preventing an apostrophe from appearing as a literal entity after section morphing.
 - TASK-005 moved from `READY` to `IN PROGRESS`: local implementation and isolated/static validation are complete; unpublished-development-theme, Theme Editor and representative real-cart validation remain pending.

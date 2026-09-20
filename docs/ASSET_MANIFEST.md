@@ -1,6 +1,6 @@
 # Asset manifest
 
-**Status:** TASK-004 Cloud White handoff validated. Five files have `APPROVED VISUAL` status and three remain `PROVISIONAL`; no file has been uploaded to Shopify or added to this repository.
+**Status:** TASK-004 Cloud White handoff validated. Five files have `APPROVED VISUAL` status and three remain `PROVISIONAL`; no handoff file has been uploaded to Shopify or added to this repository. TASK-008 uses existing Shopify Product media as its fail-safe runtime fallback.
 
 The product-specific source of truth is the ordered manifest in `docs/CONTENT_MATRIX.md`. Shopify `product.media` remains the sole runtime gallery source, with native variant associations. The external handoff is an approval/input record only and must never become a parallel URL or metafield gallery.
 
@@ -54,10 +54,10 @@ This summary deliberately matches the eight-row source manifest in `docs/CONTENT
 
 | ID | Asset | Requirement | Status |
 |---|---|---|---|
-| HOME-01 | Cloud White hero campaign | `02` desktop + `03` mobile independent crops | APPROVED VISUAL; implementation waits for TASK-008 |
+| HOME-01 | Cloud White hero campaign | `02` desktop + `03` mobile independent crops | APPROVED VISUAL; binaries unavailable to TASK-008, not uploaded; existing Product media fallback active with editor-controlled safe crop |
 | HOME-02 | Hero campaign 2 | Desktop + mobile independent crop | PENDING |
 | HOME-03 | Category media | One per approved category | PENDING |
-| HOME-04 | Featured product stories | Approved product media | PENDING |
+| HOME-04 | Featured product stories | Approved product media | RUNTIME FALLBACK: existing Shopify Product media with editor-controlled safe crop; dedicated editorial exports pending |
 | HOME-05 | Ecosystem banner | Feeder/fountain relationship | PENDING |
 | HOME-06 | UGC/social | Usage rights and real context | PENDING |
 | HOME-07 | Brand manifesto | Emotional lifestyle scene | PENDING |

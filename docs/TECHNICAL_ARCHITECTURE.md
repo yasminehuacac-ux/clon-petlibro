@@ -1,6 +1,6 @@
 # Technical architecture
 
-**Status:** Repository-validated Horizon baseline with TASK-004 and TASK-005 complete; TASK-005 passed unpublished-development-theme, isolated empty-cart, and fresh post-correction verification.
+**Status:** Repository-validated Horizon baseline with TASK-004, TASK-005, and TASK-008 complete; TASK-008 passed unpublished-development-theme responsive, Theme Editor, PDP, Cart Drawer, and fresh static verification.
 
 ## Platform
 
@@ -209,6 +209,33 @@ Primary implementation files: `assets/component-cart-items.js`, `assets/header-a
 Reused unchanged: `assets/theme-drawer.js`, `assets/section-renderer.js`, `assets/morph.js`, `assets/component.js`, `assets/cart-discount.js`, `assets/cart-note.js`, `assets/cart-icon.js`, `assets/cart-drawer.js`, `assets/standard-actions-override.js`, `snippets/cart-items-component.liquid`, `snippets/theme-drawer.liquid`, `snippets/theme-drawer-header.liquid`, `snippets/theme-drawer-styles.liquid`, `sections/cart-drawer-section.liquid`, `sections/main-cart.liquid`, `templates/cart.json`, and `assets/product-form.js`.
 
 The implementation did not touch PDP composition, Variant Picker, gallery, Product/Variant data, or `assets/product-form.js`. Development-theme validation and isolated authenticated empty-cart closure are complete; unavailable properties, selling plans, bundle/app lines, Markets combinations, and nested live dialogs remain conditional on representative future data and were not fabricated.
+
+## TASK-008 Home architecture
+
+The Home remains an Online Store 2.0 JSON-template composition. `templates/index.json` owns order and merchant defaults; no route-specific JavaScript application or parallel content store was introduced.
+
+1. `relivanow-home-hero` resolves each confirmed slide from an explicit Product/media selection, then an optional merchant-selected fallback collection. It renders through Horizon's existing `slideshow` and `slideshow-slide` snippets, uses one responsive `<picture>`, owns the visible Home H1, gives eager/high priority only to the first eligible image, and offers an opt-in safe crop for Product fallback media with embedded supplier copy.
+2. `relivanow-benefits-bar` renders the four confirmed supplier facts through its existing verification gates.
+3. Native `product-list` reads real Shopify collection/Product data and uses the existing Horizon product-card/gallery hierarchy. Its new `defer_card_images` setting is opt-in and defaults false; Home enables it to protect hero LCP without changing other product-list instances.
+4. `relivanow-home-product-story` resolves one real Product plus selected/fallback media, renders no Product form or Variant state, and emits no public wrapper unless status, heading, text, and media are complete. Its opt-in safe crop shares the same claim-containment boundary as the hero and is disabled when approved clean media is assigned.
+5. `relivanow-reviews` remains the existing `@app` host. With no Judge.me block it emits no public section. Native footer/email-signup owns newsletter submission.
+6. Category navigation remains a native `collection-list` section in the editor but is disabled publicly until real collection selections and media exist; Shopify's placeholder collection cards are never exposed.
+
+Public flow:
+
+```text
+announcement/header
+  -> confirmed campaign hero (native slideshow)
+  -> confirmed benefits
+  -> native Product discovery
+  -> Product-backed routine story
+  -> Product-backed connected-care story
+  -> reviews app host (fail-closed without output)
+  -> Product-backed final CTA
+  -> native newsletter/footer
+```
+
+The header's former Home-only visually hidden shop-name H1 was removed because the campaign now supplies the page H1; logo/link accessibility remains native. All new section CSS is namespaced, all optional external evidence fails closed, and no Home code enters the PDP purchase panel, Variant Picker, Product form, cart mutation path, or active-theme publication flow.
 
 ## Provenance and protection boundary
 

@@ -134,9 +134,11 @@
             continue
           endif
 
-          if forloop.first and section.index == null or section.index < 5
-            assign loading = 'eager'
-            assign sizes = image_sizes
+          if forloop.first and section.settings.defer_card_images != true
+            if section.index == null or section.index < 5
+              assign loading = 'eager'
+              assign sizes = image_sizes
+            endif
           endif
 
           assign class = 'product-media-container media-fit product-media-container--[media_type]' | replace: '[media_type]', media.media_type

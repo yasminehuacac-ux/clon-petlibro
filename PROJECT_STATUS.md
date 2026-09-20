@@ -1,8 +1,8 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** TASK-005 cart drawer complete and validated on the unpublished development theme
-**Active task:** none — TASK-005 `DONE`; TASK-006 remains `DRAFT`
+**Stage:** TASK-008 Home complete
+**Active task:** None; TASK-008 is `DONE` and TASK-006 remains `DRAFT`
 **Last updated:** 2026-09-20
 
 ## Verified baseline facts
@@ -67,6 +67,10 @@
 - Fresh pre-commit verification on 2026-09-20 covered the final post-correction working tree: all 68 JSON/JSONC files, 31 storefront locales, 158 Liquid schemas, duplicate setting IDs, both modified JavaScript files, `git diff --check`, and Shopify Theme Check. Theme Check inspected 355 files with zero errors and only the six unchanged Horizon warnings in `sections/header.liquid` and `snippets/divider.liquid`; neither warning surface is modified by TASK-005.
 - AOV additions are deliberately not part of the READY implementation: free-shipping progress, recommendations, cross-sells, upsells, gifts, bundles, and new promotion logic remain gated by confirmed operational and commercial inputs.
 
+- TASK-008 is complete on unpublished development theme `193260781938`. The public Home renders the confirmed feeder campaign, benefits, native Product discovery, two editorial stories, final CTA, and native newsletter/footer; category, reviews, promotion/bundle, ecosystem, UGC, press/testimonial, and dedicated manifesto modules fail closed where real data/assets are absent.
+- Exact Home checks passed at 1440x900, 1024x768, 768x1024, 390x844, and 360x800 with no horizontal overflow, clipped controls, broken images, missing image alts, public placeholders, or console warnings/errors. The visible hero owns the single H1; only its image is eager/high priority.
+- Theme Editor exposed the complete ordered section list and campaign controls with Save disabled after inspection. PDP and the existing 17-item Cart Drawer were verified read-only; no Product, Variant, cart, Market, app, theme setting, or other commercial data was changed.
+
 ## Current blockers
 
 - Additional remote definitions, records, or Product fields beyond the five confirmed TASK-004 values require new scope and evidence.
@@ -85,6 +89,6 @@
 - TASK-005 is closed. Representative properties/uploads, selling plans, discounts, app/bundle-controlled lines, Markets money, nested live dialogs, and quick-add/app overlap remain conditional on future real data or integrations; they were not fabricated and do not block the completed drawer-only task.
 - `assets/product-form.js` preserves form properties in its normal FormData path, but its multi-item add-on JSON path currently rebuilds only Variant IDs and quantities. If a Product form later combines selected add-ons with line-item properties or a selling plan, preserving those fields requires a separately authorized correction; TASK-005 may document and test this boundary but does not modify the PDP or `product-form.js` in the current scope.
 
-## Next task
+## Active task
 
-TASK-002, TASK-003, TASK-004, and TASK-005 are `DONE`. TASK-006 remains `DRAFT` and has not begun. The final TASK-005 closure changed no code and uploaded no theme file; no AOV, product-data, media, app, active-theme, publication, order, stage, commit, or push action occurred.
+No task is active. TASK-008 is `DONE`; TASK-006 remains `DRAFT` and was not modified. TASK-009 has not started. Theme `193260781938` contains the validated Home implementation; active theme `192527597938` remains protected and unchanged.

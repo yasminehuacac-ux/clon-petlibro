@@ -6,280 +6,321 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
-    "hero_jVaWmY": {
-      "type": "hero",
+    "home_hero": {
+      "type": "relivanow-home-hero",
       "blocks": {
-        "text_YLPk4p": {
-          "type": "text",
-          "name": "t:names.heading",
+        "campaign_primary": {
+          "type": "slide",
           "settings": {
-            "text": "<p>Browse our latest products</p>",
-            "text_color": "{{ settings.color_palette.background }}",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
+            "verification_status": "CONFIRMED",
+            "product": "automatic-pet-feeder-with-remote-control-and-timed-feeding",
+            "mobile_object_position": "left center",
+            "crop_embedded_copy": true,
+            "eyebrow": "RELIVANOW Smart Pet Care",
+            "heading": "Smart care for life together.",
+            "text": "<p>Build a more predictable feeding routine with connected controls and precise portions.</p>",
+            "primary_label": "Shop Now",
+            "content_position": "bottom-left",
+            "overlay_color": "#171817",
+            "overlay_opacity": 55
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": ["campaign_primary"],
+      "name": "RELIVANOW hero",
+      "settings": {
+        "enable_section": true,
+        "fallback_collection": "all",
+        "accessibility_label": "Featured RELIVANOW campaign",
+        "section_width": "full-width",
+        "section_height": "large",
+        "controls_style": "dots",
+        "autoplay": false,
+        "autoplay_speed": 5,
+        "background_color": "#171817",
+        "text_color": "#FFFFFF",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "home_benefits": {
+      "type": "relivanow-benefits-bar",
+      "blocks": {
+        "meals": {
+          "type": "benefit",
+          "settings": { "source": "manual", "verification_status": "CONFIRMED", "icon": "check_box", "title": "1–10 meals a day", "text": "Flexible daily feeding frequency." },
+          "blocks": {}
+        },
+        "portions": {
+          "type": "benefit",
+          "settings": { "source": "manual", "verification_status": "CONFIRMED", "icon": "check_box", "title": "1–12 portions per meal", "text": "Portion control for everyday routines." },
+          "blocks": {}
+        },
+        "capacity": {
+          "type": "benefit",
+          "settings": { "source": "manual", "verification_status": "CONFIRMED", "icon": "check_box", "title": "2 L capacity", "text": "Compact storage for scheduled feeding." },
+          "blocks": {}
+        },
+        "pets": {
+          "type": "benefit",
+          "settings": { "source": "manual", "verification_status": "CONFIRMED", "icon": "paw_print", "title": "For dogs and cats", "text": "Designed for life with either companion." },
+          "blocks": {}
+        }
+      },
+      "block_order": ["meals", "portions", "capacity", "pets"],
+      "name": "Confirmed benefits",
+      "settings": {
+        "enable_section": true,
+        "accessibility_label": "Confirmed product benefits",
+        "section_width": "page-width",
+        "background_color": "#F7F7F4",
+        "padding-block-start": 24,
+        "padding-block-end": 24
+      }
+    },
+    "home_categories": {
+      "type": "collection-list",
+      "disabled": true,
+      "blocks": {
+        "category_header": {
+          "type": "group",
+          "name": "Header",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 8,
+            "width": "fill",
+            "width_mobile": "fill",
+            "height": "fit",
+            "background_media": "none",
+            "border": "none",
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },
-          "blocks": {}
-        },
-        "button_H9gpTf": {
-          "type": "button",
-          "name": "t:names.button",
-          "settings": {
-            "label": "Shop all",
-            "link": "shopify://collections/all",
-            "open_in_new_tab": false,
-            "style_class": "button-custom",
-            "custom_button_background": "rgba(0,0,0,0)",
-            "custom_button_text": "{{ settings.color_palette.background }}",
-            "custom_button_border": "{{ settings.color_palette.background }}",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
+          "blocks": {
+            "category_heading": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>Shop smart pet care</h2>",
+                "type_preset": "h2",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "wrap": "pretty",
+                "padding-block-start": 0,
+                "padding-block-end": 16,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
           },
-          "blocks": {}
+          "block_order": ["category_heading"]
+        },
+        "static-collection-card": {
+          "type": "_collection-card",
+          "name": "Collection card",
+          "static": true,
+          "settings": { "horizontal_alignment": "flex-start", "vertical_alignment": "flex-start", "placement": "on_image", "border": "none", "border_width": 1, "border_opacity": 100, "border_radius": 0 },
+          "blocks": {
+            "collection-card-image": {
+              "type": "_collection-card-image",
+              "name": "Collection image",
+              "static": true,
+              "settings": { "image_ratio": "4 / 5" },
+              "blocks": {}
+            },
+            "collection-title": {
+              "type": "collection-title",
+              "name": "Collection title",
+              "settings": { "type_preset": "h5", "width": "fit-content", "alignment": "left", "background": true, "background_color": "#FFFFFF", "padding-block-start": 4, "padding-block-end": 4, "padding-inline-start": 8, "padding-inline-end": 8 },
+              "blocks": {}
+            }
+          },
+          "block_order": ["collection-title"]
         }
       },
-      "block_order": [
-        "text_YLPk4p",
-        "button_H9gpTf"
-      ],
-      "name": "t:names.hero",
+      "block_order": ["category_header"],
+      "name": "Shop by category",
       "settings": {
-        "media_type_1": "image",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "flex-end",
-        "align_baseline": true,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 24,
+        "collection_list": ["all"],
+        "layout_type": "grid",
+        "carousel_on_mobile": false,
+        "columns": 4,
+        "mobile_columns": "1",
+        "columns_gap": 12,
+        "rows_gap": 12,
         "section_width": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "background_color": "rgba(0,0,0,0)",
-        "toggle_overlay": true,
-        "overlay_color": "#12121266",
-        "overlay_style": "solid",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 100,
-        "padding-block-end": 72
+        "gap": 24,
+        "background_color": "#FFFFFF",
+        "padding-block-start": 80,
+        "padding-block-end": 80
       }
     },
-    "product_list_fa6P9H": {
+    "home_products": {
       "type": "product-list",
       "blocks": {
         "static-header": {
           "type": "_product-list-content",
-          "name": "t:names.header",
+          "name": "Header",
           "static": true,
-          "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
+          "settings": { "content_direction": "row", "vertical_on_mobile": true, "horizontal_alignment": "space-between", "vertical_alignment": "flex-end", "align_baseline": true, "gap": 12, "width": "fill", "width_mobile": "fill", "height": "fit", "background_media": "none", "border": "none", "padding-block-start": 0, "padding-block-end": 0, "padding-inline-start": 0, "padding-inline-end": 0 },
           "blocks": {
-            "product_list_text_YFtzcL": {
+            "product_list_text": {
               "type": "_product-list-text",
-              "name": "t:names.collection_title",
-              "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h4",
-                "font": "var(--font-body--family)",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
+              "name": "Heading",
+              "settings": { "text": "<h2>New &amp; Popular</h2>", "type_preset": "h2", "width": "fit-content", "max_width": "normal", "alignment": "left", "wrap": "pretty", "padding-block-start": 0, "padding-block-end": 0, "padding-inline-start": 0, "padding-inline-end": 0 },
               "blocks": {}
             },
-            "product_list_button_MWeP9V": {
+            "product_list_button": {
               "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "link",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
+              "name": "View all",
+              "settings": { "label": "View all", "open_in_new_tab": false, "style_class": "link", "width": "fit-content", "width_mobile": "fit-content" },
               "blocks": {}
             }
           },
-          "block_order": [
-            "product_list_text_YFtzcL",
-            "product_list_button_MWeP9V"
-          ]
+          "block_order": ["product_list_text", "product_list_button"]
         },
         "static-product-card": {
           "type": "_product-card",
-          "name": "t:names.product_card",
+          "name": "Product card",
           "static": true,
-          "settings": {
-            "product_card_gap": 4,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
+          "settings": { "product_card_gap": 8, "border": "none", "border_width": 1, "border_opacity": 100, "border_radius": 0, "padding-block-start": 0, "padding-block-end": 0, "padding-inline-start": 0, "padding-inline-end": 0 },
           "blocks": {
-            "product_card_gallery_677WP3": {
+            "product-card-gallery": {
               "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
+              "name": "Product media",
+              "settings": { "image_ratio": "adapt", "border": "none", "border_width": 1, "border_opacity": 100, "border_radius": 0, "padding-block-start": 0, "padding-block-end": 0, "padding-inline-start": 0, "padding-inline-end": 0 },
               "blocks": {}
             },
-            "product_title_YXxMTj": {
+            "product_title": {
               "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
+              "name": "Product title",
+              "settings": { "width": "100%", "max_width": "normal", "alignment": "left", "type_preset": "paragraph", "font_size": "1rem", "wrap": "pretty", "background": false, "padding-block-start": 8, "padding-block-end": 0, "padding-inline-start": 0, "padding-inline-end": 0 },
               "blocks": {}
             },
-            "price_JQzVV4": {
+            "price": {
               "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
+              "name": "Product price",
+              "settings": { "show_sale_price_first": true, "show_installments": false, "show_tax_info": false, "type_preset": "h6", "width": "100%", "alignment": "left", "font_size": "1rem", "padding-block-start": 0, "padding-block-end": 0, "padding-inline-start": 0, "padding-inline-end": 0 },
               "blocks": {}
             }
           },
-          "block_order": [
-            "product_card_gallery_677WP3",
-            "product_title_YXxMTj",
-            "price_JQzVV4"
-          ]
+          "block_order": ["product-card-gallery", "product_title", "price"]
         }
       },
-      "name": "Featured collection",
+      "block_order": [],
+      "name": "New & Popular",
       "settings": {
         "collection": "all",
+        "defer_card_images": true,
         "layout_type": "grid",
         "carousel_on_mobile": false,
-        "max_products": 8,
+        "max_products": 4,
         "columns": 4,
         "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
+        "columns_gap": 12,
         "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
         "section_width": "page-width",
         "horizontal_alignment": "flex-start",
         "gap": 28,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "background_color": "#F7F7F4",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "home_story_routine": {
+      "type": "relivanow-home-product-story",
+      "name": "Daily routine story",
+      "settings": {
+        "enable_section": true,
+        "fallback_collection": "all",
+        "verification_status": "CONFIRMED",
+        "product": "automatic-pet-feeder-with-remote-control-and-timed-feeding",
+        "product_media_position": 1,
+        "crop_embedded_copy": true,
+        "eyebrow": "Better routines",
+        "heading": "More certainty at every meal.",
+        "text": "<p>Choose from 1 to 10 meals each day and 1 to 12 portions per meal to support a consistent routine.</p>",
+        "cta_label": "Shop Now",
+        "cta_style": "primary",
+        "media_position": "left",
+        "image_ratio": "4 / 5",
+        "alignment": "left",
+        "section_width": "full-width",
+        "background_color": "#FFFFFF",
+        "text_color": "#171817",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "home_story_connected": {
+      "type": "relivanow-home-product-story",
+      "name": "Connected care story",
+      "settings": {
+        "enable_section": true,
+        "fallback_collection": "all",
+        "verification_status": "CONFIRMED",
+        "product": "automatic-pet-feeder-with-remote-control-and-timed-feeding",
+        "product_media_position": 1,
+        "crop_embedded_copy": true,
+        "eyebrow": "Connected control",
+        "heading": "Care that fits the daily routine.",
+        "text": "<p>Generic mobile app support and confirmed 2.4 GHz connectivity keep everyday controls close at hand.</p>",
+        "cta_label": "Learn More",
+        "cta_style": "secondary",
+        "media_position": "right",
+        "image_ratio": "1 / 1",
+        "alignment": "left",
+        "section_width": "full-width",
+        "background_color": "#F0F1ED",
+        "text_color": "#171817",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "home_reviews": {
+      "type": "relivanow-reviews",
+      "blocks": {},
+      "block_order": [],
+      "name": "Verified reviews",
+      "settings": { "enable_section": true, "eyebrow": "Real experiences", "heading": "Customer reviews", "alignment": "center", "section_width": "page-width", "background_color": "#FFFFFF", "padding-block-start": 80, "padding-block-end": 80 }
+    },
+    "home_final_cta": {
+      "type": "relivanow-home-product-story",
+      "name": "Final call to action",
+      "settings": {
+        "enable_section": true,
+        "fallback_collection": "all",
+        "verification_status": "CONFIRMED",
+        "product": "automatic-pet-feeder-with-remote-control-and-timed-feeding",
+        "product_media_position": 1,
+        "crop_embedded_copy": true,
+        "eyebrow": "RELIVANOW Smart Pet Care",
+        "heading": "Smart care for life together.",
+        "text": "<p>Discover a 2 L automatic feeder designed for dogs and cats, with portion control and connected support.</p>",
+        "cta_label": "Shop Now",
+        "cta_style": "primary",
+        "media_position": "left",
+        "image_ratio": "16 / 9",
+        "alignment": "left",
+        "section_width": "page-width",
+        "background_color": "#171817",
+        "text_color": "#FFFFFF",
+        "padding-block-start": 64,
+        "padding-block-end": 64
       }
     }
   },
-  "order": [
-    "hero_jVaWmY",
-    "product_list_fa6P9H"
-  ]
+  "order": ["home_hero", "home_benefits", "home_categories", "home_products", "home_story_routine", "home_story_connected", "home_reviews", "home_final_cta"]
 }

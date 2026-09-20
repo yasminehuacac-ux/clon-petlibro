@@ -1,6 +1,6 @@
 # TASK-008 — RELIVANOW Home
 
-**Status:** DRAFT  
+**Status:** DONE
 **Depends on:** Shared systems approved; Home copy, products, campaigns, and media available  
 **Gate owner:** ChatGPT Work
 
@@ -39,14 +39,15 @@ Build a premium, responsive RELIVANOW Home that reproduces the benchmark's disco
 
 ## Acceptance criteria
 
-- [ ] Each section has one documented funnel purpose.
-- [ ] Content and ordering are editable.
-- [ ] Mobile/tablet/desktop use intentional compositions.
-- [ ] Only the necessary hero asset receives eager/high-priority loading.
-- [ ] No duplicated heavy media for hidden breakpoints.
-- [ ] Navigation, sliders, CTA, Theme Editor, accessibility, and performance pass.
+- [x] Each section has one documented funnel purpose.
+- [x] Content and ordering are editable.
+- [x] Mobile/tablet/desktop use intentional compositions.
+- [x] Only the necessary hero asset receives eager/high-priority loading.
+- [x] No duplicated heavy media for hidden breakpoints.
+- [x] Navigation, sliders, CTA, Theme Editor, accessibility, and performance pass.
 
 ## Required handoff
 
 Create `reports/TASK-008-RESULT.md` with full-page responsive evidence. Do not begin TASK-009.
 
+Completed in `reports/TASK-008-RESULT.md`. Missing secondary collection/editorial/review inputs remain documented fail-closed backlog and do not create public placeholders.

@@ -1,0 +1,150 @@
+{% liquid
+  assign story_status = section.settings.verification_status | upcase
+  assign story_product = section.settings.product
+  if story_product == blank
+    assign story_product = section.settings.fallback_collection.products.first
+  endif
+  assign story_image = section.settings.image
+
+  if story_image == blank and story_product != blank
+    assign media_index = section.settings.product_media_position | minus: 1
+    assign story_media = story_product.media[media_index]
+    if story_media == blank
+      assign story_media = story_product.featured_media
+    endif
+    assign story_image = story_media.preview_image
+  endif
+
+  assign story_link = section.settings.cta_link
+  if story_link == blank and story_product != blank
+    assign story_link = story_product.url
+  endif
+
+  assign story_is_valid = false
+  if section.settings.enable_section and story_status == 'CONFIRMED' and section.settings.heading != blank and section.settings.text != blank and story_image != blank
+    assign story_is_valid = true
+  endif
+%}
+
+{% if story_is_valid %}
+  {% liquid
+    assign story_alt = section.settings.image_alt | default: story_image.alt | default: story_product.title | default: section.settings.heading
+    assign focal_point_style = ''
+    if story_image.presentation.focal_point != blank
+      assign focal_point_style = 'object-position: ' | append: story_image.presentation.focal_point | append: ';'
+    endif
+    render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
+  %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section
+    class="relivanow-home-story relivanow-home-story--{{ section.settings.media_position }} section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %}; --home-story-ratio: {{ section.settings.image_ratio }}; --home-story-text: {{ section.settings.text_color }};"
+  >
+    <div class="relivanow-home-story__layout">
+      <figure class="relivanow-home-story__media{% if section.settings.crop_embedded_copy %} relivanow-home-story__media--safe-crop{% endif %}">
+        {{ story_image | image_url: width: 2000 | image_tag: widths: '480, 750, 1000, 1500, 2000', sizes: '(min-width: 750px) 55vw, 100vw', loading: 'lazy', alt: story_alt, style: focal_point_style }}
+      </figure>
+      <div class="relivanow-home-story__content relivanow-home-story__content--{{ section.settings.alignment }}">
+        {% if section.settings.eyebrow != blank %}<p class="relivanow-home-story__eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+        <h2>{{ section.settings.heading | escape }}</h2>
+        <div class="relivanow-home-story__text rte">{{ section.settings.text }}</div>
+        {% if section.settings.cta_label != blank and story_link != blank %}
+          <a class="button{% if section.settings.cta_style == 'secondary' %} button-secondary{% endif %}" href="{{ story_link }}">{{ section.settings.cta_label | escape }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Home product story — select a Product or approved image, add complete copy, and mark it Confirmed' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-home-story { color: var(--home-story-text); }
+
+  .relivanow-home-story__layout {
+    display: grid;
+    min-width: 0;
+    background: var(--color-background);
+  }
+
+  .relivanow-home-story__media {
+    min-width: 0;
+    margin: 0;
+    aspect-ratio: var(--home-story-ratio);
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+
+  .relivanow-home-story__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .relivanow-home-story__media--safe-crop img {
+    transform: scale(1.55);
+    transform-origin: center bottom;
+  }
+
+  .relivanow-home-story__content {
+    display: grid;
+    align-content: center;
+    gap: var(--gap-sm);
+    min-width: 0;
+    padding: clamp(32px, 6vw, 88px);
+  }
+
+  .relivanow-home-story__content--center { justify-items: center; text-align: center; }
+  .relivanow-home-story__eyebrow,
+  .relivanow-home-story__content h2,
+  .relivanow-home-story__text > :first-child,
+  .relivanow-home-story__text > :last-child { margin-block: 0; }
+  .relivanow-home-story__eyebrow { color: var(--color-brand); font-size: var(--font-size--sm); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+  .relivanow-home-story__content h2 { max-width: 15ch; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.02; text-wrap: balance; }
+  .relivanow-home-story__text { max-width: 38rem; color: var(--color-muted); font-size: clamp(1rem, 1.5vw, 1.125rem); }
+  .relivanow-home-story__content .button { width: fit-content; min-height: 44px; margin-block-start: var(--margin-xs); }
+
+  @media screen and (min-width: 750px) {
+    .relivanow-home-story__layout { grid-template-columns: minmax(0, 7fr) minmax(20rem, 5fr); }
+    .relivanow-home-story--right .relivanow-home-story__media { order: 2; }
+    .relivanow-home-story--right .relivanow-home-story__layout { grid-template-columns: minmax(20rem, 5fr) minmax(0, 7fr); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW home story",
+  "tag": "section",
+  "class": "relivanow-home-story-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "collection", "id": "fallback_collection", "label": "Fallback collection", "info": "The first Product is used when no Product is selected." },
+    { "type": "select", "id": "verification_status", "label": "Content status", "options": [{ "value": "UNVERIFIED", "label": "Unverified" }, { "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNVERIFIED" },
+    { "type": "product", "id": "product", "label": "Product source" },
+    { "type": "image_picker", "id": "image", "label": "Optional approved image override" },
+    { "type": "range", "id": "product_media_position", "label": "Product media position", "min": 1, "max": 10, "step": 1, "default": 1, "info": "Falls back to featured media when this position is unavailable." },
+    { "type": "checkbox", "id": "crop_embedded_copy", "label": "Crop embedded source copy", "info": "Zooms from the bottom to keep text baked into fallback media outside the visible frame. Disable for an approved clean image override.", "default": false },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "text", "id": "cta_label", "label": "CTA label" },
+    { "type": "url", "id": "cta_link", "label": "CTA link", "info": "Uses the selected Product when blank." },
+    { "type": "select", "id": "cta_style", "label": "CTA style", "options": [{ "value": "primary", "label": "Primary" }, { "value": "secondary", "label": "Secondary" }], "default": "primary" },
+    { "type": "select", "id": "media_position", "label": "Media position", "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }], "default": "left" },
+    { "type": "select", "id": "image_ratio", "label": "Image ratio", "options": [{ "value": "1 / 1", "label": "Square" }, { "value": "4 / 5", "label": "Portrait" }, { "value": "16 / 9", "label": "Landscape" }], "default": "4 / 5" },
+    { "type": "select", "id": "alignment", "label": "Text alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }], "default": "left" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "full-width", "label": "Full" }, { "value": "page-width", "label": "Page" }], "default": "full-width" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#F7F7F4" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#171817" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 128, "step": 8, "unit": "px", "default": 0 }
+  ],
+  "presets": [{ "name": "RELIVANOW home story", "category": "Storytelling" }]
+}
+{% endschema %}

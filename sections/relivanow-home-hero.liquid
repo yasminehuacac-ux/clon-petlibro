@@ -1,0 +1,340 @@
+{% liquid
+  assign rendered_slide_count = 0
+  assign fallback_product = section.settings.fallback_collection.products.first
+
+  capture rendered_slides
+    for block in section.blocks
+      assign slide_status = block.settings.verification_status | upcase
+      assign slide_product = block.settings.product
+      if slide_product == blank
+        assign slide_product = fallback_product
+      endif
+      assign desktop_image = block.settings.desktop_image
+      if desktop_image == blank and slide_product != blank
+        assign desktop_image = slide_product.featured_image
+      endif
+
+      if slide_status != 'CONFIRMED' or block.settings.heading == blank or desktop_image == blank
+        continue
+      endif
+
+      assign slide_index = rendered_slide_count
+      assign rendered_slide_count = rendered_slide_count | plus: 1
+      assign mobile_image = block.settings.mobile_image
+      assign image_alt = block.settings.image_alt | default: desktop_image.alt | default: slide_product.title
+      assign primary_link = block.settings.primary_link
+      if primary_link == blank and slide_product != blank
+        assign primary_link = slide_product.url
+      endif
+      assign overlay_opacity = block.settings.overlay_opacity | divided_by: 100.0
+      assign image_loading = 'lazy'
+      assign image_priority = 'low'
+      if slide_index == 0 and section.index <= 2
+        assign image_loading = 'eager'
+        assign image_priority = 'high'
+      endif
+      assign focal_point_style = ''
+      if desktop_image.presentation.focal_point != blank
+        assign focal_point_style = 'object-position: ' | append: desktop_image.presentation.focal_point | append: ';'
+      endif
+
+      capture slide_children
+        echo '<div class="relivanow-home-hero__media'
+        if block.settings.crop_embedded_copy
+          echo ' relivanow-home-hero__media--safe-crop'
+        endif
+        echo '" style="--home-hero-mobile-object-position: '
+        echo block.settings.mobile_object_position
+        echo ';">'
+        echo '<picture>'
+        if mobile_image != blank
+          echo '<source media="(max-width: 749px)" srcset="'
+          echo mobile_image | image_url: width: 360
+          echo ' 360w, '
+          echo mobile_image | image_url: width: 540
+          echo ' 540w, '
+          echo mobile_image | image_url: width: 750
+          echo ' 750w" sizes="100vw">'
+        endif
+        echo desktop_image | image_url: width: 2560 | image_tag: widths: '750, 1100, 1500, 2000, 2560', sizes: '100vw', loading: image_loading, fetchpriority: image_priority, alt: image_alt, class: 'relivanow-home-hero__image', style: focal_point_style
+        echo '</picture>'
+        echo '<span class="relivanow-home-hero__overlay" aria-hidden="true"></span>'
+        echo '</div>'
+
+        echo '<div class="relivanow-home-hero__content relivanow-home-hero__content--'
+        echo block.settings.content_position
+        echo '" style="--home-hero-overlay-color: '
+        echo block.settings.overlay_color
+        echo '; --home-hero-overlay-opacity: '
+        echo overlay_opacity
+        echo ';" '
+        echo block.shopify_attributes
+        echo '><div class="relivanow-home-hero__copy">'
+        if block.settings.eyebrow != blank
+          echo '<p class="relivanow-home-hero__eyebrow">'
+          echo block.settings.eyebrow | escape
+          echo '</p>'
+        endif
+        if slide_index == 0
+          echo '<h1>'
+        else
+          echo '<h2>'
+        endif
+        echo block.settings.heading | escape
+        if slide_index == 0
+          echo '</h1>'
+        else
+          echo '</h2>'
+        endif
+        if block.settings.text != blank
+          echo '<div class="relivanow-home-hero__text rte">'
+          echo block.settings.text
+          echo '</div>'
+        endif
+        if block.settings.primary_label != blank and primary_link != blank or block.settings.secondary_label != blank and block.settings.secondary_link != blank
+          echo '<div class="relivanow-home-hero__actions">'
+          if block.settings.primary_label != blank and primary_link != blank
+            echo '<a class="button" href="'
+            echo primary_link
+            echo '">'
+            echo block.settings.primary_label | escape
+            echo '</a>'
+          endif
+          if block.settings.secondary_label != blank and block.settings.secondary_link != blank
+            echo '<a class="button button-secondary" href="'
+            echo block.settings.secondary_link
+            echo '">'
+            echo block.settings.secondary_label | escape
+            echo '</a>'
+          endif
+          echo '</div>'
+        endif
+        echo '</div></div>'
+      endcapture
+
+      render 'slideshow-slide', index: slide_index, children: slide_children, slide_size: section.settings.section_height, slide_id: block.id
+    endfor
+  endcapture
+%}
+
+{% if section.settings.enable_section and rendered_slide_count > 0 %}
+  {% liquid
+    assign autoplay = false
+    assign show_arrows = false
+    if rendered_slide_count > 1 and section.settings.autoplay
+      assign autoplay = true
+    endif
+    if rendered_slide_count > 1
+      assign show_arrows = true
+    endif
+
+    capture controls
+      if rendered_slide_count > 1
+        render 'slideshow-controls', style: section.settings.controls_style, autoplay: autoplay, item_count: rendered_slide_count, show_arrows: true, arrows_on_media: true, controls_on_media: true, pagination_position: 'center', icon_style: 'arrow'
+      endif
+    endcapture
+  %}
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <section
+    class="relivanow-home-hero section section--{{ section.settings.section_width }} color-custom-{{ section.id }} spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %}; --home-hero-text: {{ section.settings.text_color }};"
+    aria-label="{{ section.settings.accessibility_label | escape }}"
+  >
+    {% render 'slideshow',
+      class: 'relivanow-home-hero__slideshow',
+      controls: controls,
+      show_arrows: show_arrows,
+      icon_style: 'arrow',
+      icon_shape: 'circle',
+      autoplay: autoplay,
+      autoplay_speed: section.settings.autoplay_speed,
+      slides: rendered_slides,
+      slide_count: rendered_slide_count,
+      slide_size: section.settings.section_height
+    %}
+  </section>
+{% elsif section.settings.enable_section and request.design_mode %}
+  <section class="section section--{{ section.settings.section_width }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    {% render 'relivanow-preview-placeholder', label: 'Home hero — add a confirmed slide with a desktop image or Product featured image' %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-home-hero {
+    color: var(--home-hero-text);
+  }
+
+  .relivanow-home-hero__slideshow,
+  .relivanow-home-hero__slideshow slideshow-container,
+  .relivanow-home-hero__slideshow slideshow-slides,
+  .relivanow-home-hero__slideshow slideshow-slide {
+    min-width: 0;
+  }
+
+  .relivanow-home-hero__slideshow slideshow-slide {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .relivanow-home-hero__media,
+  .relivanow-home-hero__media picture,
+  .relivanow-home-hero__image,
+  .relivanow-home-hero__overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .relivanow-home-hero__image {
+    display: block;
+    object-fit: cover;
+  }
+
+  .relivanow-home-hero__media--safe-crop .relivanow-home-hero__image {
+    transform: scale(1.55);
+    transform-origin: center bottom;
+  }
+
+  .relivanow-home-hero__overlay {
+    background: var(--home-hero-overlay-color);
+    opacity: var(--home-hero-overlay-opacity);
+  }
+
+  .relivanow-home-hero__content {
+    position: relative;
+    z-index: var(--layer-raised);
+    display: flex;
+    min-height: inherit;
+    padding: clamp(24px, 5vw, 72px);
+  }
+
+  .relivanow-home-hero__content--bottom-left { align-items: flex-end; justify-content: flex-start; text-align: left; }
+  .relivanow-home-hero__content--bottom-center { align-items: flex-end; justify-content: center; text-align: center; }
+  .relivanow-home-hero__content--center-left { align-items: center; justify-content: flex-start; text-align: left; }
+  .relivanow-home-hero__content--center { align-items: center; justify-content: center; text-align: center; }
+
+  .relivanow-home-hero__copy {
+    display: grid;
+    gap: var(--gap-sm);
+    width: min(100%, 44rem);
+  }
+
+  .relivanow-home-hero__eyebrow,
+  .relivanow-home-hero__copy h1,
+  .relivanow-home-hero__copy h2,
+  .relivanow-home-hero__text > :first-child,
+  .relivanow-home-hero__text > :last-child {
+    margin-block: 0;
+  }
+
+  .relivanow-home-hero__eyebrow {
+    font-size: var(--font-size--sm);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .relivanow-home-hero__copy h1,
+  .relivanow-home-hero__copy h2 {
+    max-width: 14ch;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+
+  .relivanow-home-hero__text {
+    max-width: 36rem;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+  }
+
+  .relivanow-home-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-xs);
+    margin-block-start: var(--margin-xs);
+  }
+
+  .relivanow-home-hero__actions .button {
+    min-width: 10rem;
+    min-height: 44px;
+  }
+
+  .relivanow-home-hero__content--bottom-center .relivanow-home-hero__copy,
+  .relivanow-home-hero__content--center .relivanow-home-hero__copy { justify-items: center; }
+
+  @media screen and (max-width: 749px) {
+    .relivanow-home-hero__content { padding: 24px 20px 40px; }
+    .relivanow-home-hero__image { object-position: var(--home-hero-mobile-object-position, center); }
+    .relivanow-home-hero__copy {
+      background: rgb(23 24 23 / 0.84);
+      border: 1px solid rgb(255 255 255 / 0.2);
+      padding: 18px;
+    }
+    .relivanow-home-hero__copy h1,
+    .relivanow-home-hero__copy h2 { font-size: clamp(2.25rem, 11vw, 3.25rem); }
+    .relivanow-home-hero__actions { width: 100%; }
+    .relivanow-home-hero__actions .button {
+      flex: 1 1 100%;
+      width: 100%;
+      background: #f7f7f4;
+      color: #171817;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .relivanow-home-hero__slideshow * { scroll-behavior: auto; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW home hero",
+  "tag": "section",
+  "class": "relivanow-home-hero-wrapper",
+  "max_blocks": 4,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "collection", "id": "fallback_collection", "label": "Fallback collection", "info": "The first Product supplies media and the primary CTA when a slide has no Product or desktop image." },
+    { "type": "text", "id": "accessibility_label", "label": "Accessibility label", "default": "Featured campaigns" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [{ "value": "full-width", "label": "Full" }, { "value": "page-width", "label": "Page" }], "default": "full-width" },
+    { "type": "select", "id": "section_height", "label": "Height", "options": [{ "value": "small", "label": "Small" }, { "value": "medium", "label": "Medium" }, { "value": "large", "label": "Large" }], "default": "large" },
+    { "type": "select", "id": "controls_style", "label": "Pagination", "options": [{ "value": "dots", "label": "Dots" }, { "value": "counter", "label": "Counter" }], "default": "dots" },
+    { "type": "checkbox", "id": "autoplay", "label": "Auto-rotate slides", "default": false },
+    { "type": "range", "id": "autoplay_speed", "label": "Speed", "min": 3, "max": 7, "step": 1, "unit": "s", "default": 5, "visible_if": "{{ section.settings.autoplay }}" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#171817" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#FFFFFF" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 0 }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Campaign slide",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Content status", "options": [{ "value": "UNVERIFIED", "label": "Unverified" }, { "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNVERIFIED" },
+        { "type": "product", "id": "product", "label": "Optional Product source" },
+        { "type": "image_picker", "id": "desktop_image", "label": "Desktop image" },
+        { "type": "image_picker", "id": "mobile_image", "label": "Optional mobile image" },
+        { "type": "select", "id": "mobile_object_position", "label": "Mobile image focus", "options": [{ "value": "left center", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right center", "label": "Right" }], "default": "center" },
+        { "type": "checkbox", "id": "crop_embedded_copy", "label": "Crop embedded source copy", "info": "Zooms from the bottom to keep text baked into fallback media outside the visible frame. Disable for approved clean campaign media.", "default": false },
+        { "type": "text", "id": "image_alt", "label": "Image alt text" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "text", "id": "primary_label", "label": "Primary CTA label" },
+        { "type": "url", "id": "primary_link", "label": "Primary CTA link", "info": "Uses the selected Product when blank." },
+        { "type": "text", "id": "secondary_label", "label": "Secondary CTA label" },
+        { "type": "url", "id": "secondary_link", "label": "Secondary CTA link" },
+        { "type": "select", "id": "content_position", "label": "Content position", "options": [{ "value": "bottom-left", "label": "Bottom left" }, { "value": "bottom-center", "label": "Bottom center" }, { "value": "center-left", "label": "Center left" }, { "value": "center", "label": "Center" }], "default": "bottom-left" },
+        { "type": "color", "id": "overlay_color", "label": "Overlay color", "default": "#171817" },
+        { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 40 }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW home hero", "category": "Banners", "blocks": [{ "type": "slide" }] }]
+}
+{% endschema %}

@@ -286,3 +286,19 @@ All component variant IDs/quantities, compatibility, inventory, margin, CPA, AOV
 - **Product:** Portable Pet Water Bottle with Bowl. Four description images were externally reported with `alt="undefined"`.
 - **Diagnosis:** The theme outputs Shopify-managed `product.description` HTML directly and does not manufacture image alt attributes.
 - **Action:** Correct only the four affected saved description alts with approved image-specific text; use an empty alt only for decorative images. No global theme substitution or invented alt text.
+
+## TASK-008 Home content — 2026-09-20
+
+| Funnel role | Public content/data source | Claim/status gate | Runtime result |
+|---|---|---|---|
+| Announcement | Approved RELIVANOW tagline | FROZEN | `Smart care for life together.` |
+| Primary campaign | Selected automatic-feeder Product, Product media, confirmed campaign copy | Slide must be `CONFIRMED` and have heading + resolved media | Public hero with native Product URL fallback |
+| Trust/benefits | Confirmed supplier facts | Each block must be `CONFIRMED` | 1–10 meals/day, 1–12 portions/meal, 2 L, dogs and cats |
+| Product discovery | Native `all` collection and Horizon product cards | Shopify Product availability/data | Four real Products, native price/URL/availability |
+| Daily routine story | Selected automatic-feeder Product media + confirmed editorial copy | Section must be `CONFIRMED` and complete | Public split story and native Product CTA |
+| Connected care story | Selected automatic-feeder Product media + confirmed editorial copy | Section must be `CONFIRMED` and complete | Generic mobile app support and 2.4 GHz only |
+| Reviews/social proof | Judge.me `@app` output only | Real app block output required | Publicly absent; editor guidance only |
+| Final CTA | Selected automatic-feeder Product media + confirmed editorial copy | Section must be `CONFIRMED` and complete | Public CTA; no Product form or Variant ID |
+| Newsletter/footer | Horizon native email-signup/footer | Native Shopify customer form | Public newsletter and footer composition |
+
+Category navigation remains present and reorderable in Theme Editor but is disabled publicly until real merchant collections and category media exist. Promotion/bundle, ecosystem, UGC/social, press/testimonial, and dedicated manifesto modules are omitted rather than populated with provisional claims or assets. Existing Shopify Product media is an approved runtime fallback for the completed Home; hero and story instances enable the editor-controlled safe crop so embedded supplier copy stays outside the visible frame. This runtime treatment does not promote the external HOME-01 files to uploaded/publication-approved status.

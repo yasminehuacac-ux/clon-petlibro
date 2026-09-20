@@ -1,5 +1,22 @@
 # QA matrix
 
+## TASK-008 Home acceptance matrix — 2026-09-20
+
+| Case | Result | Evidence / remaining gate |
+|---|---|---|
+| Destination safety | PASS | All storefront uploads targeted development theme `193260781938`. Theme list retained active theme `192527597938`; no `--live`, publish, push, Product/Variant, Market, app, or commercial-data mutation occurred. |
+| Public composition | PASS | Announcement, hero, confirmed benefits, native New & Popular grid, daily-routine story, connected-care story, final CTA, newsletter, and footer render in sequence. Category and Judge.me sections remain editor-visible but public fail-closed; no placeholder text leaks. |
+| Exact responsive preview | PASS | 1440x900, 1024x768, 768x1024, 390x844, and 360x800 all reported root width equal to client width, zero clipped non-skip controls, zero broken images, and zero public placeholder matches. Desktop/tablet/mobile screenshots were visually inspected. |
+| Accessibility | PASS for available UI | Exactly one visible H1 (`Smart care for life together.`), every visible Home image has an `alt` attribute, the section has an accessible label, CTA targets remain real links, and reduced-motion CSS disables slideshow smooth scrolling. |
+| Performance | PASS | Hero image is the only `loading="eager"` / `fetchpriority="high"` Home image. Product-card first media and every editorial image are lazy; responsive `srcset`/`sizes`, intrinsic dimensions, object-fit, and reserved section geometry are present. |
+| Claims/data | PASS | Public manual claims are restricted to 1–10 meals/day, 1–12 portions/meal, 2 L, dogs/cats, generic app support, and 2.4 GHz. Product image/URL/price/availability come from real Shopify Products. The active safe crop keeps embedded supplier copy outside hero/story frames. Prohibited-claim and added hardcoded remote ID/URL scans are clean. |
+| Theme Editor | PASS | Development editor shows the complete ordered Home section list. Hero enablement, fallback collection, height, pagination, autoplay, colors, spacing, Product/media, mobile focus, safe crop, copy, CTA, position, overlay and verification controls are accessible. Save stayed disabled after read-only inspection. |
+| Local contracts/structure | PASS | 7 Node tests pass: Home contract/order/gates, native card deferral, shell/newsletter, all repository JSON/JSONC, all Liquid schemas, and setting-ID uniqueness. Modified test JavaScript passes `node --check`; `git diff --check` passes. |
+| Home runtime console | PASS | Stable Home preview produced no console warnings or errors. |
+| PDP regression | PASS read-only | Feeder PDP retained one H1, 11 Product images with no broken media, native price, Color group, quantity input, two Product forms, and Add to cart. No form submission or commerce mutation was performed. |
+| Cart Drawer regression | PASS read-only | Existing cart trigger expanded the native dialog with 17 pre-existing items, native line labels/quantities/totals, and `$1,519.23 USD` cart total. Drawer closed normally; no line, quantity, cart or checkout change was made. |
+| Secondary assets/data | PASS fail-closed / BACKLOG | HOME-01 remains external/not uploaded; existing Product media supplies the usable fallback. Real collections/category media, Judge.me output, promotion/bundle, ecosystem, UGC, press/testimonial, and dedicated manifesto assets remain pending and were not fabricated. |
+
 ## Baseline viewports
 
 - 360px mobile.

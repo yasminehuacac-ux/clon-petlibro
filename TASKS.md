@@ -9,7 +9,7 @@
 | TASK-005 | RELIVANOW cart drawer | DONE | Approved real development-theme and isolated empty-cart validation | Work |
 | TASK-006 | PDP storytelling | DRAFT | TASK-004 + approved content | Work |
 | TASK-007 | Reviews integration | DRAFT | Provider selected | Work |
-| TASK-008 | Home | DRAFT | Shared systems approved | Work |
+| TASK-008 | Home | DONE | Development-theme QA, Theme Editor, PDP/Cart regression, and handoff complete | Work |
 | TASK-009 | Analytics and SEO | DRAFT | Events/providers/markets frozen | Work |
 | TASK-010 | Final QA and release | DRAFT | TASK-001–009 complete | Work |
 
