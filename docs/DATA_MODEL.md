@@ -24,7 +24,7 @@ Source priority is supplier-confirmed evidence, approved RELIVANOW decisions, Sh
 | Product media | Gallery files, order, alt text, media type, variant featured-media association | Sole source for the PDP gallery. Do not store primary images in metafields or use permanent supplier URLs. |
 | Shopify Markets | Market membership, catalog availability, currency/display pricing, language/domain configuration | No invented converted prices. Decide fixed local pricing versus automatic conversion before launch. |
 | Shopify Bundles | Fixed bundle product and component inventory relationships | Create only after every component product/SKU exists and commercial approval is recorded. |
-| Judge.me | Average rating, review count, verified reviews, customer photos/videos, review structured data | Planned single review authority. Do not create parallel manual rating/count metafields or duplicate Product review schema. |
+| Judge.me | Average rating, review count, verified reviews, customer photos/videos, review structured data | Active single review authority on development theme `193260781938`. Do not create parallel manual rating/count metafields or duplicate Product review schema. |
 
 ## TASK-004 Phase 2 section-owned data
 
@@ -296,11 +296,11 @@ Shopify Markets owns actual catalogs, availability, currencies, domains, and tra
 
 ## Reviews authority
 
-- Judge.me is the planned sole future source for average rating, review count, verified reviews, customer media, and review structured data.
+- Judge.me is the active sole source on the development theme for average rating, review count, verified reviews, customer media, and review structured data.
 - The adapter must read Judge.me's standard `reviews.rating` rating object and `reviews.rating_count` integer. Render only when count is a non-negative integer and the rating object has numeric `rating`, `scale_min`, and `scale_max` with `scale_max > scale_min` and rating inside that range; use the supplied scale rather than assuming five. Missing or malformed input hides rating UI/schema. A true zero count may show a neutral no-reviews state without stars or AggregateRating.
 - Audit Horizon's existing `product | structured_data` output and Judge.me JSON-LD together. Enable exactly one aggregate-rating/review schema source; visible stars/count and schema must resolve from the same Judge.me values.
 - Do not create manual rating or review-count metafields, invent reviews, import PETLIBRO reviews, or enable duplicate Product/review schema.
-- Installation and configuration require separate authorization. Until then, review-dependent UI must hide or degrade gracefully.
+- The authorized development integration uses official app blocks and the core embed only. Publication, paid-plan acceptance, and any review import remain separate gates; absent authentic content must degrade to Judge.me's honest zero-review state.
 - If the provider changes, disable Judge.me output and structured data before enabling the replacement; verify a single visible and schema source.
 
 ## Bundle model
@@ -319,7 +319,7 @@ Use Shopify Bundles for fixed bundles after product/SKU creation and profitabili
 - Native purchase-critical data (selected variant, price, availability, SKU, quantity and media) always uses Horizon's native Shopify path; never substitute metafield placeholders.
 - Empty subtitle/value proposition: omit its text block. For every reference list, filter `nil`, `DRAFT`, invalid-status, and unavailable records first; if no renderable records remain, omit the whole section and navigation anchor. Omit a specification group that has no renderable rows. Empty policy reference: omit that policy item. Empty user manual: omit the download link. Never print placeholder labels, `undefined`, blank wrappers, or invented values.
 - Empty `product.media`: preserve Horizon's native Theme Editor/design-mode placeholder, but block production publication of the product until at least one approved native medium exists. Never create a metafield or external-URL fallback gallery. A real variant with no featured media, including Graphite at TASK-004 start, falls back to the complete general `product.media` collection.
-- Reviews without an active Judge.me source: hide rating summary, review count, review list and review structured data together; a neutral “No reviews yet” message is allowed only if Judge.me confirms a real zero count.
+- Reviews without an active Judge.me source: hide rating summary, review count, review list and review structured data together. With the active provider and a confirmed real zero count, Judge.me's neutral `No reviews` / first-review CTA state is allowed without `AggregateRating`.
 - App name/links: omit the entire download module until the official name, platform compatibility, and destination URLs are verified; generic confirmed app-control copy may remain.
 - Add-on products: filter missing, parent-self, unconfirmed, and multi-Variant Products individually; render a sold-out single-Variant Product as disabled and omit the module when none remain. A Product may enter the list only after compatibility with both confirmed Single Bowl colors is approved. The checkbox submits the one real default Variant as a separate cart line item; never infer a configuration, duplicate price/inventory, or hardcode a handle/Variant ID.
 - Box contents: prefer confirmed `relivanow.box_items` records for item-level quantity/media/alt; when none render, use existing `relivanow.box_contents` text values as a text-only fallback. Never merge both sources, parse untrusted quantities, or add batteries/accessories by implication.
@@ -343,7 +343,7 @@ Use Shopify Bundles for fixed bundles after product/SKU creation and profitabili
 4. Upload approved media to `product.media`, order it, write final alt text, and associate variants natively.
 5. Enter simple product/variant metafields; keep internal definitions private.
 6. Link feature, specification, FAQ, policy, and approved bundle records. Market delivery uses the country-code handle lookup and is not linked from each product.
-7. Configure Markets, translations, Judge.me, and Shopify Bundles only under separate authorization.
+7. Configure Markets, translations, and Shopify Bundles only under separate authorization. Judge.me is configured only on development theme `193260781938`; publication, plan changes, and review imports still require their own gate.
 8. Test graceful empty states, variant/commerce synchronization, structured data uniqueness, and every market before publication.
 
 ## Implementation references

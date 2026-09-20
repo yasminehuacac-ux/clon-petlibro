@@ -1,5 +1,25 @@
 # QA matrix
 
+## TASK-007 Judge.me acceptance matrix — 2026-09-20
+
+| Case | Result | Evidence / remaining gate |
+|---|---|---|
+| Destination and live safety | PASS | Integration targets unpublished development theme `193260781938` only. Before/after SHA-256 values for live theme `192527597938` are identical for `layout/theme.liquid`, `config/settings_data.json`, and `templates/product.json`; no publish or `--live` action occurred. |
+| Installation and plan | PASS existing install / PLAN UNVERIFIED | Judge.me was already installed before TASK-007 and exposes four active extensions. No permission, credential, plan, or charge acceptance occurred in this session; onboarding still exposes a Plan step that was not entered. |
+| Single review authority | PASS | One official Star Ratings block, one official Review Widget, and the core embed are active in development. The native Horizon rating block is disabled; no manual rating/review store or Liquid-injected provider script exists. |
+| Authentic zero-review state | PASS | The current real Product shows provider-owned `No reviews`, `Be the first to write a review`, and `Write a review` output. No sample review, false count, fabricated media, or public admin placeholder appears. |
+| Populated review behavior | BLOCKED BY AUTHENTIC CONTENT | No authentic Judge.me or Shopify reviews exist. Rating/count values, review content, filters, customer media, pagination, verified-buyer output, and populated schema cannot be truthfully exercised. |
+| Visual tokens | PASS stars / BLOCKED verified output | Runtime stars resolve to `rgb(255, 98, 1)` (`#FF6201`). Verified-buyer selectors consume `--color-verified` (`#3897F0`), but a populated authentic verified review is unavailable for visual validation. |
+| Structured data | PASS zero state | PDP JSON-LD contains Organization and ProductGroup only for reviews: zero `AggregateRating` and zero review nodes, consistent with the visible real zero state. Populated consistency remains blocked by authentic content. |
+| Scripts and loading | PASS | PDP loads two unique Judge.me resources: one deferred core loader and one async module review-widget script. Home loads only the deferred core loader and no widget. No duplicate widget/script instance or manual injection was found. |
+| Keyboard and dialog | PASS available state | The first-review dialog exposes `role=dialog`, `aria-modal=true`, a named heading, initial focus on Close, keyboard progression to the one-star control, and five named star buttons. No review was submitted. |
+| Heading/accessibility boundary | PASS | The long-form section exposes one visible `Customer reviews` H2; Judge.me's nested widget title is visually suppressed without hiding the widget controls. PDP retains one H1. |
+| Responsive | PASS | 1440×900, 768×1024, 390×844, and 360×800 show the rating and long-form widget with no positive horizontal overflow or clipped CTA. |
+| Theme Editor | PASS | Star Ratings and Review Widget app blocks are visible and editable; Review Widget hide/show persisted. The approved Save affected the development theme only. |
+| PDP/Home/Cart regressions | PASS read-only | PDP commerce controls remained present; Home retained one H1, no review widget, and no overflow; the native Cart Drawer opened with its existing 17 items and `$1,519.23 USD` total and was closed without mutation. Stable PDP/Home console inspection showed no warnings/errors. |
+| Theme Check | PASS code, known tool false positive documented | Raw Theme Check inspected 358 files and reported one `JSONMissingBlock` error for the valid nested Judge.me `shopify://apps/...` URI plus six inherited warnings. Re-running with only that known false-positive check disabled produced zero errors and the same six warnings. |
+| Task gate | IN PROGRESS | Technical infrastructure is validated and retained. Official acceptance still requires authentic populated filters/media/verified/schema evidence, so TASK-007 is not marked DONE. |
+
 ## TASK-006 reconciliation acceptance matrix — 2026-09-20
 
 | Case | Result | Evidence / remaining gate |

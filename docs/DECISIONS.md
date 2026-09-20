@@ -64,6 +64,7 @@
 | D-060 | The visible Home campaign owns the single H1 and the only eager/high-priority image; Home may defer native product-card media through an opt-in `defer_card_images` section setting | IMPLEMENTED / DONE | Removes the duplicate hidden Home H1 and prevents below-the-fold cards from competing with the LCP image while leaving other product-list instances unchanged by default |
 | D-061 | Hero and story sections expose an opt-in safe crop for existing Product fallback media that contains embedded supplier copy | IMPLEMENTED / DONE | Keeps unverified text outside the visible frame without editing Shopify media; merchants disable the crop when approved clean HOME-01/HOME-04 assets are assigned |
 | D-062 | TASK-006 closes by reusing TASK-004's 16 long-form sections and adding only one fail-closed PDP anchor-navigation section | IMPLEMENTED / DONE | The navigation discovers rendered Purchase/Overview/Specifications/FAQ/Reviews targets, omits unavailable destinations, tracks the active location and uses Horizon header offsets; no storytelling, commerce or content system is duplicated |
+| D-063 | Judge.me owns the development PDP's only visible rating and review output through one Star Ratings app block, one Review Widget in the existing long-form host, and the core embed; Horizon's native rating block is disabled there | IMPLEMENTED / IN PROGRESS | Reuses official app boundaries, preserves one provider authority, keeps the live theme protected, and renders the authentic zero-review state without fabricated proof or aggregate-rating schema; populated acceptance remains blocked by authentic content |
 
 ## Pending decisions
 
@@ -72,7 +73,7 @@
 - Operational approval of shipping thresholds, carriers, tracking, taxes/duties, returns, and warranty.
 - Germany and Belgium delivery eligibility/timing.
 - Real accessory/fountain/Dual Bowl products, SKUs, inventory, compatibility, cost, and bundle profitability.
-- Judge.me installation/configuration and structured-data ownership authorization.
+- Authentic Judge.me review content for populated filters, customer media, pagination, verified-buyer output, and populated visible/schema consistency; exact current plan tier also remains unverified, and no charge was accepted.
 - Consumable subscription in V1.
 - Financing providers by market.
 - Analytics/pixel stack and consent requirements.

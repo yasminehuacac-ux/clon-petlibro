@@ -6,6 +6,8 @@ All notable project changes are recorded here.
 
 ### Added
 
+- TASK-007 Judge.me infrastructure on unpublished development theme `193260781938`: official top rating and long-form review app blocks, the core app embed, an honest provider-owned zero-review state, and persistent contract tests for single-source configuration and RELIVANOW review colors.
+- TASK-007 safety and QA evidence covering live-theme before/after checksums, four responsive PDP viewports, keyboard/dialog behavior, Theme Editor hide/show, script/schema duplication, Home/PDP/Cart regressions, and the authentic-content gate.
 - TASK-006 reconciliation against the completed TASK-004 long-form PDP, including a fail-closed, merchant-editable sticky anchor navigation with active-location state and dynamic omission of unavailable destinations.
 - Persistent TASK-006 contract tests for navigation structure, accessibility state, fail-closed targets, and placement immediately after Product Information.
 - TASK-008 premium Home composition with a claim-gated responsive hero, confirmed-benefit strip, native New & Popular product grid, two Product-backed editorial stories, fail-closed reviews host, final CTA, announcement, newsletter, and footer copy.
@@ -42,6 +44,8 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- TASK-007 moved from `DRAFT` to `IN PROGRESS`. The validated technical integration is retained, while populated-review filters, media, pagination, verified-buyer presentation, and populated rating/schema consistency remain `BLOCKED BY AUTHENTIC CONTENT`.
+- The native Product rating block is disabled in the development template so Judge.me is the single visible review authority; the existing Reviews / Social Proof app host remains the only long-form review section.
 - TASK-006 moved from `DRAFT` to `DONE` after reconciling all official criteria with the 16 existing TASK-004 long-form sections, native Product Recommendations and Horizon media system. Installation video, camera/monitoring, freshness/reliability, cleaning/compatibility and ecosystem publication remain content-gated rather than fabricated.
 - TASK-008 moved from `DRAFT` through `IN PROGRESS` to `DONE`; TASK-006 remains `DRAFT` and its PDP scope/files were not changed.
 - The Home selects the real automatic-feeder Product for hero/story data instead of a collection-order fallback. Missing category collections, Judge.me output, promotion/bundle, ecosystem, UGC, press/testimonial, and dedicated manifesto assets remain fail-closed and documented rather than fabricated.

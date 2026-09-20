@@ -125,9 +125,14 @@
                 "padding-inline-end": 0
               },
               "blocks": {
+                "judge_me_reviews_preview_badge_PELCBD": {
+                  "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+                  "settings": {}
+                },
                 "review_RELI04": {
                   "type": "review",
                   "name": "Product rating",
+                  "disabled": true,
                   "settings": {
                     "stars_style": "shaded",
                     "show_number": true,
@@ -197,6 +202,7 @@
                 }
               },
               "block_order": [
+                "judge_me_reviews_preview_badge_PELCBD",
                 "review_RELI04",
                 "text_xrnftG",
                 "value_prop_RELI04",
@@ -850,8 +856,20 @@
     },
     "reviews_RELI04": {
       "type": "relivanow-reviews",
-      "blocks": {},
-      "block_order": [],
+      "blocks": {
+        "judge_me_reviews_review_widget_YmCF9G": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "real_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_YmCF9G"
+      ],
       "name": "Reviews / Social Proof",
       "settings": {
         "enable_section": true,

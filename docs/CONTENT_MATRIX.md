@@ -16,7 +16,7 @@
 | Shipping below threshold | Calculated at checkout | PROVISIONAL / Operations |
 | Return window | 30 days | PROVISIONAL / Operations/legal |
 | Limited warranty | 24 months | PROVISIONAL / Operations/legal |
-| Reviews provider | Judge.me | CONFIRMED direction; installation not authorized |
+| Reviews provider | Judge.me | ACTIVE on development theme `193260781938`; installed before TASK-007, exact plan tier unverified, no charge accepted |
 | Fixed bundles | Shopify Bundles | CONFIRMED direction; products not created |
 | Primary product visual | Cloud White | CONFIRMED / Work |
 | Default available variant | Cloud White / Single Bowl | CONFIRMED / Work; must be first in Shopify's native variant order when no `?variant=` is requested |
@@ -59,7 +59,7 @@ Model cards always read native Product title, URL, featured media, availability,
 
 | Panel item | Authoritative source | Current state / public rule |
 |---|---|---|
-| Rating and count | Judge.me standard `reviews.rating` and `reviews.rating_count` metafields | BLOCKED BY REMOTE DATA/app installation; public block is absent, editor shows a labelled preview only |
+| Rating and count | Judge.me official Star Ratings app block and provider data | ACTIVE on development; authentic zero state shows `No reviews`, native Horizon rating block is disabled, populated values remain BLOCKED BY AUTHENTIC CONTENT |
 | Product title | Native Product title | IMPLEMENTED and native |
 | Product subtitle | Product `relivanow.product_subtitle` | PROVISIONAL copy and no remote definition/value; public block is absent until populated, editor preview only |
 | Price / compare-at | Native selected Variant | IMPLEMENTED through Horizon; compare-at BLOCKED BY TEST DATA on the current Product |
@@ -102,7 +102,7 @@ All headings, editor copy, and layout settings are original RELIVANOW interface 
 | Product Comparison | Two to four distinct Product pickers plus verified row blocks | Both the relation block and referenced Product must be `CONFIRMED`; native Product image, URL, price and availability are read directly; at least one confirmed row is required |
 | Why Choose Smart Feeding | Theme Editor comparison row blocks | Requires 3–6 complete `CONFIRMED` rows; all traditional/RELIVANOW values are editorial evidence-gated and no competitor is named |
 | App Experience | One to three Theme Editor screenshot blocks | Requires a heading and at least one image block explicitly marked `CONFIRMED`; cards are CSS-only and no unsupported interface or platform claim is generated |
-| Reviews / Social Proof | Native Shopify theme app blocks | Requires rendered `@app` content; intended for Judge.me after separate installation authorization; no manual reviews, rating data, customer media, or review schema are created |
+| Reviews / Social Proof | Native Shopify theme app blocks | Judge.me Review Widget is active on development with `real_data`, shop reviews off, and official empty state; no manual reviews, customer media, or parallel schema are created |
 | Final CTA | Approved native Product featured image or approved Theme Editor image plus section copy | Requires explicit image confirmation, heading, brief benefit and honest CTA label; optional price uses native Product output; the CTA returns to the purchase panel and never submits a form |
 
 All Phase 2 defaults are claim-safe and fail closed. Only the two typed Precise Feeding metric blocks start with `CONFIRMED` status, and they still render nothing until their complete Product min/max pairs exist. Sections dependent on app/insight/review/comparison/final media have no publishable default records or images.
@@ -254,10 +254,10 @@ No row has final `APPROVED` publication status yet. The three `APPROVED VISUAL` 
 
 ## Reviews
 
-- Judge.me is the planned single future source for average rating, review count, verified reviews, customer photos/videos, and review structured data.
-- The future adapter must consume Judge.me's standard `reviews.rating` and `reviews.rating_count` inputs and ensure Horizon/Judge.me emit only one aggregate-rating schema source.
+- Judge.me is the active single source on the development theme for average rating, review count, verified reviews, customer photos/videos, and review structured data.
+- The official app blocks and core embed own provider output. Horizon's native rating block is disabled in the development Product template, and the current authentic zero state emits no aggregate-rating schema.
 - Do not create manual rating/count fields, invent reviews, import PETLIBRO reviews, or run two Product review schema sources.
-- Integration remains pending a separately authorized installation/configuration.
+- Installation/configuration authorization was used for development theme `193260781938`; live publication, paid-plan acceptance, and fabricated/imported review content remain prohibited.
 - Stars use the approved RELIVANOW rating token; verified-buyer presentation uses the approved information token.
 
 ## TASK-004 closure data — 2026-09-12
@@ -297,7 +297,7 @@ All component variant IDs/quantities, compatibility, inventory, margin, CPA, AOV
 | Product discovery | Native `all` collection and Horizon product cards | Shopify Product availability/data | Four real Products, native price/URL/availability |
 | Daily routine story | Selected automatic-feeder Product media + confirmed editorial copy | Section must be `CONFIRMED` and complete | Public split story and native Product CTA |
 | Connected care story | Selected automatic-feeder Product media + confirmed editorial copy | Section must be `CONFIRMED` and complete | Generic mobile app support and 2.4 GHz only |
-| Reviews/social proof | Judge.me `@app` output only | Real app block output required | Publicly absent; editor guidance only |
+| Reviews/social proof | Judge.me `@app` output only | Real app block output required | Active on development; official zero-review widget and honest first-review CTA, no fabricated proof |
 | Final CTA | Selected automatic-feeder Product media + confirmed editorial copy | Section must be `CONFIRMED` and complete | Public CTA; no Product form or Variant ID |
 | Newsletter/footer | Horizon native email-signup/footer | Native Shopify customer form | Public newsletter and footer composition |
 

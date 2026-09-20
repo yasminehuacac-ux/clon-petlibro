@@ -55,7 +55,7 @@ For every requested feature:
 | Header/search/footer | Reuse + extend | Preserve header groups, responsive drawer, and predictive Section Rendering; compose visual menu content |
 | Slideshow | Reuse | Use existing section/snippet/custom element for campaign and proof carousels |
 | Dialog/modal/drawer | Reuse | Use shared focus, open/close, persistence, and lifecycle primitives |
-| Reviews | Create provider adapter | Judge.me is the planned single rating/review/schema source; integration remains separately authorized |
+| Reviews | Official app blocks in existing hosts | Judge.me is the active single rating/review/schema source on development; no manual adapter or parallel schema is introduced |
 | Add-ons/bundles | Compose | Use native product references, Shopify product forms/lists, and Shopify Bundles after compatibility, inventory, offer, and discount rules are approved |
 | PDP anchor nav | Create lightweight behavior | No matching native system found; use anchors, sticky offsets, and IntersectionObserver later |
 
@@ -100,7 +100,7 @@ For every requested feature:
 - The `relivanow` namespace stores product-specific structured values. Variant metafields exist only for real SKU differences, and procurement/provenance fields have storefront access disabled.
 - Reusable/localizable structures use publishable/translatable metaobjects: feature, specification item/group, FAQ, localized PDP policy summary, market delivery, and bundle offer. Records remain `DRAFT` until confirmed and approved; empty references are skipped cleanly.
 - Specification items carry presentation labels and a controlled `value_source`; an explicit renderer allowlist reads authoritative typed product metafields, including paired min/max ranges, instead of duplicating values.
-- Native Shopify shipping/refund policies and shipping-rate configuration remain legal/operational sources. Shopify Markets owns catalogs, availability, currency and localization; Judge.me's standard review metafields are the planned single rating source; Shopify Bundles owns exact component-variant quantities, bundle price, and component-derived inventory state.
+- Native Shopify shipping/refund policies and shipping-rate configuration remain legal/operational sources. Shopify Markets owns catalogs, availability, currency and localization; Judge.me is the active development-theme review authority; Shopify Bundles owns exact component-variant quantities, bundle price, and component-derived inventory state.
 - Product-level add-on references apply only when compatibility is approved uniformly across both confirmed Single Bowl colors; future bowl-specific compatibility requires an explicit variant relation.
 - TASK-003 is approved and documentation-only: it created no definitions, records, products, variants, markets, bundles, app installations, or media.
 - TASK-004 uses one Horizon carousel backed only by `product.media`. The first server-selected featured medium is ordered first; if the selected variant has no featured medium, the full general gallery remains visible. Cloud White's default is owned by native first-available variant order, and direct variant URLs remain authoritative.
@@ -116,7 +116,7 @@ For every requested feature:
 - Specifications dispatch through `relivanow-specification-row` and the documented `value_source` allowlist; arbitrary keys emit no row. FAQ reuses native `details` and the existing accordion custom element, with no new JavaScript and structured data disabled by default. All long-form CSS is section-namespaced and uses Horizon/RELIVANOW tokens.
 - TASK-004 long-form Phase 2 adds eight more isolated OS 2.0 sections without entering the Product Information component tree. Precise Feeding reads only the two approved typed min/max pairs or confirmed manual metrics; insights, remote-control benefits, smart-feeding differences, app images and final media are section-owned and explicitly verification-gated.
 - Product Comparison filters duplicate or unconfirmed Product picker references, then reads native image, title, URL, price and availability while comparison rows remain confirmed editorial data. Its focusable overflow region has an accessible instruction and a sticky feature column; Style variants remain entirely separate inside the frozen native Variant Picker.
-- Reviews / Social Proof captures only native `@app` block output. Empty app output emits no public wrapper, and the section owns no review values or JSON-LD. Judge.me remains the planned single provider after separately authorized installation.
+- Reviews / Social Proof captures only native `@app` block output. The authorized development template contains Judge.me's official Review Widget; the section owns no review values or JSON-LD, and its CSS only maps provider stars/verified badges to RELIVANOW tokens and suppresses the provider's duplicate internal title.
 - Final CTA uses the native Product featured image or an approved `image_picker`, optional native Product price output, and no form or Variant ID. A small custom element finds the existing `ProductInformation-*` target, focuses it accessibly and scrolls smoothly only when reduced motion is not requested; the link retains `#MainContent` as its no-script/missing-target fallback.
 - TASK-004 closure was validated on unpublished development theme `193260781938` against the current remote Product. The only created definitions are the four typed feeding integers and the box-content text list; their Liquid values drive Precise Feeding and Box Contents. All other long-form adapters retain their existing fail-closed boundaries. Live theme `192527597938` and native commerce/SEO/media ownership were not changed.
 - Gallery images retain explicit aspect-ratio sizing; the first medium is eager/high priority and subsequent media are lazy. Native slideshow/zoom focus, keyboard, editor lifecycle, and reduced-motion behavior remain intact.
@@ -218,7 +218,7 @@ The Home remains an Online Store 2.0 JSON-template composition. `templates/index
 2. `relivanow-benefits-bar` renders the four confirmed supplier facts through its existing verification gates.
 3. Native `product-list` reads real Shopify collection/Product data and uses the existing Horizon product-card/gallery hierarchy. Its new `defer_card_images` setting is opt-in and defaults false; Home enables it to protect hero LCP without changing other product-list instances.
 4. `relivanow-home-product-story` resolves one real Product plus selected/fallback media, renders no Product form or Variant state, and emits no public wrapper unless status, heading, text, and media are complete. Its opt-in safe crop shares the same claim-containment boundary as the hero and is disabled when approved clean media is assigned.
-5. `relivanow-reviews` remains the existing `@app` host. With no Judge.me block it emits no public section. Native footer/email-signup owns newsletter submission.
+5. `relivanow-reviews` remains the existing `@app` host. The Home template contains no Judge.me block and still emits no public review section; the development Product template alone contains the official widget. Native footer/email-signup owns newsletter submission.
 6. Category navigation remains a native `collection-list` section in the editor but is disabled publicly until real collection selections and media exist; Shopify's placeholder collection cards are never exposed.
 
 Public flow:
@@ -236,6 +236,15 @@ announcement/header
 ```
 
 The header's former Home-only visually hidden shop-name H1 was removed because the campaign now supplies the page H1; logo/link accessibility remains native. All new section CSS is namespaced, all optional external evidence fails closed, and no Home code enters the PDP purchase panel, Variant Picker, Product form, cart mutation path, or active-theme publication flow.
+
+## TASK-007 Judge.me architecture
+
+- `templates/product.json` composes Judge.me through official Shopify app-block URIs: one Star Ratings block in the existing purchase Header and one Review Widget inside the existing `relivanow-reviews` long-form section. No second reviews section or theme-owned review data store exists.
+- `config/settings_data.json` enables only Judge.me's core embed for this development configuration. The cart-drawer widget remains disabled, and provider scripts are not manually injected into Liquid.
+- The existing native Horizon rating block is disabled in the development Product template, leaving Judge.me as the only visible rating/count authority. The Product's native `structured_data` remains intact; the authentic zero-review state emits no `AggregateRating` or review schema.
+- `sections/relivanow-reviews.liquid` contains presentation-only token mappings: stars use `--color-rating`, verified-buyer treatment uses `--color-verified`, and the provider's nested title is hidden so the section exposes one visible heading. Review values, verification state, media, pagination, form submission, and structured data remain provider-owned.
+- The provider currently loads one deferred core loader and one module review-widget script on the PDP. Home has only the core loader and no review widget. Core Product, Variant, form, sticky ATC, cart, Home, and navigation code are unchanged.
+- Development theme `193260781938` is the only integration target. Live theme `192527597938` remained byte-identical across the protected snapshot surfaces and was never published or overwritten.
 
 ## Provenance and protection boundary
 

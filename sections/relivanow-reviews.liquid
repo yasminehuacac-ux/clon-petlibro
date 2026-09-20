@@ -18,6 +18,21 @@
 
 {% stylesheet %}
   .relivanow-reviews__app { min-width: 0; }
+
+  .relivanow-reviews .jdgm-rev-widg__title,
+  .relivanow-reviews .jm-review-widget-minimal-header__title {
+    display: none !important;
+  }
+
+  .jdgm-star.jdgm-star {
+    color: var(--color-rating) !important;
+  }
+
+  .jdgm-rev[data-verified-buyer='true'] .jdgm-rev__icon.jdgm-rev__icon::after,
+  .jdgm-rev__buyer-badge.jdgm-rev__buyer-badge {
+    color: #fff !important;
+    background-color: var(--color-verified) !important;
+  }
 {% endstylesheet %}
 
 {% schema %}
