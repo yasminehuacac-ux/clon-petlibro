@@ -1,9 +1,9 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** TASK-004 PDP purchase area and long-form Phase 1–2 closed
-**Active task:** None; TASK-005 remains `DRAFT`
-**Last updated:** 2026-09-12
+**Stage:** TASK-005 cart drawer complete and validated on the unpublished development theme
+**Active task:** none — TASK-005 `DONE`; TASK-006 remains `DRAFT`
+**Last updated:** 2026-09-20
 
 ## Verified baseline facts
 
@@ -59,6 +59,13 @@
 - Authenticated Liquid readback verified every saved value. The development preview returned HTTP 200 and rendered only Precise Feeding and What’s in the Box; unsupported modules remained publicly absent and no design-mode placeholder leaked.
 - Exact 1440×900, 768×1024, 390×844, and 360×800 development-preview measurements reported zero positive horizontal overflow. Product title/description, price, variants, inventory, handle, SEO, and `product.media` remained unchanged.
 - No Shopify definitions, records, products, variants, inventory, Markets, bundles, app configuration, or media were created or modified by TASK-003.
+- TASK-005 audited the complete local Horizon cart path. The theme already owns a global native `theme-drawer`, responsive modal/squeeze behavior, focus management, Shopify standard cart events, AJAX add/change/update routes, Section Rendering/morphing, line properties, selling-plan display, bundle/nested-line presentation, discounts, subtotal/checkout, accelerated checkout, empty state, and cart-count announcements.
+- TASK-005 now extends that native path locally without introducing another cart or browser state store. The implementation adds premium drawer presentation, exact 80×80 px media, serialized line-key quantity/remove behavior, authoritative concurrency reconciliation, visible error/retry states, and an accessible no-JavaScript `routes.cart_url` path while preserving native/app line semantics.
+- The isolated browser suite passes 23 cart-mutation/event assertions, seven native desktop-drawer focus/lifecycle assertions, six native mobile-modal assertions, and exact-width 1440×900, 1024×768, 768×1024, 390×844, 360×800 plus 390×844 RTL layout checks with no positive horizontal overflow or obstructed Checkout.
+- The authorized working tree was uploaded only to unpublished development theme `193260781938`. Real preview validation passed add-to-cart, two distinct valid Variants, separate line keys, increment/decrement/remove, rapid same-line input, FIFO two-line mutation handling, authoritative counts/totals, native `/cart`, Checkout handoff without purchase, focus/Escape restoration, and exact 1440×900, 768×1024, 390×844, and 360×800 layouts. Active theme `192527597938` remained live and untouched.
+- Final empty-state closure passed in a clean temporary Chrome profile after manual storefront authentication. The isolated cart began empty, added exactly one valid Variant, removed only that line, and returned to zero items/zero total with no Checkout, subtotal, product residue, visible error, or stuck busy state. The drawer passed 1440×900, 390×844, and 360×800 with zero overflow; Close/Escape restored the Cart trigger; `/cart` rendered its correct empty page; stable console/network diagnostics were clean. The shared cart was read-only and all temporary profile data/processes were removed.
+- Fresh pre-commit verification on 2026-09-20 covered the final post-correction working tree: all 68 JSON/JSONC files, 31 storefront locales, 158 Liquid schemas, duplicate setting IDs, both modified JavaScript files, `git diff --check`, and Shopify Theme Check. Theme Check inspected 355 files with zero errors and only the six unchanged Horizon warnings in `sections/header.liquid` and `snippets/divider.liquid`; neither warning surface is modified by TASK-005.
+- AOV additions are deliberately not part of the READY implementation: free-shipping progress, recommendations, cross-sells, upsells, gifts, bundles, and new promotion logic remain gated by confirmed operational and commercial inputs.
 
 ## Current blockers
 
@@ -75,7 +82,9 @@
 - Judge.me and Shopify Bundles are the approved directions, but installation/configuration and real bundle products remain separately gated; subscriptions, financing, analytics/consent, and operational Markets setup are not frozen.
 - Exact live product, variant, cart, app, and commercial-flow behavior still requires task-specific validation with representative store data.
 - The TASK-001 audit remains a historical static audit; its tooling and runtime limitations accurately describe that audit session, not the current environment.
+- TASK-005 is closed. Representative properties/uploads, selling plans, discounts, app/bundle-controlled lines, Markets money, nested live dialogs, and quick-add/app overlap remain conditional on future real data or integrations; they were not fabricated and do not block the completed drawer-only task.
+- `assets/product-form.js` preserves form properties in its normal FormData path, but its multi-item add-on JSON path currently rebuilds only Variant IDs and quantities. If a Product form later combines selected add-ons with line-item properties or a selling plan, preserving those fields requires a separately authorized correction; TASK-005 may document and test this boundary but does not modify the PDP or `product-form.js` in the current scope.
 
 ## Next task
 
-TASK-002, TASK-003, and TASK-004 are `DONE`. TASK-005 remains `DRAFT` and unstarted. Editorial/app media, real comparison Products, Judge.me, final CTA media, and any further remote Product/data/media work remain separately gated and must not be fabricated to reopen fail-closed modules.
+TASK-002, TASK-003, TASK-004, and TASK-005 are `DONE`. TASK-006 remains `DRAFT` and has not begun. The final TASK-005 closure changed no code and uploaded no theme file; no AOV, product-data, media, app, active-theme, publication, order, stage, commit, or push action occurred.

@@ -114,9 +114,10 @@
   {% endif %}
 
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
-    <button
+    <a
+      href="{{ routes.cart_url }}"
       class="header-actions__action button-unstyled{% if display_style == 'text' %} header-actions__text-style{% endif %}"
-      on:click="#cart-drawer/toggle"
+      on:click="/openCartDrawer"
       aria-haspopup="dialog"
       aria-expanded="false"
       aria-controls="cart-drawer"
@@ -125,7 +126,7 @@
       data-testid="cart-drawer-trigger"
     >
       {{ cart_icon }}
-    </button>
+    </a>
   {% else %}
     <a
       href="{{ routes.cart_url }}"

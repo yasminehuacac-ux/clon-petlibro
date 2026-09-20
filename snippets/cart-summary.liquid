@@ -478,8 +478,23 @@
 
   .cart__ctas .cart__checkout-button {
     width: 100%;
-    height: clamp(25px, var(--height-buy-buttons), 55px);
+    min-height: max(var(--minimum-touch-target), 3.25rem);
+    height: auto;
     padding-inline: var(--padding-4xl);
+  }
+
+  #cart-drawer .cart__checkout-button {
+    --button-color: var(--color-canvas);
+    --button-background-color: var(--color-ink);
+    --button-border-color: var(--color-ink);
+    --button-focus-outline-color: var(--color-ink);
+    --button-border-width: 1px;
+  }
+
+  #cart-drawer .cart__checkout-button:hover:not(:disabled) {
+    --button-color: var(--color-canvas);
+    --button-background-color: var(--color-ink);
+    --button-border-color: var(--color-ink);
   }
 
   .cart-drawer__summary .cart-totals:not(:has(.cart-totals__original-container:empty)) {

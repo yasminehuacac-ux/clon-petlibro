@@ -155,7 +155,7 @@ The executable local gate is complete, but TASK-004 remains `IN PROGRESS` under 
 | Final Shopify Theme Check | PASS | One post-implementation run inspected 337 files with no offenses. No duplicate run was started. |
 | Populated add-on, review, trust, feature and subtitle states | BLOCKED BY TEST DATA | Requires approved remote values/products; none were created solely for QA. |
 
-The purchase-panel completion introduces no new critical local defect. TASK-004 nevertheless remains `IN PROGRESS` exactly as instructed; TASK-005 remains `DRAFT` and unstarted.
+At that dated checkpoint, the purchase-panel completion introduced no new critical local defect; TASK-004 still remained `IN PROGRESS` and TASK-005 was `DRAFT` and unstarted. The current project state is recorded in `PROJECT_STATUS.md` and the TASK-005 matrix below.
 
 ### TASK-004 long-form Phase 1 addendum — 2026-09-12
 
@@ -226,3 +226,84 @@ The Phase 2 responsive results are isolated CSS/DOM fixture evidence, not Shopif
 | Protected fields/assets | PASS | No price, variant, inventory, handle, SEO, Product description/title, `product.media`, live-theme, publication, or app change. Approved binaries were unavailable; provisional media was not used. |
 
 TASK-004 is `DONE`. Image-, comparison-, specification-record-, FAQ-, and Judge.me-dependent modules remain intentionally fail-closed until their separately approved sources exist.
+
+## TASK-005 cart-drawer acceptance matrix
+
+This matrix applies to the READY drawer-only scope. Free-shipping progress, recommendations, upsells, cross-sells, gifts, bundle creation, and new offer logic are not test fixtures and must remain absent.
+
+| Area | Required evidence |
+|---|---|
+| Native architecture | One `#cart-drawer`, one native `dialog`, one `cart-items-component`, one standard cart-event path, and no duplicated Cart API/store/price state. |
+| Open and close | Header trigger, optional successful-add auto-open, quick-add-modal deferral, close button, backdrop, Escape, repeated open/close, and close during/open after animation produce one stable drawer. |
+| Focus | Close button receives initial focus; Tab/Shift+Tab remain contained while opened by the user; nested disclosure dialogs stay above the drawer; close restores the connected trigger or its fresh replacement. |
+| Quantity success | Plus, minus, typed value, min/max/increment, volume pricing, trailing debounce, and server-confirmed section morph produce the exact final quantity once. |
+| Remove success | Remove one line, a parent with nested lines, an app-controlled non-removable line, and the final line. The empty state appears only after Shopify confirms success. |
+| Pending | Affected controls expose `aria-busy`, duplicate activation is blocked, layout does not jump, unrelated product links remain understandable, and state clears on every settle path. |
+| Error and retry | Shopify validation error, 4xx/5xx, invalid JSON, timeout/offline/network rejection, and stale section response preserve/restore the authoritative line, announce one useful error, expose Retry, and succeed on retry without duplicate mutation. |
+| Concurrency | Rapid same-line changes coalesce before dispatch; dispatched changes serialize; add from PDP/quick add/app during a drawer mutation cannot let an older response overwrite newer state. |
+| Line identity | Two lines with the same Variant but different properties remain distinct by line key. Main Product and add-ons remain separate; no Product/Variant aggregation removes properties. |
+| Properties/apps | Public text and upload properties render; underscore-prefixed properties stay hidden; `item.instructions.can_update_quantity/can_remove`, parent relationships, nested lines, disclosures, and bundle components remain intact. |
+| Selling plans | Existing selling-plan allocation/name survives quantity/remove and morphing. No selling-plan selector is invented; the current theme has display support only. |
+| Prices/discounts | Native original/final/compare-at prices, line discounts, cart discounts, unit prices, subtotal/estimated total, optional currency code, tax/shipping text, and Markets money output agree with Shopify. |
+| Discount/note | Existing settings off/on, apply, invalid, shipping-only, remove, typing preservation, note debounce, failure and external standard-action refresh do not clobber current form input. |
+| Checkout | Full-width black standard Checkout is first and dominant, submits the native cart form once, and preserves all lines/properties. Shopify accelerated checkout is absent/present only according to platform output and the existing setting. |
+| Empty cart | Localized heading and close control render; no Continue shopping, summary, fake offer, recommendation, or stranded loading/error markup appears. |
+| Count/live regions | Header bubble and drawer badge show the absolute `cart.item_count`; cart-count, total, add success and error announcements are correct and not duplicated. Back-forward cache correction passes. |
+| Theme Editor | `cart_type`, auto-open, note, discount, installments, accelerated checkout, empty link, thumbnail and drawer colors reload safely; no duplicate listeners, IDs, forms, dialogs, or stale hydration targets. |
+| Localization | English plus representative long German/Spanish strings, RTL locale, localized money, optional currency code, and 100+ count do not clip or reorder semantics incorrectly. |
+| Performance | Cart modules remain low-priority/module-loaded, no external library or polling is added, no duplicate Product media is fetched, and drawer interactions meet the existing INP objective. |
+| No JavaScript | Header cart action reaches `routes.cart_url`; the server-rendered cart form exposes items and Checkout. Document any quantity/remove limitation that remains instead of claiming full AJAX behavior. |
+
+### Responsive and accessibility matrix
+
+| Viewport/state | Layout requirement | Interaction/accessibility requirement |
+|---|---|---|
+| 360×800 | Overlay drawer fits width; ~80×80 media; title/options/price wrap; summary/Checkout remain visible without horizontal overflow. | 44px controls, visible focus, no background focus/scroll, Escape and close restore the trigger. |
+| 390×844 | Same mobile hierarchy with multiple properties, discount pill, and long translated content. | Quantity/remove/error/retry remain named and announced once. |
+| 768×1024 | Modal drawer remains usable with multiple lines and tall summary; item list scrolls independently when needed. | Keyboard traversal reaches header, lines, disclosures, summary and Checkout in logical order. |
+| 1024×768 | Native squeeze mode starts at 990 px; page and 25rem drawer do not overlap or create root overflow. | Custom focus trap cycles inside the open drawer; nested modal and Escape priority pass. |
+| 1440×900 | 25rem drawer, subtle dividers and sticky/static summary threshold behave without obscuring the last line. | Opening, closing, restored-session state, focus restoration, and multiple-drawer stack pass. |
+| Reduced motion | No row/drawer/view-transition motion is required to understand state; durations collapse according to existing gates. | Focus, loading, error and retry remain fully functional with `reduce`. |
+
+### Implementation gate
+
+TASK-005 may move from `READY` to `REVIEW` only after code-level static checks, relevant isolated error/concurrency fixtures, exact-width browser evidence, keyboard/accessibility-tree inspection, Theme Editor lifecycle checks, no-JavaScript fallback inspection, `git diff --check`, and one post-change Theme Check. Any remote/store-dependent case must be labelled with the exact missing data and must not be fabricated.
+
+### TASK-005 local implementation addendum — 2026-09-14
+
+| Case | Result | Evidence / remaining gate |
+|---|---|---|
+| Native architecture/diff boundary | PASS static | Existing `theme-drawer`, `cart-items-component`, standard events, Cart routes and Section Rendering remain the only cart graph. No dependency, global store, Product-form change, AOV feature or remote mutation was added. |
+| Rapid same-line quantity | PASS isolated browser | Three rapid intents coalesced into one absolute native line-key request with the final quantity. |
+| Different-line concurrency | PASS isolated browser | Two dispatched line changes were FIFO serialized; measured maximum concurrent `/cart/change` requests was one. Active and queued rows exposed `aria-busy`. |
+| External overlap/out-of-order responses | PASS isolated browser | A local change plus external add reconciled to the authoritative final state; an older external response could not replace a newer state. |
+| Failure/retry matrix | PASS isolated browser | Shopify 422, HTTP 500, network rejection, invalid JSON and missing section all exposed recoverable UI. Retry was single-flight and repeated the retained absolute intent once. |
+| Failed/successful remove | PASS isolated browser | Failed removal retained its connected row and never produced false empty state; successful retry removed it only after server confirmation. |
+| Line semantics | PASS static + isolated browser / BLOCKED representative apps | Separate line keys, public properties, hidden underscore properties, selling-plan and discount markup survived morphs. Real upload properties, bundle parents/components, nested/app instructions and same-Variant property combinations remain development-data cases. |
+| Progressive fallback | PASS static + isolated browser | Loaded ordinary click toggled the drawer; missing drawer/module did not prevent the real `routes.cart_url` link. Existing `/cart` form and Checkout code are unchanged. |
+| Native drawer accessibility | PASS isolated browser / BLOCKED nested live dialog | Desktop sidebar passed open, initial close focus, forward Tab wrap, outside-focus redirection, Escape, original/fresh-trigger focus restoration. Mobile modal additionally passed backdrop close. Real nested disclosure/dialog stacking remains pending representative data. |
+| Empty drawer | PASS static + isolated visual | Continue shopping is suppressed only for drawer context. Native localized heading/close remain; cart-page Continue shopping remains intact. |
+| Premium layout | PASS isolated visual | Exact 1440×900, 1024×768, 768×1024, 390×844 and 360×800 CSS viewports plus 390×844 RTL: zero root/drawer positive overflow, 80×80 media and visible full-width Checkout. |
+| Localization | PASS JSON/static + isolated RTL / BLOCKED Markets | Error and Retry keys have matching entries in all 31 storefront locales; all 30 strict storefront locale JSON files parse after the parity correction. Long fixture content and RTL do not overflow. Real localized money/currency-code/Markets output remains pending. |
+| Accelerated checkout, discounts and note | PASS preservation static / BLOCKED platform output | Existing conditional accelerated checkout, cart discount and note components were not replaced. Platform-supplied accelerated buttons and real setting combinations require development-theme validation. |
+| Theme Editor/lifecycle | PASS morph fixture / NOT EXECUTED remote | Hydration replacement preserved one component and focus restoration found a fresh trigger. Actual editor reload/settings changes require upload to unpublished theme `193260781938`, which was not authorized. |
+| Static validation | PASS | 67 JSON/JSONC files and 158 Liquid schema payloads parsed; duplicate setting IDs: 0. Modified JavaScript passes `node --check`; hardcoded commerce scan and `git diff --check` pass. |
+| Final Theme Check | EXECUTED ONCE / CORRECTED LOCALLY AFTER FAILURE | The sole run inspected 355 files and reported 56 `MatchingTranslations` errors (the two new keys missing in 28 locales) plus the six inherited Horizon warnings. The 28 locale files were then completed; a direct parity check finds both keys in all 31 storefront locales and all 30 strict locale JSON files parse. Theme Check was not repeated because the task explicitly limited it to one run. |
+
+These are isolated local fixtures and static source checks, not claims about Liquid rendered against real Shopify data. At this local checkpoint TASK-005 remained `IN PROGRESS`; the development-theme and final isolated-empty-state addenda below supersede that status. TASK-006 has not begun.
+
+### TASK-005 development-theme validation addendum — 2026-09-16
+
+| Case | Result | Evidence / remaining gate |
+|---|---|---|
+| Destination and publication safety | PASS | Theme `193260781938` remained `development` and received the working tree; theme `192527597938` remained `live`. No publish, `--live`, order, global commerce-data, app, commit, or push action occurred. |
+| Final Theme Check | PASS | One run in this final phase inspected 355 files with zero errors. The only output was the unchanged Horizon baseline: one `ExcessiveSettingsCount` warning in `sections/header.liquid` and five `UnusedDocParam` warnings in `snippets/divider.liquid`. |
+| Locale parity | PASS | `actions.retry` and `content.cart_update_error` exist in all 31 storefront locales; all 30 strict JSON files and the English default JSONC parse. |
+| Real basic cart flow | PASS with data-dependent omissions | The preview added the current Product, added a second valid Variant as a distinct keyed line, changed quantities, removed only test-created lines, reopened the drawer, and preserved authoritative count, subtotal, title and Variant labels. No eligible add-on/property/selling-plan/discount fixture existed, so those states were not fabricated. |
+| Real concurrency | PASS | Rapid same-line increments coalesced to the final server-confirmed quantity. Consecutive mutations across two lines remained serialized, exposed row pending state, produced no duplicate/stale lines, and left no stuck drawer state. |
+| Real accessibility | PASS for available UI | Initial focus reached Close; Escape closed and restored the connected cart trigger; Shift+Tab stayed within the drawer; desktop remained nonmodal and ≤768 px modal. Visible controls met the 44 px target gate, media measured 80×80, and the checkout target measured 52 px. Failure/retry and reduced-motion guarantees retain passing isolated-suite evidence because unsafe network/server failures were not forced. |
+| Exact responsive preview | PASS | 1440×900: 480 px right drawer; 768×1024: 480 px modal drawer; 390×844 and 360×800: full-width modal drawer. Each had zero positive root/drawer overflow, undistorted 80×80 media, and a visible full-width black 52 px Checkout. |
+| `/cart` and Checkout | PASS | The header renders a real `/cart` anchor. The full cart page loaded with native cart form and Checkout; Checkout opened with `preview_theme_id=193260781938`, preserved the cart summary, and no purchase was completed. Full JavaScript disabling was unavailable, so the HTML anchor plus direct server-page navigation are the real degradation evidence. |
+| PDP regressions | PASS for available data | Gallery navigation, Style/Color radios, Variant URL/price update, Add to Cart, Product form, accelerated PayPal output, and the two currently data-backed long-form sections remained functional. Add-ons, delivery and the other fail-closed long-form modules remained absent because their real eligible data was absent. |
+| Runtime error-copy correction | PASS | Preview inspection found a double-escaped apostrophe in the fallback error attribute. `Theme.translations.cart_update_error` is now preferred and Liquid uses `escape_once`; the corrected rendered attribute contains a normal apostrophe. |
+| Real empty-cart state | PASS | A clean temporary Chrome profile was manually authenticated without exposing credentials. `/cart.js` began with zero items/zero total. Variant `62294853190002` was added once as native key `62294853190002:b6a00faaf4df7311e236fccf9d03be13`, count 1 and subtotal `$129.99 USD`; only that line was removed. Shopify returned count/total/rows to zero. The open drawer contained the empty heading/account message, no Continue shopping, Checkout, subtotal, image, quantity control, visible error, or busy state. 1440×900, 390×844, and 360×800 had zero root/drawer overflow with visible heading/Close. Fresh open focused Close; button close and Escape restored the Cart trigger. `/cart` showed its correct empty page; settled console/network diagnostics contained no errors, failures, or HTTP ≥400. The shared cart was untouched and the temporary profile/processes were removed. TASK-005 is `DONE`. |

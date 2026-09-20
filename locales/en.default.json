@@ -74,6 +74,7 @@
     "added": "Added",
     // Button to apply discount code to cart
     "apply": "Apply",
+    "retry": "Try again",
     "back": "Back",
     "back_to": "Back to {{ title }}",
     "choose": "Choose",
@@ -173,6 +174,7 @@
     "cart_title": "Cart",
     "cart_subtotal": "Subtotal",
     "cart_total": "Cart total",
+    "cart_update_error": "We couldn't update your cart. Please try again.",
     "checkout": "Check out",
     "collection_placeholder": "Collection title",
     "discount_code": "Discount code",

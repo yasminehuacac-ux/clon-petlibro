@@ -6,6 +6,10 @@ All notable project changes are recorded here.
 
 ### Added
 
+- TASK-005 development-theme validation evidence on unpublished theme `193260781938`: real PDP add, distinct valid Variants, quantity/remove mutations, FIFO cross-line concurrency, cart count/subtotal, native `/cart`, Checkout handoff without purchase, accessibility, and exact 1440×900, 768×1024, 390×844, and 360×800 measurements.
+- TASK-005 local cart-drawer reliability layer inside Horizon's existing `CartItemsComponent`: per-line intent coalescing, FIFO server mutation serialization, authoritative overlap reconciliation, affected-row pending semantics, localized visible errors and one retained Retry action.
+- Matching error and Retry copy across all 31 storefront locales.
+- Exact-width isolated cart fixtures covering error/retry, failed removal, external update races, no-JavaScript/module fallback, native drawer focus lifecycle, 80×80 media, RTL and responsive Checkout visibility.
 - Authorized TASK-004 Shopify closure evidence: a pre-change Product snapshot, five confirmed Product metafield definitions/values, authenticated Liquid readback, and real unpublished-development-theme viewport measurements.
 - TASK-004 long-form Phase 2 with Precise Feeding, Feeding Insights, Remote Control, Product Comparison, Why Choose Smart Feeding, App Experience, Reviews / Social Proof, and Final CTA as eight independent Online Store 2.0 sections.
 - A real-Product comparison table with native Product media, price, URL and availability, verification-gated rows, an allowlisted badge, accessible horizontal scrolling, and a sticky feature column.
@@ -32,6 +36,12 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- TASK-005 moved from `IN PROGRESS` to `DONE` after the final empty-cart closure passed in a manually authenticated, clean temporary Chrome profile. The isolated cart began at zero, received one valid feeder Variant, removed only that test line by its native line key, returned to authoritative zero state, and passed drawer, `/cart`, accessibility, console/network, and 1440×900, 390×844, and 360×800 checks. The shared cart was untouched and all temporary processes/profile data were removed.
+- Runtime fallback error copy now prefers the already-decoded locale value and uses single HTML escaping, preventing an apostrophe from appearing as a literal entity after section morphing.
+- TASK-005 moved from `READY` to `IN PROGRESS`: local implementation and isolated/static validation are complete; unpublished-development-theme, Theme Editor and representative real-cart validation remain pending.
+- The drawer now uses the existing RELIVANOW semantic tokens for a white/neutral premium hierarchy, restrained dividers, fixed 80×80 media, a sticky safe-area summary and a dominant full-width black native Checkout button.
+- The header drawer action is a real localized cart-route link progressively enhanced into the native drawer; failed JavaScript/module loading retains Shopify's server-rendered `/cart` fallback.
+- Destructive optimistic row removal was replaced by server-confirmed Section Rendering. Public properties, selling plans, bundle/nested/app line markup, discounts, totals and accelerated checkout continue to be rendered by native snippets.
 - TASK-004 moved from `IN PROGRESS` to `DONE` after the current Product passed real-data and fail-closed validation through development theme `193260781938`. The live theme and protected commerce/SEO/media fields were untouched; TASK-005 remains `DRAFT`.
 - Shopify CLI auto-updated from 4.7.0 to 4.8.0 during the authorized development-theme upload. The final 4.8.0 Theme Check inspected 355 files with zero errors and six pre-existing Horizon warnings.
 - The Product template now places all 16 approved long-form modules after Product Information in the required Phase 1–2 sequence; the existing native Product Recommendations section remains after the final CTA.

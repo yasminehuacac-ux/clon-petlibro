@@ -1,6 +1,6 @@
 # Technical architecture
 
-**Status:** Repository-validated Horizon baseline with TASK-004 purchase composition in progress; task-specific live commerce evidence remains pending.
+**Status:** Repository-validated Horizon baseline with TASK-004 and TASK-005 complete; TASK-005 passed unpublished-development-theme, isolated empty-cart, and fresh post-correction verification.
 
 ## Platform
 
@@ -50,7 +50,7 @@ For every requested feature:
 | Variant picker | Reuse + style | Preserve option availability and product-selection contract; style via tokens/settings |
 | Price/availability/SKU/quantity | Reuse | Keep Shopify/server markup as the source consumed on product selection |
 | Sticky ATC | Reuse + extend | Preserve main-form lookup and variant state; later validate safe-area/collision behavior |
-| Cart drawer | Extend | Preserve AJAX quantity/remove/discount morphing; compose shipping progress and cross-sells around it |
+| Cart drawer | Extend | Preserve native AJAX/event/morphing contracts; improve drawer presentation, reliability, recovery, and no-JavaScript access while AOV additions remain gated |
 | Product cards/quick add | Extend | Preserve card gallery, quick-add dialog/form, and standard event path |
 | Header/search/footer | Reuse + extend | Preserve header groups, responsive drawer, and predictive Section Rendering; compose visual menu content |
 | Slideshow | Reuse | Use existing section/snippet/custom element for campaign and proof carousels |
@@ -120,6 +120,95 @@ For every requested feature:
 - Final CTA uses the native Product featured image or an approved `image_picker`, optional native Product price output, and no form or Variant ID. A small custom element finds the existing `ProductInformation-*` target, focuses it accessibly and scrolls smoothly only when reduced motion is not requested; the link retains `#MainContent` as its no-script/missing-target fallback.
 - TASK-004 closure was validated on unpublished development theme `193260781938` against the current remote Product. The only created definitions are the four typed feeding integers and the box-content text list; their Liquid values drive Precise Feeding and Box Contents. All other long-form adapters retain their existing fail-closed boundaries. Live theme `192527597938` and native commerce/SEO/media ownership were not changed.
 - Gallery images retain explicit aspect-ratio sizing; the first medium is eager/high priority and subsequent media are lazy. Native slideshow/zoom focus, keyboard, editor lifecycle, and reduced-motion behavior remain intact.
+
+## TASK-005 cart drawer architecture
+
+### Existing native graph
+
+1. `layout/theme.liquid` renders the cart drawer globally outside `.page-wrapper` on every non-cart page when `settings.cart_type == 'drawer'`, then loads the shared drawer coordinator.
+2. `snippets/header-actions.liquid` targets `#cart-drawer`; `assets/header-actions.js` synchronizes `aria-expanded` and announces the absolute cart count. `assets/cart-icon.js` updates the visible bubble from `shopify:cart:lines-update` and reconciles short-lived back/forward-cache count drift through `sessionStorage`.
+3. `snippets/cart-drawer.liquid` composes `theme-drawer` → native `dialog` → `cart-drawer-component` → `cart-items-component`. `sections/cart-drawer-section.liquid` is the stable Section Rendering target `cart-drawer-section`.
+4. `assets/theme-drawer.js` owns open/close, responsive modal mode below 990 px, non-modal squeeze mode at and above 990 px, focus containment, initial close-button focus, Escape/backdrop handling, nested-dialog stacking, scroll lock, and focus restoration. `snippets/theme-drawer.liquid` coordinates page squeeze and wide-screen session restoration.
+5. Product forms and compatible external standard actions dispatch `shopify:cart:lines-update` with a deferred promise. `assets/cart-drawer.js` may open after a successful add and deliberately waits for a source quick-add modal to close before capturing drawer focus.
+6. `assets/component-cart-items.js` listens for line, discount, note, and quantity events. Quantity/remove POST to `Theme.routes.cart_change_url` and request every mounted cart section. Successful responses resolve the standard event, morph the drawer in hydration mode, update quantity constraints, totals and count, and retain the drawer wrapper/open state.
+7. `snippets/cart-products.liquid` renders native line keys, Product/Variant links and media, options, public properties, selling-plan names, line discount titles, compare-at/final prices, bundle components, nested lines, app-controlled quantity/remove instructions, unit pricing, line totals, and localized money.
+8. `snippets/cart-summary.liquid` renders cart-level discounts, optional native note and discount-code flows, estimated total, tax/shipping information, the normal cart-form Checkout submit, and Shopify-provided accelerated checkout when enabled.
+9. `/cart` uses the same cart-products/cart-summary primitives inside `sections/main-cart.liquid` and `templates/cart.json`. It is the server-rendered fallback and must not diverge from the drawer's commerce semantics.
+
+### Existing mutation/event flow
+
+```text
+PDP / quick add / standard action
+  → Shopify /cart/add.js
+  → shopify:cart:lines-update + deferred promise
+  → cart drawer auto-open (when enabled), cart-items morph, cart bubble/count announcement
+
+Drawer quantity/remove
+  → quantity-selector:update (300 ms trailing debounce)
+  → Shopify /cart/change with affected section IDs
+  → shopify:cart:lines-update
+  → hydration morph of cart-drawer-inner
+  → quantity constraints, line totals, cart totals, discounts and count refresh
+
+Discount / note
+  → Shopify /cart/update
+  → shopify:cart:discount-update or shopify:cart:note-update
+  → direct section morph or uncached Section Rendering fallback
+```
+
+The Section Renderer aborts superseded rendering fetches per section, and hydration morphing updates `data-hydration-key="cart-drawer-inner"` while `data-skip-node-update` preserves the outer drawer/runtime state. This protects presentation work; it is not a transaction lock for Cart API mutations.
+
+### TASK-005 extension boundary
+
+- Keep the graph above. Add no new cart endpoint wrapper, global cart store, price calculator, polling loop, or event namespace.
+- Scope RELIVANOW presentation to the existing drawer selectors: white surface, neutral typography/dividers, approximately 80×80 px media at mobile widths, compact hierarchy, and a full-width black native Checkout button.
+- Remove the empty-state Continue shopping link only when `context == 'drawer'`; do not remove the cart-page fallback or its editable destination.
+- Extend `CartItemsComponent` with one local mutation coordinator: coalesce pre-dispatch quantity intent, serialize dispatched mutations, key operations by the native line key, retain the row while pending, and ignore an obsolete presentation response. Never abort a request after it may have reached Shopify.
+- Mark the component/affected controls `aria-busy` while pending and keep dimensions stable. On success, let the returned native section replace the state. On non-OK HTTP, invalid JSON, Shopify `errors`, or network rejection, restore the server-confirmed quantity/row, expose the exact safe Shopify message in an assertive region, and offer a localized retry of the retained intent.
+- Route all success/error/count announcements through the existing standard event promise, line alert, total status, and header count region. Add at most one drawer error region; avoid repeating the same message in multiple live regions.
+- Retain public properties and hide underscore-prefixed private properties exactly as today. Retain selling-plan, bundle component, nested-line and `item.instructions` behavior; no UI may assume one Variant equals one logical line.
+- Keep normal Checkout as the first dominant action. Shopify-provided accelerated checkout remains conditional on `additional_checkout_buttons` and `show_accelerated_checkout_buttons`; do not reimplement it.
+- Make the header action progressively reach `routes.cart_url` when modules fail or JavaScript is disabled while preserving the drawer's focus trigger when enhanced.
+- Keep Theme Editor ownership in the existing global cart settings. New drawer settings are unnecessary for the frozen RELIVANOW design; any new public error/retry string must use locale files.
+
+### Known risks that implementation must close
+
+- Current removal mutates the DOM optimistically before the server response. A late rejection can find no quantity input to restore, and last-line removal can display a false empty cart. TASK-005 must wait for confirmed success or perform a guaranteed authoritative rollback/refetch.
+- Current network and invalid-response failures dispatch `shopify:cart:error` but do not render a visible retry action in the drawer.
+- CSS `pointer-events: none` limits direct repeat clicks only after a request begins; it does not serialize mutations originating from another Product form, quick add, app, or standard action.
+- The current drawer trigger is JavaScript-only even though the shared cart page exists.
+- The normal Product FormData add path preserves `properties[...]` and any app-provided form fields. The RELIVANOW multi-item add-on JSON path currently reconstructs only IDs and quantities, so properties/selling plan can be lost when selected add-ons coexist with those inputs. This is outside the drawer implementation and requires separate authorization before modifying `assets/product-form.js`.
+- Discount apply/remove aborts its prior client fetch and has no explicit pending disable. It remains native and supported, but concurrent discount interaction must be included in QA; do not broaden TASK-005 into a replacement discount engine.
+
+### Implemented local mutation and rendering flow
+
+```text
+quantity-selector:update / Remove
+  → resolve the authoritative native line key
+  → coalesce same-line quantity intent for 300 ms
+  → enqueue one absolute { id: lineKey, quantity } mutation
+  → serialize dispatched /cart/change requests (never abort them)
+  → mark only the affected/queued rows and controls aria-busy
+  → success without overlap: resolve the standard event and hydration-morph the returned section
+  → failure: retain the server row, restore displayed quantity, announce a localized error, retain one Retry intent
+  → overlap with another standard cart/discount/note event:
+      wait for all known operations to settle
+      → uncached native Section Rendering + /cart.json
+      → reapply pending/error state
+      → rebroadcast one standard authoritative cart update
+```
+
+No global cart object, second API client, pricing calculation, request polling or response abort was added. `cart.items`, native line keys and returned section markup remain authoritative. Multiple lines sharing a Variant are not merged; aggregate Variant quantity is used only for Horizon's existing external quantity-selector constraint synchronization.
+
+The header action is now a real `routes.cart_url` anchor. `HeaderActions.openCartDrawer()` intercepts only an unmodified primary click and only after `#cart-drawer` upgrades to an element with `toggle()`. Failed/disabled JavaScript therefore follows the native cart route. The shared `/cart` form, Checkout submission and server-rendered line semantics remain unchanged.
+
+### Implemented surface
+
+Primary implementation files: `assets/component-cart-items.js`, `assets/header-actions.js`, `snippets/cart-drawer.liquid`, `snippets/cart-products.liquid`, `snippets/cart-summary.liquid`, `snippets/header-actions.liquid`, and `snippets/scripts.liquid`. The new error/Retry keys are present in all 31 storefront locale files; schema-locale files are unchanged.
+
+Reused unchanged: `assets/theme-drawer.js`, `assets/section-renderer.js`, `assets/morph.js`, `assets/component.js`, `assets/cart-discount.js`, `assets/cart-note.js`, `assets/cart-icon.js`, `assets/cart-drawer.js`, `assets/standard-actions-override.js`, `snippets/cart-items-component.liquid`, `snippets/theme-drawer.liquid`, `snippets/theme-drawer-header.liquid`, `snippets/theme-drawer-styles.liquid`, `sections/cart-drawer-section.liquid`, `sections/main-cart.liquid`, `templates/cart.json`, and `assets/product-form.js`.
+
+The implementation did not touch PDP composition, Variant Picker, gallery, Product/Variant data, or `assets/product-form.js`. Development-theme validation and isolated authenticated empty-cart closure are complete; unavailable properties, selling plans, bundle/app lines, Markets combinations, and nested live dialogs remain conditional on representative future data and were not fabricated.
 
 ## Provenance and protection boundary
 

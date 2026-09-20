@@ -6,7 +6,7 @@
 | TASK-002 | RELIVANOW design system | DONE | TASK-001 approved + local toolchain verified | Work |
 | TASK-003 | Shopify data model | DONE | TASK-001/002 + commercial data | Work |
 | TASK-004 | PDP purchase area | DONE | TASK-002/003 + product assets | Work |
-| TASK-005 | Cart drawer and AOV | DRAFT | TASK-004 + offer rules | Work |
+| TASK-005 | RELIVANOW cart drawer | DONE | Approved real development-theme and isolated empty-cart validation | Work |
 | TASK-006 | PDP storytelling | DRAFT | TASK-004 + approved content | Work |
 | TASK-007 | Reviews integration | DRAFT | Provider selected | Work |
 | TASK-008 | Home | DRAFT | Shared systems approved | Work |
@@ -30,4 +30,8 @@ Work approved TASK-002 after desktop/mobile Home and PDP validation, commerce-fl
 
 ## TASK-003 gate
 
-Work approved the documentation-only Shopify data model and TASK-003 is `DONE`. Work then approved TASK-004 validation against the current Product through unpublished development theme `193260781938`. The complete purchase panel and 16 long-form modules passed static, Theme Editor, real-data, fail-closed, and exact-width development-preview validation. Five confirmed Product metafield definitions/values were added after preserving the prior state; no price, variant, inventory, handle, SEO, media, live-theme, or publication change occurred. TASK-004 is `DONE`; unavailable approved assets and third-party/merchandising data remain separate follow-up gates. TASK-005 remains `DRAFT` and unstarted.
+Work approved the documentation-only Shopify data model and TASK-003 is `DONE`. Work then approved TASK-004 validation against the current Product through unpublished development theme `193260781938`. The complete purchase panel and 16 long-form modules passed static, Theme Editor, real-data, fail-closed, and exact-width development-preview validation. Five confirmed Product metafield definitions/values were added after preserving the prior state; no price, variant, inventory, handle, SEO, media, live-theme, or publication change occurred. TASK-004 is `DONE`; unavailable approved assets and third-party/merchandising data remain separate follow-up gates.
+
+## TASK-005 gate
+
+The local Horizon 4.1.1 cart audit and implementation evidence are recorded in `reports/TASK-005-AUDIT.md` and `reports/TASK-005-RESULT.md`. The authorized working tree was uploaded only to unpublished development theme `193260781938`; active theme `192527597938` was not modified. Real add, two-Variant, quantity/remove, concurrency, `/cart`, Checkout-without-purchase, accessibility and exact-width checks pass. Final empty-cart closure also passed in a clean temporary Chrome profile after manual authentication: it began at zero, added one valid feeder Variant, removed only that keyed line, returned to zero, and passed three exact empty-state viewports, focus/Close/Escape, `/cart`, and console/network inspection. The shared cart was untouched and the temporary profile was removed. TASK-005 is `DONE`; unavailable data-dependent cases were not fabricated.

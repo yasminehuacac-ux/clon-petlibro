@@ -29,6 +29,28 @@ class HeaderActions extends Component {
     document.removeEventListener(DrawerCloseEvent.eventName, this.#onDrawerStateChange);
   }
 
+  /**
+   * Progressively enhances the real cart link into the native drawer trigger.
+   * If either module failed to load, the link keeps navigating to the native cart route.
+   * @param {MouseEvent} event
+   */
+  openCartDrawer(event) {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+
+    const cartDrawer = /** @type {HTMLElement & {toggle?: () => void} | null} */ (
+      document.getElementById('cart-drawer')
+    );
+    if (!cartDrawer) return;
+
+    customElements.upgrade(cartDrawer);
+    if (typeof cartDrawer.toggle !== 'function') return;
+
+    event.preventDefault();
+    cartDrawer.toggle();
+  }
+
   #syncCartTriggerAriaExpanded = () => {
     const cartDrawer = document.getElementById('cart-drawer');
     if (!cartDrawer) return;

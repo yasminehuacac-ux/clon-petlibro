@@ -13,6 +13,12 @@
 
 {% liquid
   assign block_settings = block.settings
+  assign is_drawer_empty = false
+  if context == 'drawer'
+    if cart.empty? or force_empty
+      assign is_drawer_empty = true
+    endif
+  endif
 %}
 
 {%- if block_settings.input_style == 'custom' -%}
@@ -45,8 +51,9 @@
 
 <div
   {{ block.shopify_attributes }}
-  class="cart-items__wrapper{% if context == 'drawer' and cart.empty? or force_empty %} cart-items__wrapper--drawer-empty{% endif %}"
-  {% if context == 'drawer' and cart.empty? or force_empty %}
+  class="cart-items__wrapper{% if is_drawer_empty %} cart-items__wrapper--drawer-empty{% endif %}"
+  data-cart-update-error-message="{{ 'content.cart_update_error' | t | escape_once }}"
+  {% if is_drawer_empty %}
     data-cart-drawer-empty
   {% endif %}
   style="
@@ -54,6 +61,29 @@
     {{- custom_style -}}
   "
 >
+  <div
+    class="cart-items__mutation-error hidden"
+    role="alert"
+    data-cart-component-error
+  >
+    <span class="svg-wrapper" aria-hidden="true">
+      {{- 'icon-error.svg' | inline_asset_content -}}
+    </span>
+    <span
+      class="cart-items__mutation-error-text cart-primary-typography"
+      data-cart-item-error-text
+    ></span>
+    <button
+      class="button-unstyled cart-item__retry"
+      type="button"
+      on:click="/retryLastMutation"
+      data-cart-mutation-retry
+      hidden
+    >
+      {{- 'actions.retry' | t -}}
+    </button>
+  </div>
+
   {% if cart.empty? or force_empty %}
     {%- if shop.customer_accounts_enabled and customer == null -%}
       <p>
@@ -61,14 +91,16 @@
       </p>
     {%- endif -%}
 
-    <a
-      class="button cart-items__empty-button"
-      href="{{ settings.empty_cart_button_link | default: routes.all_products_collection_url }}"
-    >
-      <span class="button-text">
-        {{ 'actions.continue_shopping' | t }}
-      </span>
-    </a>
+    {% unless context == 'drawer' %}
+      <a
+        class="button cart-items__empty-button"
+        href="{{ settings.empty_cart_button_link | default: routes.all_products_collection_url }}"
+      >
+        <span class="button-text">
+          {{ 'actions.continue_shopping' | t }}
+        </span>
+      </a>
+    {% endunless %}
   {%- else -%}
     <span
       class="visually-hidden"
@@ -147,6 +179,7 @@
                 ref="cartItemRows[]"
                 data-parent-key="{{ item.parent_relationship.parent.key }}"
                 data-key="{{ item.key }}"
+                data-cart-item-line="{{ item.index | plus: 1 }}"
               >
                 <td
                   class="cart-items__media"
@@ -349,7 +382,7 @@
                     %}
 
                     <button
-                      class="button cart-items__remove"
+                      class="button-unstyled cart-items__remove"
                       type="button"
                       aria-label="{{ 'accessibility.remove_item' | t: title: item.title | escape }}"
                       on:click="/onLineItemRemove/{{ item.index | plus: 1 }}"
@@ -358,8 +391,7 @@
                         hidden
                       {% endif %}
                     >
-                      {{- 'icon-delete.svg' | inline_asset_content -}}
-                      <span class="visually-hidden">{{ 'accessibility.remove' | t }}</span>
+                      {{- 'actions.remove' | t -}}
                     </button>
                   </div>
                 </td>
@@ -367,6 +399,7 @@
                   class="cart-items__error hidden"
                   role="cell"
                   ref="cartItemErrorContainer-{{ item.index | plus: 1 }}"
+                  data-cart-item-error-container
                   headers="quantity"
                 >
                   <div
@@ -379,7 +412,17 @@
                     <small
                       class="cart-item__error-text cart-primary-typography"
                       ref="cartItemError-{{ item.index | plus: 1 }}"
+                      data-cart-item-error-text
                     ></small>
+                    <button
+                      class="button-unstyled cart-item__retry"
+                      type="button"
+                      on:click="/retryLastMutation"
+                      data-cart-mutation-retry
+                      hidden
+                    >
+                      {{- 'actions.retry' | t -}}
+                    </button>
                   </div>
                 </td>
                 {%- liquid
@@ -435,10 +478,6 @@
     width: 100%;
   }
 
-  .cart-items-disabled {
-    pointer-events: none;
-  }
-
   .cart-items__wrapper {
     display: flex;
     flex-direction: column;
@@ -456,6 +495,27 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+  }
+
+  .cart-items__mutation-error {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--gap-xs);
+    margin: 0 var(--padding-xl) var(--margin-md);
+    padding: var(--padding-sm) var(--padding-md);
+    border: 1px solid var(--color-border-semantic);
+    background: var(--color-surface);
+    color: var(--color-ink);
+  }
+
+  .cart-items__mutation-error .svg-wrapper {
+    flex: 0 0 var(--icon-size-sm);
+  }
+
+  .cart-items__mutation-error-text {
+    flex: 1 1 12rem;
+    font-size: var(--font-size--sm);
   }
 
   .cart-items__table {
@@ -680,12 +740,27 @@
 
   .cart-items__remove {
     background-color: transparent;
-    color: var(--color-foreground);
-    width: var(--minimum-touch-target);
-    height: var(--minimum-touch-target);
+    color: var(--color-foreground-subdued);
+    min-width: var(--minimum-touch-target);
+    min-height: var(--minimum-touch-target);
     justify-content: center;
     box-shadow: none;
-    padding: 0;
+    padding: 0 var(--padding-2xs);
+    font-size: var(--font-size--xs);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .cart-items__remove:hover {
+    color: var(--color-foreground);
+  }
+
+  .cart-items__table-row--pending {
+    opacity: var(--opacity-70);
+  }
+
+  .cart-items__table-row--pending :is(button, input) {
+    cursor: progress;
   }
 
   .cart-items__media {
@@ -753,6 +828,8 @@
   .cart-item__error {
     display: flex;
     align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--gap-xs);
     width: 100%;
     font-size: var(--font-size--sm);
     padding-block: var(--padding-2xs);
@@ -764,6 +841,20 @@
     height: var(--icon-size-xs);
     margin-inline: var(--margin-3xs) var(--margin-xs);
     margin-block-start: var(--margin-3xs);
+  }
+
+  .cart-item__error-text {
+    flex: 1 1 10rem;
+  }
+
+  .cart-item__retry {
+    min-height: var(--minimum-touch-target);
+    padding-inline: var(--padding-xs);
+    color: var(--color-foreground);
+    font-size: var(--font-size--sm);
+    font-weight: var(--font-weight-medium);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   @container cart-items (min-width: 720px) {
@@ -894,38 +985,6 @@
     --shopify-accelerated-checkout-inline-alignment: center;
     --shopify-accelerated-checkout-button-border-radius: var(--style-border-radius-buttons-primary);
     --shopify-accelerated-checkout-row-gap: var(--checkout-button-gap, 10px);
-  }
-
-  /* Remove animation */
-  .remove-icon-bottom,
-  .remove-icon-top {
-    transition: transform var(--animation-speed) var(--animation-easing);
-  }
-
-  .cart-items__remove:hover .remove-icon-top {
-    transform: translate(calc(-1 * var(--icon-stroke-width)), var(--icon-stroke-width)) rotate(-15deg);
-  }
-
-  .cart-items__remove:is(:hover, :active) .remove-icon-bottom {
-    transform: translateY(var(--icon-stroke-width));
-  }
-
-  .cart-items__table-row.removing .remove-icon-bottom {
-    transform: translateY(0);
-  }
-
-  .cart-items__table-row.removing .remove-icon-top {
-    animation: removeButtonClickedIconTop var(--animation-speed) var(--animation-easing) forwards;
-  }
-
-  @keyframes removeButtonClickedIconTop {
-    50% {
-      transform: translate(0, calc(-1 * var(--icon-stroke-width)));
-    }
-
-    100% {
-      transform: translate(0, 0);
-    }
   }
 
   .cart-items__properties {
