@@ -1,0 +1,108 @@
+{% if section.settings.enable_section and section.blocks.size > 0 %}
+  <script src="{{ 'relivanow-pdp-navigation.js' | asset_url }}" type="module"></script>
+  {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+  <div class="section-background color-custom-{{ section.id }}"></div>
+  <relivanow-pdp-navigation
+    class="relivanow-pdp-navigation color-custom-{{ section.id }}"
+    hidden
+  >
+    <nav
+      class="relivanow-pdp-navigation__viewport section section--page-width"
+      aria-label="{{ section.settings.accessibility_label | escape }}"
+    >
+      <ul class="relivanow-pdp-navigation__list" role="list">
+        {% for block in section.blocks %}
+          {% if block.settings.label == blank %}{% continue %}{% endif %}
+          <li {{ block.shopify_attributes }}>
+            <a href="#MainContent" data-relivanow-pdp-target="{{ block.settings.target | escape }}">
+              {{ block.settings.label | escape }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </relivanow-pdp-navigation>
+{% endif %}
+
+{% stylesheet %}
+  .shopify-section:has(.relivanow-pdp-navigation) {
+    z-index: var(--layer-sticky);
+  }
+
+  .shopify-section:has(.relivanow-pdp-navigation:not([hidden])) {
+    position: sticky;
+    inset-block-start: var(--header-group-height, 0px);
+  }
+
+  .relivanow-pdp-navigation {
+    display: block;
+    border-block: 1px solid var(--color-border);
+    background: var(--color-background);
+  }
+
+  .relivanow-pdp-navigation[hidden] { display: none; }
+
+  .relivanow-pdp-navigation__viewport { overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; }
+  .relivanow-pdp-navigation__list { display: flex; width: max-content; min-width: 100%; margin: 0; padding: 0; list-style: none; }
+  .relivanow-pdp-navigation__list li { flex: 1 0 auto; }
+  .relivanow-pdp-navigation__list li[hidden] { display: none; }
+
+  .relivanow-pdp-navigation__list a {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 48px;
+    padding-inline: var(--padding-sm);
+    color: currentcolor;
+    font-size: var(--font-paragraph-small--size);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .relivanow-pdp-navigation__list a::after {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: var(--padding-sm);
+    height: 2px;
+    background: currentcolor;
+    opacity: 0;
+    content: '';
+  }
+
+  .relivanow-pdp-navigation__list a:hover::after,
+  .relivanow-pdp-navigation__list a[aria-current='location']::after { opacity: 1; }
+  .relivanow-pdp-navigation__list a:focus-visible { outline: var(--focus-outline-width) solid currentcolor; outline-offset: calc(-1 * var(--focus-outline-offset)); }
+
+  [data-relivanow-pdp-anchor] {
+    scroll-margin-block-start: calc(var(--header-group-height, 0px) + var(--relivanow-pdp-nav-height, 0px) + 16px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .relivanow-pdp-navigation__viewport { scroll-behavior: auto; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW PDP navigation",
+  "max_blocks": 5,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enable_section", "label": "Show section", "default": true },
+    { "type": "text", "id": "accessibility_label", "label": "Accessibility label", "default": "Product page sections" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFFFFF" }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Navigation link",
+      "settings": [
+        { "type": "select", "id": "target", "label": "Target", "options": [{ "value": "purchase", "label": "Purchase" }, { "value": "overview", "label": "Overview" }, { "value": "specs", "label": "Specifications" }, { "value": "faq", "label": "FAQ" }, { "value": "reviews", "label": "Reviews" }], "default": "overview" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Overview" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW PDP navigation", "category": "Product" }]
+}
+{% endschema %}

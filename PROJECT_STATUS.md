@@ -1,8 +1,8 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** TASK-008 Home complete
-**Active task:** None; TASK-008 is `DONE` and TASK-006 remains `DRAFT`
+**Stage:** TASK-006 PDP storytelling reconciliation complete
+**Active task:** None; TASK-006 and TASK-008 are `DONE`
 **Last updated:** 2026-09-20
 
 ## Verified baseline facts
@@ -70,6 +70,8 @@
 - TASK-008 is complete on unpublished development theme `193260781938`. The public Home renders the confirmed feeder campaign, benefits, native Product discovery, two editorial stories, final CTA, and native newsletter/footer; category, reviews, promotion/bundle, ecosystem, UGC, press/testimonial, and dedicated manifesto modules fail closed where real data/assets are absent.
 - Exact Home checks passed at 1440x900, 1024x768, 768x1024, 390x844, and 360x800 with no horizontal overflow, clipped controls, broken images, missing image alts, public placeholders, or console warnings/errors. The visible hero owns the single H1; only its image is eager/high priority.
 - Theme Editor exposed the complete ordered section list and campaign controls with Save disabled after inspection. PDP and the existing 17-item Cart Drawer were verified read-only; no Product, Variant, cart, Market, app, theme setting, or other commercial data was changed.
+- TASK-006 reconciles the official storytelling/specifications/FAQ scope with the 16 long-form OS 2.0 sections already delivered by TASK-004. The only functional gap was the deferred Purchase/Overview/Specifications/FAQ/Reviews navigation; it now discovers real rendered destinations, hides unavailable links, tracks the active location, and accounts for the dynamic Horizon header without changing the purchase panel.
+- Installation video, camera/monitoring, freshness/reliability, cleaning/compatibility, ecosystem relationships and Judge.me output remain governed by approved-content/data gates. The native Horizon media/recommendation/app-host systems and RELIVANOW sections are ready without fabricated public output.
 
 ## Current blockers
 
@@ -91,4 +93,4 @@
 
 ## Active task
 
-No task is active. TASK-008 is `DONE`; TASK-006 remains `DRAFT` and was not modified. TASK-009 has not started. Theme `193260781938` contains the validated Home implementation; active theme `192527597938` remains protected and unchanged.
+No task is active. TASK-002, TASK-003, TASK-004, TASK-005, TASK-006 and TASK-008 are `DONE`; TASK-007 and TASK-009 have not started. Theme `193260781938` contains the validated TASK-006 navigation and prior approved implementations; active theme `192527597938` remains protected and unchanged.

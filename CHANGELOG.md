@@ -6,6 +6,8 @@ All notable project changes are recorded here.
 
 ### Added
 
+- TASK-006 reconciliation against the completed TASK-004 long-form PDP, including a fail-closed, merchant-editable sticky anchor navigation with active-location state and dynamic omission of unavailable destinations.
+- Persistent TASK-006 contract tests for navigation structure, accessibility state, fail-closed targets, and placement immediately after Product Information.
 - TASK-008 premium Home composition with a claim-gated responsive hero, confirmed-benefit strip, native New & Popular product grid, two Product-backed editorial stories, fail-closed reviews host, final CTA, announcement, newsletter, and footer copy.
 - Home-specific OS 2.0 sections for campaign media/copy and Product-backed storytelling, including independent desktop/mobile media, mobile focal control, an editor-controlled safe crop for fallback media with embedded supplier copy, first-image LCP priority, editor-only missing-data guidance, and public fail-closed output.
 - Persistent Node contract/structure tests for the Home sequence, editor controls, Product ownership, native product-card deferral, JSON/JSONC parsing, Liquid schema parsing, and setting-ID uniqueness.
@@ -40,6 +42,7 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- TASK-006 moved from `DRAFT` to `DONE` after reconciling all official criteria with the 16 existing TASK-004 long-form sections, native Product Recommendations and Horizon media system. Installation video, camera/monitoring, freshness/reliability, cleaning/compatibility and ecosystem publication remain content-gated rather than fabricated.
 - TASK-008 moved from `DRAFT` through `IN PROGRESS` to `DONE`; TASK-006 remains `DRAFT` and its PDP scope/files were not changed.
 - The Home selects the real automatic-feeder Product for hero/story data instead of a collection-order fallback. Missing category collections, Judge.me output, promotion/bundle, ecosystem, UGC, press/testimonial, and dedicated manifesto assets remain fail-closed and documented rather than fabricated.
 - Horizon's Home-only hidden shop-name H1 was removed so the visible campaign heading is the single H1. Native product-list cards now expose an optional `defer_card_images` control; Home uses it so only the hero image is eager/high priority.

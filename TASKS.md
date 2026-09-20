@@ -7,7 +7,7 @@
 | TASK-003 | Shopify data model | DONE | TASK-001/002 + commercial data | Work |
 | TASK-004 | PDP purchase area | DONE | TASK-002/003 + product assets | Work |
 | TASK-005 | RELIVANOW cart drawer | DONE | Approved real development-theme and isolated empty-cart validation | Work |
-| TASK-006 | PDP storytelling | DRAFT | TASK-004 + approved content | Work |
+| TASK-006 | PDP storytelling | DONE | TASK-004 reconciliation, navigation closure, and development-theme QA complete | Work |
 | TASK-007 | Reviews integration | DRAFT | Provider selected | Work |
 | TASK-008 | Home | DONE | Development-theme QA, Theme Editor, PDP/Cart regression, and handoff complete | Work |
 | TASK-009 | Analytics and SEO | DRAFT | Events/providers/markets frozen | Work |

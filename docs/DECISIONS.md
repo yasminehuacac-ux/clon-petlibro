@@ -63,6 +63,7 @@
 | D-059 | Missing real category collections, Judge.me output and secondary editorial assets remain fail-closed; their editor configuration/backlog is preserved without fabricating collections, ratings, testimonials, UGC, bundle offers or ecosystem relationships | APPROVED / DONE | The confirmed hero, Product discovery, stories, CTA and newsletter keep the Home commercially usable while evidence-dependent modules wait for real inputs |
 | D-060 | The visible Home campaign owns the single H1 and the only eager/high-priority image; Home may defer native product-card media through an opt-in `defer_card_images` section setting | IMPLEMENTED / DONE | Removes the duplicate hidden Home H1 and prevents below-the-fold cards from competing with the LCP image while leaving other product-list instances unchanged by default |
 | D-061 | Hero and story sections expose an opt-in safe crop for existing Product fallback media that contains embedded supplier copy | IMPLEMENTED / DONE | Keeps unverified text outside the visible frame without editing Shopify media; merchants disable the crop when approved clean HOME-01/HOME-04 assets are assigned |
+| D-062 | TASK-006 closes by reusing TASK-004's 16 long-form sections and adding only one fail-closed PDP anchor-navigation section | IMPLEMENTED / DONE | The navigation discovers rendered Purchase/Overview/Specifications/FAQ/Reviews targets, omits unavailable destinations, tracks the active location and uses Horizon header offsets; no storytelling, commerce or content system is duplicated |
 
 ## Pending decisions
 

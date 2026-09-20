@@ -408,6 +408,37 @@
         "padding-block-end": 0
       }
     },
+    "pdp_navigation_RELI06": {
+      "type": "relivanow-pdp-navigation",
+      "blocks": {
+        "purchase_RELI06": {
+          "type": "link",
+          "settings": { "target": "purchase", "label": "Purchase" }
+        },
+        "overview_RELI06": {
+          "type": "link",
+          "settings": { "target": "overview", "label": "Overview" }
+        },
+        "specs_RELI06": {
+          "type": "link",
+          "settings": { "target": "specs", "label": "Specifications" }
+        },
+        "faq_RELI06": {
+          "type": "link",
+          "settings": { "target": "faq", "label": "FAQ" }
+        },
+        "reviews_RELI06": {
+          "type": "link",
+          "settings": { "target": "reviews", "label": "Reviews" }
+        }
+      },
+      "block_order": ["purchase_RELI06", "overview_RELI06", "specs_RELI06", "faq_RELI06", "reviews_RELI06"],
+      "settings": {
+        "enable_section": true,
+        "accessibility_label": "Product page sections",
+        "background_color": "#FFFFFF"
+      }
+    },
     "trust_benefits_RELI04": {
       "type": "relivanow-benefits-bar",
       "blocks": {
@@ -1001,6 +1032,7 @@
   },
   "order": [
     "main",
+    "pdp_navigation_RELI06",
     "trust_benefits_RELI04",
     "two_ways_RELI04",
     "precise_feeding_RELI04",

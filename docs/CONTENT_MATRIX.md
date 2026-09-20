@@ -302,3 +302,7 @@ All component variant IDs/quantities, compatibility, inventory, margin, CPA, AOV
 | Newsletter/footer | Horizon native email-signup/footer | Native Shopify customer form | Public newsletter and footer composition |
 
 Category navigation remains present and reorderable in Theme Editor but is disabled publicly until real merchant collections and category media exist. Promotion/bundle, ecosystem, UGC/social, press/testimonial, and dedicated manifesto modules are omitted rather than populated with provisional claims or assets. Existing Shopify Product media is an approved runtime fallback for the completed Home; hero and story instances enable the editor-controlled safe crop so embedded supplier copy stays outside the visible frame. This runtime treatment does not promote the external HOME-01 files to uploaded/publication-approved status.
+
+## TASK-006 PDP reconciliation — 2026-09-20
+
+The merchant-editable PDP navigation uses the neutral interface labels `Purchase`, `Overview`, `Specifications`, `FAQ`, and `Reviews`. It publishes only when at least two real destinations render, hides links whose fail-closed sections are absent, and never creates content or claims for those destinations. Installation video, camera/monitoring, freshness/reliability, cleaning/compatibility and ecosystem storytelling remain pending approved evidence; Horizon native media and the existing RELIVANOW sections require no placeholder copy or fabricated asset.

@@ -1,7 +1,7 @@
 # TASK-006 — PDP storytelling, specs, and FAQ
 
-**Status:** DRAFT  
-**Depends on:** TASK-004 approved; final copy, media, specs, FAQ, and video available  
+**Status:** DONE
+**Depends on:** TASK-004 approved; absent final copy/media/video remain documented fail-closed content gates
 **Gate owner:** ChatGPT Work
 
 ## Objective
@@ -36,14 +36,15 @@ Build the post-purchase-area PDP narrative using reusable, merchant-editable com
 
 ## Acceptance criteria
 
-- [ ] All content is editable through approved sources.
-- [ ] Feature sections reuse shared media/content components.
-- [ ] Desktop/mobile media do not create duplicate heavy DOM branches.
-- [ ] Specs and FAQ are semantic, searchable, and accessible.
-- [ ] FAQ UI and schema remain identical.
-- [ ] Sticky navigation offsets and active states work without overlap.
+- [x] All content is editable through approved sources.
+- [x] Feature sections reuse shared media/content components.
+- [x] Desktop/mobile media do not create duplicate heavy DOM branches.
+- [x] Specs and FAQ are semantic, searchable, and accessible.
+- [x] FAQ UI and schema remain identical.
+- [x] Sticky navigation offsets and active states work without overlap.
 
 ## Required handoff
 
 Create `reports/TASK-006-RESULT.md` and do not begin TASK-007.
 
+Completed through reconciliation with TASK-004. The existing 16 long-form sections, native Product Recommendations, native media/video support and fail-closed data model were retained. TASK-006 added only the missing dynamic PDP anchor navigation; content-dependent modules remain hidden until approved inputs exist. Evidence and the full traceability matrix are recorded in `reports/TASK-006-RESULT.md`.

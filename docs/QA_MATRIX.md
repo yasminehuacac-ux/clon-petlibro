@@ -1,5 +1,18 @@
 # QA matrix
 
+## TASK-006 reconciliation acceptance matrix — 2026-09-20
+
+| Case | Result | Evidence / remaining gate |
+|---|---|---|
+| Traceability | PASS | 30 official/explicit criteria reconciled: 25 `COVERED`, 0 `PARTIAL`, 0 `MISSING`, 5 `BLOCKED BY CONTENT`; full matrix is in `reports/TASK-006-RESULT.md`. |
+| Existing long-form PDP | PASS | All 16 TASK-004 RELIVANOW sections plus native Product Recommendations remain in their approved order and were not rewritten or duplicated. |
+| Navigation | PASS | Purchase/Overview/Specifications/FAQ/Reviews navigation is directly after Product Information, hides missing destinations, requires at least two real targets, exposes one `aria-current="location"`, and uses dynamic header/navigation offsets. |
+| Fail-closed claims/content | PASS | Missing video, camera/monitoring, freshness/reliability, cleaning/compatibility, ecosystem, reviews and secondary media remain absent publicly; no claim, image, interface or relationship was invented. |
+| Static validation | PASS | TASK-006 tests, repository JSON/JSONC and Liquid schema/setting-ID checks, JavaScript syntax, prohibited-claim/ID/URL scans and whitespace validation pass. |
+| Theme Editor | PASS | Navigation enablement, accessible label, background and five reorderable target/label blocks are exposed; existing long-form controls remain unchanged. |
+| Development preview | PASS | Only theme `193260781938` received the affected files. Navigation, active state, missing-target omission, responsive overflow and section anchors passed targeted real-preview checks. |
+| Regression | PASS read-only | Purchase panel and Cart Drawer retained their existing controls/behavior; no Product form, Variant Picker, cart line or commercial data was changed. |
+
 ## TASK-008 Home acceptance matrix — 2026-09-20
 
 | Case | Result | Evidence / remaining gate |
