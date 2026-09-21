@@ -51,3 +51,23 @@ Run the full technical, functional, responsive, accessibility, SEO, analytics, p
 ## Required handoff
 
 Create `reports/TASK-010-RESULT.md`, finalize `PROJECT_STATUS.md` and `CHANGELOG.md`, and stop for explicit release approval.
+
+## Release Gates Batch 1 — 2026-09-21
+
+**Result:** PASS for the safe executable scope; TASK-010 remains `IN PROGRESS`.
+
+- Corrected only the documented real secondary controls below 44×44 px: Home product-card Choose and View all, integrated newsletter submit, Judge.me rating/review actions, More payment options, and footer utility/policy actions. Existing typography, colors and layout remain unchanged.
+- Mouse, keyboard, mobile-pointer and exact 1440×900, 1024×768, 768×1024, 390×844 and 360×800 checks pass on development theme `193260781938`; Home, PDP, Search, Judge.me and the read-only Cart Drawer regressions pass with zero horizontal overflow.
+- Peru is the confirmed legal country. The read-only payment shortlist is Mercado Pago Tarjetas, Mercado Pago Checkout Pro and PayPal Express. No provider/account/credential/bank/contract/charge state was changed. Tarjetas + PayPal is the conditional recommendation, pending real international and currency checkout tests.
+- United States remains active in USD. Canada and the Germany/Belgium/Spain/France EU market remain draft. English remains the only published language; German, Spanish, French and Dutch remain unpublished.
+- White/Black and Single/Dual are supplier-reference requirements only. No Product, Variant, SKU, price, inventory or media was created or modified.
+- Only the six accessibility implementation files were uploaded to the development theme. Live theme `192527597938` remains live and byte-identical across the protected snapshot files.
+
+Authoritative remaining blockers:
+
+1. Real supplier confirmation for White/Black and Single/Dual.
+2. Authorized selection and connection of a card gateway.
+3. Authorized connection of PayPal Business.
+4. Real checkout testing.
+5. Policies, shipping, consent and final QA for the six launch markets.
+6. Later password removal and sitemap validation.

@@ -11,7 +11,7 @@
 | TASK-007 | Reviews integration | DONE | Authentic zero-review launch baseline approved; populated behavior deferred to real-review operations | Work |
 | TASK-008 | Home | DONE | Development-theme QA, Theme Editor, PDP/Cart regression, and handoff complete | Work |
 | TASK-009 | Analytics and SEO | DONE | Technical baseline verified; authorized administrative baseline recorded; release gates documented | Work |
-| TASK-010 | Final QA and release | IN PROGRESS | Release-candidate checkpoint passes with zero open P0/P1; external launch gates remain | Work |
+| TASK-010 | Final QA and release | IN PROGRESS | Batch 1 accessibility gates pass; six explicit external release gates remain | Work |
 
 ## Status meanings
 
@@ -43,3 +43,9 @@ Judge.me's official core embed, Star Ratings block, and Review Widget are config
 ## TASK-009 gate
 
 Work explicitly authorized TASK-009 to proceed independently while TASK-007 was still in progress. The theme has the safe SEO/structured-data corrections, localized-route fallback, and provider-neutral interaction hooks validated on development theme `193260781938`. The authorized administrative baseline is recorded: US remains active; Canada and the approved four-country EU scope are draft; legacy UK and Australia/New Zealand markets are draft; English is published while German, Spanish, French, and Dutch remain untranslated/unassigned/unpublished; Customer Privacy settings are active; `relivanow.com` is DNS-verified in Search Console; and Merchant Center account `5857724399` exists without products, feeds, listings, Ads, campaigns, plans, or charges. CAD/EUR, delivery/legal content, post-release sitemap fetch, Merchant onboarding, regional consent/localization regression, and authentic review data are documented release gates. TASK-009 is `DONE`.
+
+## TASK-010 gate
+
+Release Gates Batch 1 resolves the documented sub-44 px secondary targets without redesigning approved components. The correction and fresh Home/PDP/Search/Judge.me/Cart Drawer regression pass only on development theme `193260781938`; live theme `192527597938` retains its protected hashes. Read-only Admin discovery confirms Peru as the legal country, United States active in USD, Canada and the Germany/Belgium/Spain/France EU market in draft, English published, and German/Spanish/French/Dutch unpublished. Mercado Pago Tarjetas, Mercado Pago Checkout Pro and PayPal Express are the three real payment options inspected; no connection or commercial state changed.
+
+TASK-010 stays `IN PROGRESS`. Its authoritative blockers are exactly: (1) real supplier confirmation for White/Black and Single/Dual, (2) authorized selection and connection of a card gateway, (3) authorized PayPal Business connection, (4) real checkout testing, (5) policies, shipping, consent and final QA for all six markets, and (6) later password removal and sitemap validation.

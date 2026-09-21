@@ -304,8 +304,15 @@
     font-size: smaller;
   }
 
-  more-payment-options-link a:hover {
-    color: rgb(var(--color-rgb, var(--color-foreground-rgb)) / var(--opacity-subdued-text));
+  more-payment-options-link a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--minimum-touch-target);
+
+    &:hover {
+      color: rgb(var(--color-rgb, var(--color-foreground-rgb)) / var(--opacity-subdued-text));
+    }
   }
 
   .shopify-payment-button__more-options[aria-hidden='true'] {
