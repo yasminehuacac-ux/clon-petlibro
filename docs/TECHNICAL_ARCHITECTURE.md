@@ -1,6 +1,6 @@
 # Technical architecture
 
-**Status:** Repository-validated Horizon baseline with TASK-004, TASK-005, and TASK-008 complete; TASK-008 passed unpublished-development-theme responsive, Theme Editor, PDP, Cart Drawer, and fresh static verification.
+**Status:** Repository-validated Horizon baseline with TASK-002 through TASK-009 complete; TASK-010 release-candidate checkpoint validated on unpublished development theme `193260781938` with external launch gates remaining.
 
 ## Platform
 
@@ -253,6 +253,12 @@ The header's former Home-only visually hidden shop-name H1 was removed because t
 - Each custom event has an explicit field allowlist and accepts only primitive string, number, or boolean values. The module has no network request, cookie, browser-storage, account, token, pixel ID, or customer/order object path.
 - Provider mapping, checkout/purchase measurement, consent enforcement, attribution, and server-side/CAPI ownership belong to approved Shopify Customer Events/custom pixels outside the theme and remain externally gated.
 - SEO stays Shopify-native: canonical URLs, titles, descriptions, Product data, money/currency, localization routes, robots, and sitemap remain native. The additive breadcrumb JSON-LD uses current route objects, while Product JSON-LD guards prevent blank or duplicate featured-product entities.
+
+## TASK-010 release-candidate correction
+
+- PDP sticky navigation imports the shared `getScrollEventTarget()` helper and rebinds its listener when `scrollContainerMediaQuery` changes, so active-location updates observe `.page-wrapper` on desktop and the document on smaller viewports.
+- Delegated navigation scrolls to a stable outer-section layout offset while `Purchase` preserves the real `ProductInformation-*` hash. Active-location calculation sorts a temporary destination list by page position, independent of merchant-configured link order, and includes the 16 px CSS gap, a 1 px subpixel tolerance, and a scroll-limit fallback for the final destination.
+- This correction changes no Product, Variant, price, inventory, form, cart, review, Market, localization, consent, analytics, app, or live-theme state. Only `assets/relivanow-pdp-navigation.js` was uploaded to development theme `193260781938`.
 
 ## Provenance and protection boundary
 

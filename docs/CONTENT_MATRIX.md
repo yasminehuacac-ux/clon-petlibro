@@ -10,7 +10,7 @@
 | Descriptor | Smart Pet Care | CONFIRMED / Work |
 | Main tagline | Smart care for life together. | CONFIRMED / Work |
 | Initial primary language | English | CONFIRMED / Work |
-| Planned markets | United States, Canada, Australia, Germany, Spain, Belgium | CONFIRMED plan / Work |
+| Approved/configured market baseline | United States active; Canada draft; European Union draft restricted to Germany, Belgium, Spain, and France; United Kingdom and Australia/New Zealand draft | VERIFIED administrative baseline / Work; draft markets remain unpublished |
 | Base currency | USD | CONFIRMED / Work |
 | Free shipping | USD 99 or more | PROVISIONAL / Operations |
 | Shipping below threshold | Calculated at checkout | PROVISIONAL / Operations |
@@ -251,6 +251,9 @@ No row has final `APPROVED` publication status yet. The three `APPROVED VISUAL` 
 | Spain | 6–10 days | CONFIRMED supplier estimate | Publish only after carrier/VAT/operations validation |
 | Germany | No estimate | UNVERIFIED | Keep the Market inactive and/or omit its shipping zone |
 | Belgium | No estimate | UNVERIFIED | Keep the Market inactive and/or omit its shipping zone |
+| France | No estimate | UNVERIFIED | Keep the Market draft and omit public delivery promises |
+| United Kingdom | No estimate | UNVERIFIED | Keep the Market draft and omit public delivery promises |
+| New Zealand | No estimate | UNVERIFIED | Keep the Market draft and omit public delivery promises |
 
 ## Reviews
 

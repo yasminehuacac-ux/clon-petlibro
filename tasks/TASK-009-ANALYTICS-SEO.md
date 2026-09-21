@@ -62,7 +62,7 @@ Instrument the approved semantic events, ensure structured-data consistency, and
 | Search Console / Merchant Center | PARTIAL / LAUNCH GATE | The `relivanow.com` domain property is DNS-verified in Search Console and Shopify's sitemap was submitted. It currently returns HTTP 404 while the storefront redirects to `/password`, so Google reports that it cannot fetch it. Merchant Center account `5857724399` (`Relivanow`, Peru) exists under the approved account; address, countries, products, feed, free listings, Ads, remarketing, and campaigns remain unset. |
 | Development preview | COVERED | Only the 13 TASK-009 theme files were uploaded to development theme `193260781938`. Home/PDP/Search/Collection/Page, responsive layouts, metadata/schema, console/resources, Theme Editor, Judge.me, and read-only Cart Drawer regressions pass; theme `192527597938` remains `live`. |
 
-TASK-009 is `DONE`. The remaining currency, translation, legal/shipping, sitemap-fetch, Merchant onboarding, and authentic-review items are documented launch gates; TASK-010 remains gated by TASK-007 and those launch prerequisites.
+TASK-009 is `DONE`. TASK-007 later closed on the approved authentic zero-review launch baseline. The remaining currency, translation, legal/shipping, sitemap-fetch, Merchant onboarding, regional-runtime and populated-review items are documented launch gates for TASK-010.
 
 ## Required handoff
 

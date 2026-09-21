@@ -1,9 +1,9 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** TASK-002 through TASK-009 complete; final QA remains
-**Active task:** TASK-010 is next; TASK-007 and TASK-009 are `DONE`
-**Last updated:** 2026-09-20
+**Stage:** TASK-002 through TASK-009 complete; TASK-010 release-candidate checkpoint validated with external launch gates remaining
+**Active task:** TASK-010 is `IN PROGRESS`; TASK-007 and TASK-009 are `DONE`
+**Last updated:** 2026-09-21
 
 ## Verified baseline facts
 
@@ -84,6 +84,10 @@
 - Shopify Customer Privacy admin settings retain the automated regional cookie banner with Manage preferences, Accept, Decline, and editable consent categories. Work declined destructive Network Intelligence deactivation after Shopify disclosed Messaging data deletion and automation impact. Judge.me remains `Always active`; regional cookie/request behavior requires release QA. No Meta/TikTok pixel, GA4, Google Ads, or paid campaign was enabled.
 - Search Console domain ownership for `relivanow.com` is verified by Cloudflare TXT. The native sitemap was submitted; `/sitemap.xml` returned HTTP 404 while `/` redirected to `/password`. Google currently cannot fetch it, and the relationship must be retested after release rather than treated as proven causation.
 - Merchant Center account `Relivanow` (`5857724399`, Peru) exists under the approved account. Business address, target countries, products, feed, free listings, Ads, remarketing, campaigns, paid plans, and charges remain unset.
+- TASK-010 final QA found and corrected one reproducible PDP sticky-navigation regression: navigation now binds and rebinds to Horizon's responsive scroll owner, uses stable section offsets while preserving the Product Information hash, includes the 16 px anchor gap plus subpixel tolerance, and resolves the final destination at the scroll limit. Regression tests pass; fresh Purchase/Overview/Reviews checks pass at 1440×900, 1024×768, 768×1024, 390×844 and 360×800, including the live 1024→768 owner transition. Only `assets/relivanow-pdp-navigation.js` was uploaded to development theme `193260781938`.
+- Fresh release-candidate checks pass 23 Node tests, JavaScript syntax for 89 files, repository JSON/JSONC/Liquid-schema and setting-ID contracts, prohibited tracker/claim scans, `git diff --check`, and Theme Check with zero actionable errors after excluding only the documented valid Judge.me app-URI false positive. The six unchanged Horizon warnings remain informational.
+- Fresh browser checks on the development theme pass Home/PDP/Search structure, variant switching, gallery/zoom, Add to Cart, quantity/remove with restoration of the shared cart to 17 items, Cart Drawer focus/Escape, Judge.me's authentic zero state, structured data, console, Theme Editor read-only state, and corrected Purchase/Overview/Reviews navigation. That navigation passes fresh at exact 1440×900, 1024×768, 768×1024, 390×844, and 360×800 viewports with zero overflow.
+- The release candidate has zero open P0/P1 defects. Direct Lighthouse/Core Web Vitals lab scores were unavailable in the controlled authenticated preview, so no score was invented; equivalent loading, image, script, console and layout-reservation evidence is recorded. Minor touch-target/localization/performance observations and all external launch gates are documented in `reports/TASK-010-RESULT.md`.
 
 ## Current blockers
 
@@ -99,6 +103,7 @@
 - The current legacy feeder now exercises one-column Style cards plus Theme Editor-mapped Black/White Color swatches through Horizon's native multi-option picker. Native swatch image/color, Variant `swatch_color`, `style_card_image`, approved style badges, sold-out combinations, and final Cloud White/Graphite states still require representative remote data.
 - Judge.me is installed and technically integrated on the development theme; its exact plan tier remains unverified because no plan or charge was accepted. TASK-007 is complete for the approved zero-review launch, while authentic populated review data remains a future operational input. Shopify Bundles products remain separately gated; subscriptions, financing, analytics/consent, and operational Markets setup are not frozen.
 - TASK-009 is complete under the approved no-tracker baseline. CAD/EUR, human-reviewed translations, shipping/delivery/legal policy completion, storefront release plus sitemap HTTP 200, Merchant onboarding/feed eligibility, and activation-time regional consent/localization regression remain launch gates.
+- TASK-010 cannot move to `DONE` or `READY TO PUBLISH` until CAD/EUR, approved variants/Markets, human-reviewed translations and language publication, legal/shipping/returns, real regional consent, post-password sitemap HTTP 200, Merchant Center onboarding/eligibility, first authentic review follow-up, and post-launch verification are complete.
 - Exact live product, variant, cart, app, and commercial-flow behavior still requires task-specific validation with representative store data.
 - The TASK-001 audit remains a historical static audit; its tooling and runtime limitations accurately describe that audit session, not the current environment.
 - TASK-005 is closed. Representative properties/uploads, selling plans, discounts, app/bundle-controlled lines, Markets money, nested live dialogs, and quick-add/app overlap remain conditional on future real data or integrations; they were not fabricated and do not block the completed drawer-only task.
@@ -106,4 +111,4 @@
 
 ## Active task
 
-TASK-007 is `DONE`: its Judge.me infrastructure and authentic zero-review launch state are validated on unpublished theme `193260781938`; populated behavior remains future operational QA after real buyer reviews exist. TASK-009 is `DONE`: its code, tests, development preview, authorized Markets/privacy/language baseline, Search Console ownership, and Merchant account setup are recorded, with incomplete launch inputs isolated as gates. TASK-002 through TASK-009 are `DONE`; TASK-010 is the next task and must preserve all documented release gates. Active theme `192527597938` remains protected and unchanged.
+TASK-007 is `DONE`: its Judge.me infrastructure and authentic zero-review launch state are validated on unpublished theme `193260781938`; populated behavior remains future operational QA after real buyer reviews exist. TASK-009 is `DONE`: its code, tests, development preview, authorized Markets/privacy/language baseline, Search Console ownership, and Merchant account setup are recorded. TASK-010 is `IN PROGRESS`: the code and development-theme release-candidate checkpoint pass with zero open P0/P1 defects, but external commercial, localization, consent, sitemap, Merchant and post-launch gates remain. Active theme `192527597938` remains protected and unchanged.

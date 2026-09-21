@@ -6,6 +6,8 @@ All notable project changes are recorded here.
 
 ### Added
 
+- TASK-010 release-candidate evidence for the unpublished development theme: fresh full static validation, Home/PDP/Search and Theme Editor browser checks, cart mutation/restoration, authentic Judge.me zero state, structured data, accessibility, equivalent performance measurements, explicit P2 observations, rollback, and unresolved external launch gates.
+- A TASK-006 regression contract requiring PDP sticky navigation to listen to Horizon's responsive scroll container, align its active threshold with the 16 px anchor gap, and preserve the Product Information node as the `Purchase` destination.
 - TASK-009 external closure: draft-safe Shopify Markets for Canada, the approved four-country EU scope, UK, and Australia/New Zealand; unpublished German, Spanish, French, and Dutch; DNS-verified Search Console ownership; submitted native sitemap; and Merchant Center account `5857724399` without products, feeds, listings, Ads, campaigns, plans, or charges.
 - Shopify installed its free first-party Translate & Adapt app immediately when its install control was selected, before permissions or a separate confirmation appeared. This authorization deviation is recorded; no translation, language publication, or automatic uninstall followed.
 - TASK-009 local analytics foundation: one provider-neutral, transport-free `relivanow:analytics` DOM boundary for Product-gallery, eligible add-on, and confirmed FAQ interactions, with event-specific primitive payload allowlists and single-install delegated listeners.
@@ -51,6 +53,8 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- TASK-010 moved from `DRAFT` to `IN PROGRESS`. The release candidate has zero open P0/P1 defects, but it is not `READY TO PUBLISH` while commercial, localization, legal/shipping, regional consent, sitemap, Merchant Center, authentic-review follow-up, and post-launch gates remain.
+- PDP sticky navigation now binds and rebinds to Horizon's responsive scroll owner, uses stable section offsets while preserving the Product Information hash, derives active order from page position rather than merchant-configured menu order, includes the configured anchor gap plus subpixel tolerance, and recognizes the last destination at the scroll limit. Only this JavaScript asset was uploaded to development theme `193260781938`; live theme `192527597938` was not targeted.
 - TASK-007 moved from `IN PROGRESS` to `DONE` after Work approved the authentic Judge.me `No reviews` launch baseline. Populated filters, media, pagination, verified-buyer output, and rating/schema consistency are future operational checks triggered only by real buyer reviews; no review data was fabricated.
 - TASK-009 moved from `IN PROGRESS` to `DONE`. Remaining CAD/EUR, translation, delivery/legal, post-release sitemap-fetch, Merchant onboarding, regional runtime consent/localization regression, and authentic-review requirements are explicit release gates rather than fabricated configuration.
 - TASK-009 moved from `DRAFT` to `IN PROGRESS`. Local implementation, static validation, and unpublished-development-theme preview are complete; provider, consent, Search Console, Merchant Center, and Markets decisions remain external gates.

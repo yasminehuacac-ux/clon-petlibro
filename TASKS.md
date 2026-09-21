@@ -11,7 +11,7 @@
 | TASK-007 | Reviews integration | DONE | Authentic zero-review launch baseline approved; populated behavior deferred to real-review operations | Work |
 | TASK-008 | Home | DONE | Development-theme QA, Theme Editor, PDP/Cart regression, and handoff complete | Work |
 | TASK-009 | Analytics and SEO | DONE | Technical baseline verified; authorized administrative baseline recorded; release gates documented | Work |
-| TASK-010 | Final QA and release | DRAFT | TASK-001–009 complete | Work |
+| TASK-010 | Final QA and release | IN PROGRESS | Release-candidate checkpoint passes with zero open P0/P1; external launch gates remain | Work |
 
 ## Status meanings
 
