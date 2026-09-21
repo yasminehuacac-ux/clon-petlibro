@@ -1,7 +1,7 @@
 # TASK-007 — Judge.me reviews result
 
 **Date:** 2026-09-20
-**Status:** IN PROGRESS — technical checkpoint validated; populated acceptance is `BLOCKED BY AUTHENTIC CONTENT`
+**Status:** DONE — authentic zero-review launch baseline approved; populated behavior is future operational validation
 **Development theme:** `193260781938` (`Development (bfe2c0-DESKTOP-EHRJHE7)`)
 **Protected live theme:** `192527597938` (`Dawn`)
 
@@ -69,7 +69,7 @@ The inspected PDP exposes Organization and ProductGroup JSON-LD. It contains zer
 
 No authentic Judge.me or Shopify reviews were found for the current real Product. No public test review, supplier review, PETLIBRO review, generated testimonial, false verified-buyer state, fabricated customer media, or fake rating/count was created.
 
-The provider-owned zero state is valid and useful, but these cases remain **BLOCKED BY AUTHENTIC CONTENT**:
+Work approved initial launch with this authentic provider-owned zero state. The following become operational checks only after real buyer reviews exist; they are not launch defects and must not be fabricated:
 
 - populated average rating and review count;
 - review content;
@@ -113,7 +113,7 @@ The raw error matches Shopify Theme Tools issue 1144, a reported false positive 
 
 ## 14. TASK-007 status
 
-TASK-007 is **IN PROGRESS**, not DONE. The installation and technical integration are working and pass all zero-state and available runtime gates. The official task also requires filters/media behavior and a verified-buyer visual state, which cannot be truthfully validated without authentic populated reviews. The safe integration is retained as an authorized checkpoint.
+TASK-007 is **DONE** for the approved launch baseline. The installation and technical integration pass all applicable zero-state and available runtime gates: Judge.me is the sole authority, `No reviews` is authentic, and no false rating, count, review, Verified Buyer label, or `AggregateRating` is emitted. Filters, customer media, pagination, verified-buyer output, and populated visible/schema consistency must be validated later using authentic buyer reviews and are not technical defects in the zero-review launch.
 
 ## 15. Commit
 

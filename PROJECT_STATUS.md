@@ -1,8 +1,8 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** TASK-009 complete; TASK-007 authentic-content gate remains
-**Active task:** TASK-007 is `IN PROGRESS`; TASK-009 is `DONE`
+**Stage:** TASK-002 through TASK-009 complete; final QA remains
+**Active task:** TASK-010 is next; TASK-007 and TASK-009 are `DONE`
 **Last updated:** 2026-09-20
 
 ## Verified baseline facts
@@ -73,7 +73,7 @@
 - TASK-006 reconciles the official storytelling/specifications/FAQ scope with the 16 long-form OS 2.0 sections already delivered by TASK-004. The only functional gap was the deferred Purchase/Overview/Specifications/FAQ/Reviews navigation; it now discovers real rendered destinations, hides unavailable links, tracks the active location, and accounts for the dynamic Horizon header without changing the purchase panel.
 - Installation video, camera/monitoring, freshness/reliability, cleaning/compatibility, ecosystem relationships and Judge.me output remain governed by approved-content/data gates. The native Horizon media/recommendation/app-host systems and RELIVANOW sections are ready without fabricated public output.
 - TASK-007 uses Judge.me's official app blocks only on unpublished development theme `193260781938`: Star Ratings in the purchase header, Review Widget in the existing long-form app host, and the core app embed. The native rating block is disabled there to avoid a parallel visible source.
-- The current real product has zero authentic reviews. Judge.me renders its official `No reviews` / first-review CTA state, and the Product JSON-LD contains no false `AggregateRating` or review data. Populated filters, media, pagination, verified-buyer output, and populated schema remain `BLOCKED BY AUTHENTIC CONTENT`.
+- The current real product has zero authentic reviews. Judge.me renders its official `No reviews` / first-review CTA state, and the Product JSON-LD contains no false `AggregateRating` or review data. Work approved this state for launch; populated filters, media, pagination, verified-buyer output, and populated schema become future operational checks after authentic buyer reviews exist.
 - Live theme `192527597938` was checksummed before and after the work; `layout/theme.liquid`, `config/settings_data.json`, and `templates/product.json` remained byte-identical. No publish, paid-plan acceptance, Product/Variant/SEO/media mutation, or cart mutation occurred.
 - TASK-009 adds a provider-neutral, transport-free interaction layer for Product-gallery, add-on, and confirmed FAQ disclosure activity. Shopify standard events remain authoritative for Product, Variant, cart, checkout, and purchase state; no tracker, pixel ID, credential, cookie, storage, endpoint, or personal payload was added.
 - TASK-009 also corrects native SEO boundaries: one Search H1, localized Open Graph metadata, social image alt/Twitter image metadata, stable Organization URL/context, route-aware breadcrumbs, and guards against blank or duplicate Product JSON-LD from featured-product sections.
@@ -97,7 +97,7 @@
 - TASK-004's remaining acceptance evidence is gated only by representative Cloud White/Graphite variants, unavailable Color, compare-at data, approved subtitle/trust/feature/delivery records, final `product.media`, populated add-on/related Products, and Judge.me data. These are documented as `BLOCKED BY TEST DATA`, not fabricated.
 - TASK-004's visual addendum is implemented locally, but exact Color-swatch and related-model acceptance is blocked until Cloud White/Graphite and at least two public, `CONFIRMED` Products are connected through the documented `relivanow.related_models` definition. No remote definition or sample model was created.
 - The current legacy feeder now exercises one-column Style cards plus Theme Editor-mapped Black/White Color swatches through Horizon's native multi-option picker. Native swatch image/color, Variant `swatch_color`, `style_card_image`, approved style badges, sold-out combinations, and final Cloud White/Graphite states still require representative remote data.
-- Judge.me is installed and technically integrated on the development theme; its exact plan tier remains unverified because no plan or charge was accepted. Authentic populated review data is still required for the remaining TASK-007 acceptance cases. Shopify Bundles products remain separately gated; subscriptions, financing, analytics/consent, and operational Markets setup are not frozen.
+- Judge.me is installed and technically integrated on the development theme; its exact plan tier remains unverified because no plan or charge was accepted. TASK-007 is complete for the approved zero-review launch, while authentic populated review data remains a future operational input. Shopify Bundles products remain separately gated; subscriptions, financing, analytics/consent, and operational Markets setup are not frozen.
 - TASK-009 is complete under the approved no-tracker baseline. CAD/EUR, human-reviewed translations, shipping/delivery/legal policy completion, storefront release plus sitemap HTTP 200, Merchant onboarding/feed eligibility, and activation-time regional consent/localization regression remain launch gates.
 - Exact live product, variant, cart, app, and commercial-flow behavior still requires task-specific validation with representative store data.
 - The TASK-001 audit remains a historical static audit; its tooling and runtime limitations accurately describe that audit session, not the current environment.
@@ -106,4 +106,4 @@
 
 ## Active task
 
-TASK-007 remains `IN PROGRESS`: its Judge.me infrastructure is validated on unpublished theme `193260781938`, while populated-review acceptance requires authentic content. TASK-009 is `DONE`: its code, tests, development preview, authorized Markets/privacy/language baseline, Search Console ownership, and Merchant account setup are recorded, with incomplete launch inputs isolated as gates. TASK-002 through TASK-006, TASK-008, and TASK-009 are `DONE`; TASK-010 must not begin until TASK-007 and release prerequisites are satisfied. Active theme `192527597938` remains protected and unchanged.
+TASK-007 is `DONE`: its Judge.me infrastructure and authentic zero-review launch state are validated on unpublished theme `193260781938`; populated behavior remains future operational QA after real buyer reviews exist. TASK-009 is `DONE`: its code, tests, development preview, authorized Markets/privacy/language baseline, Search Console ownership, and Merchant account setup are recorded, with incomplete launch inputs isolated as gates. TASK-002 through TASK-009 are `DONE`; TASK-010 is the next task and must preserve all documented release gates. Active theme `192527597938` remains protected and unchanged.

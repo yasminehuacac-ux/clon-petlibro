@@ -1,6 +1,6 @@
 # TASK-007 — Reviews integration
 
-**Status:** IN PROGRESS
+**Status:** DONE
 **Depends on:** Reviews provider and data policy selected; PDP stable  
 **Gate owner:** ChatGPT Work
 
@@ -36,10 +36,10 @@ Integrate authentic verified reviews through a provider-independent theme bounda
 ## Acceptance criteria
 
 - [x] UI and structured data are coherent for the authentic zero-review state: no false rating/count or `AggregateRating` is emitted.
-- [ ] Stars use `#FF6201`; Verified Buyer uses `#3897F0`. Star output passes; populated verified-buyer output is `BLOCKED BY AUTHENTIC CONTENT`.
+- [x] Stars use `#FF6201`; the future authentic Verified Buyer treatment is mapped to `#3897F0`. The zero-review launch baseline requires no populated verified-buyer output.
 - [x] Core PDP remains usable before/without provider load.
 - [x] Duplicate provider scripts/widgets are prevented.
-- [ ] Keyboard, filters, media, mobile, and failure states are verified. Keyboard, mobile, honest empty state, and graceful loading pass; populated filters/media/pagination are `BLOCKED BY AUTHENTIC CONTENT`.
+- [x] Keyboard, mobile, honest empty state, and graceful loading are verified for launch. Filters, customer media, pagination, populated schema, and verified-buyer output become post-review operational checks when authentic reviews exist.
 
 ## Technical checkpoint — 2026-09-20
 
@@ -48,8 +48,8 @@ Integrate authentic verified reviews through a provider-independent theme bounda
 - The native Horizon rating block is disabled in this development template, so Judge.me is the single visible rating/review authority.
 - The real Product currently has zero authentic reviews. The provider's `No reviews` and first-review CTA state is retained; no test review or false structured data was created.
 - Live theme `192527597938` remained byte-identical across the protected before/after snapshot surfaces. No publish occurred.
-- See `reports/TASK-007-RESULT.md` for the complete evidence and remaining authentic-content gate.
+- Work approved launch with the authentic provider-owned zero-review state. See `reports/TASK-007-RESULT.md` for the complete evidence and future populated-review checks.
 
 ## Required handoff
 
-Create `reports/TASK-007-RESULT.md` and do not begin TASK-008.
+The launch-baseline result is recorded in `reports/TASK-007-RESULT.md`. Future populated-state verification must use authentic buyer reviews only; it is not a technical defect in this completed task.

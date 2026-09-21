@@ -51,6 +51,7 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- TASK-007 moved from `IN PROGRESS` to `DONE` after Work approved the authentic Judge.me `No reviews` launch baseline. Populated filters, media, pagination, verified-buyer output, and rating/schema consistency are future operational checks triggered only by real buyer reviews; no review data was fabricated.
 - TASK-009 moved from `IN PROGRESS` to `DONE`. Remaining CAD/EUR, translation, delivery/legal, post-release sitemap-fetch, Merchant onboarding, regional runtime consent/localization regression, and authentic-review requirements are explicit release gates rather than fabricated configuration.
 - TASK-009 moved from `DRAFT` to `IN PROGRESS`. Local implementation, static validation, and unpublished-development-theme preview are complete; provider, consent, Search Console, Merchant Center, and Markets decisions remain external gates.
 - The cart action fallback now uses Shopify's localized `routes.cart_url`; footer defaults no longer link to generic social-network homepages. Native canonical, robots, sitemap, commerce money, localization, Judge.me, and standard Shopify event ownership remain unchanged.
