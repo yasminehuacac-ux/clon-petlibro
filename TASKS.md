@@ -13,6 +13,7 @@
 | TASK-009 | Analytics and SEO | DONE | Technical baseline verified; authorized administrative baseline recorded; release gates documented | Work |
 | TASK-010 | Final QA and release | IN PROGRESS | Batch 1 accessibility gates pass; six explicit external release gates remain | Work |
 | TASK-011 | Home reference sections — Phase 1 | DONE | User-approved hybrid design; local-only implementation and QA | Work |
+| TASK-012 | PDP reference sections — Phase 2 | DONE | User-approved hybrid design; local-only implementation and static QA | Work |
 
 ## Status meanings
 
@@ -54,3 +55,7 @@ TASK-010 stays `IN PROGRESS`. Its authoritative blockers are exactly: (1) real s
 ## TASK-011 gate
 
 Work explicitly authorized TASK-011 as independent Phase 1 work while TASK-010 remains in progress. Eight new RELIVANOW OS 2.0 sections plus one native `collection-list` instance are appended to Home with all nine instances disabled. The approved active Home is byte-stable at the JSON-object level; `collection-list.liquid` is unchanged; marquee extensions are opt-in. Campaign, community and expert modules fail closed. Local contracts, Theme Check, content/privacy/reference scans and isolated five-viewport QA pass for the implemented code. Real Theme Editor/storefront QA remains pending because no theme upload, editor save, push or publication was authorized.
+
+## TASK-012 gate
+
+Work explicitly authorized TASK-012 as independent Phase 2 work while TASK-010 remains in progress. Six isolated RELIVANOW PDP section types are appended to the confirmed default Product template, all disabled and empty. The first nineteen Product entries remain object-hash stable. UGC, hotspots, editorial proof, highlights, offerings and Complete the Look fail closed until merchant-owned confirmation/data requirements are satisfied. Complete the Look uses native Product/Variant/form/cart ownership and an explicit form-first opt-in that leaves legacy Product forms URL-first. Local contracts, the full Node suite, Theme Check, syntax/schema/scans and exact-width geometry checks pass; visual storefront/Theme Editor QA remains pending because no upload, save or publication was authorized and local `file://` rendering was blocked by browser policy.

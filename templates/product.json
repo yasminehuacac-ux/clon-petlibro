@@ -1046,6 +1046,42 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "reference_pdp_ugc": {
+      "type": "relivanow-pdp-ugc",
+      "blocks": {},
+      "settings": {},
+      "disabled": true
+    },
+    "reference_pdp_hotspots": {
+      "type": "relivanow-shoppable-hotspots",
+      "blocks": {},
+      "settings": {},
+      "disabled": true
+    },
+    "reference_pdp_editorial_proof": {
+      "type": "relivanow-editorial-proof",
+      "blocks": {},
+      "settings": {},
+      "disabled": true
+    },
+    "reference_pdp_highlights": {
+      "type": "relivanow-product-highlights",
+      "blocks": {},
+      "settings": {},
+      "disabled": true
+    },
+    "reference_pdp_offerings": {
+      "type": "relivanow-offerings",
+      "blocks": {},
+      "settings": {},
+      "disabled": true
+    },
+    "reference_pdp_complete_look": {
+      "type": "relivanow-complete-look",
+      "blocks": {},
+      "settings": {},
+      "disabled": true
     }
   },
   "order": [
@@ -1067,6 +1103,12 @@
     "faq_RELI04",
     "reviews_RELI04",
     "final_cta_RELI04",
-    "product_recommendations_qggXJq"
+    "product_recommendations_qggXJq",
+    "reference_pdp_ugc",
+    "reference_pdp_hotspots",
+    "reference_pdp_editorial_proof",
+    "reference_pdp_highlights",
+    "reference_pdp_offerings",
+    "reference_pdp_complete_look"
   ]
 }

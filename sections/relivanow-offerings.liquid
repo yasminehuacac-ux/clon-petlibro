@@ -1,0 +1,135 @@
+<script src="{{ 'relivanow-offerings.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+{% liquid
+  assign valid_benefit_count = 0
+  assign valid_offer_count = 0
+  for block in section.blocks
+    if block.type == 'benefit' and block.settings.verification_status == 'CONFIRMED' and block.settings.icon != blank and block.settings.label != blank
+      assign valid_benefit_count = valid_benefit_count | plus: 1
+    elsif block.type == 'offer' and block.settings.verification_status == 'CONFIRMED' and block.settings.title != blank and block.settings.terms != blank
+      if block.settings.image == blank or block.settings.image_alt != blank
+        assign valid_offer_count = valid_offer_count | plus: 1
+      endif
+    endif
+  endfor
+  assign section_ready = false
+  if section.settings.heading != blank and valid_benefit_count == 4 and valid_offer_count >= 2
+    assign section_ready = true
+  endif
+%}
+
+{% if section_ready or request.design_mode %}
+  <relivanow-offerings class="rn-offerings section section--page-width color-{{ section.settings.color_scheme }}">
+    {% if section_ready %}
+      <div class="rn-offerings__panel">
+        <header class="rn-offerings__header">
+          <h2>{{ section.settings.heading | escape }}</h2>
+          <div class="rn-offerings__controls">
+            <button type="button" data-offerings-scroll="-1" aria-label="{{ 'accessibility.slideshow_previous' | t }}">&larr;</button>
+            <button type="button" data-offerings-scroll="1" aria-label="{{ 'accessibility.slideshow_next' | t }}">&rarr;</button>
+          </div>
+        </header>
+        <div class="rn-offerings__tabs" role="tablist" aria-label="{{ section.settings.heading | escape }}">
+          {% assign benefit_index = 0 %}
+          {% for block in section.blocks %}
+            {% if block.type == 'benefit' and block.settings.verification_status == 'CONFIRMED' and block.settings.icon != blank and block.settings.label != blank %}
+              {% assign benefit_index = benefit_index | plus: 1 %}
+              <button id="RnOfferTab-{{ section.id }}-{{ benefit_index }}" type="button" role="tab" data-benefit-slot="{{ benefit_index }}" aria-selected="{% if benefit_index == 1 %}true{% else %}false{% endif %}" tabindex="{% if benefit_index == 1 %}0{% else %}-1{% endif %}" {{ block.shopify_attributes }}>
+                {{ block.settings.icon | image_url: width: 96 | image_tag: width: 42, height: 42, alt: '', loading: 'lazy' }}
+                <span>{{ block.settings.label | escape }}</span>
+              </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="rn-offerings__rail" data-offerings-rail role="tabpanel" tabindex="0" aria-labelledby="RnOfferTab-{{ section.id }}-1" aria-live="polite">
+          {% assign offer_index = 0 %}
+          {% for block in section.blocks %}
+            {% if block.type == 'offer' and block.settings.verification_status == 'CONFIRMED' and block.settings.title != blank and block.settings.terms != blank %}
+              {% if block.settings.image == blank or block.settings.image_alt != blank %}
+                {% assign offer_index = offer_index | plus: 1 %}
+                <article class="rn-offerings__offer" data-offer-slot="{{ block.settings.benefit_slot }}" {{ block.shopify_attributes }}>
+                  {% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 640 | image_tag: widths: '240, 360, 480, 640', sizes: '240px', alt: block.settings.image_alt, loading: 'lazy' }}{% endif %}
+                  <div>
+                    <h3>{{ block.settings.title | escape }}</h3>
+                    <div class="rte">{{ block.settings.terms }}</div>
+                    {% if block.settings.link != blank and block.settings.link_label != blank %}<a href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a>{% endif %}
+                  </div>
+                </article>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="rn-offerings__dots" aria-hidden="true">{% for index in (1..valid_offer_count) %}<span></span>{% endfor %}</div>
+      </div>
+    {% else %}
+      <div class="rn-offerings__placeholder">Configure four confirmed benefits and at least two approved offers.</div>
+    {% endif %}
+  </relivanow-offerings>
+{% endif %}
+
+{% stylesheet %}
+  .rn-offerings { display: block; padding-block: clamp(32px, 6vw, 72px); }
+  .rn-offerings__placeholder { padding: 24px; border: 1px dashed currentColor; text-align: center; }
+  .rn-offerings__panel { padding: clamp(20px, 4vw, 44px); border-radius: 18px; background: rgb(var(--color-foreground-rgb) / .045); }
+  .rn-offerings__header { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .rn-offerings h2 { margin: 0; overflow-wrap: anywhere; }
+  .rn-offerings__controls { display: flex; gap: 8px; }
+  .rn-offerings button { min-width: 44px; min-height: 44px; cursor: pointer; }
+  .rn-offerings__controls button { border: 1px solid currentColor; border-radius: 999px; background: transparent; color: inherit; }
+  .rn-offerings__tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-block: 26px 18px; }
+  .rn-offerings__tabs button { display: flex; min-width: 0; align-items: center; justify-content: center; gap: 10px; padding: 12px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: inherit; }
+  .rn-offerings__tabs button[aria-selected='true'] { border-color: currentColor; background: rgb(var(--color-background-rgb)); }
+  .rn-offerings__tabs img { width: 42px; height: 42px; object-fit: contain; }
+  .rn-offerings__tabs span { min-width: 0; overflow-wrap: anywhere; }
+  .rn-offerings__rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(360px, 58%); gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .rn-offerings__offer { display: grid; grid-template-columns: minmax(100px, 38%) minmax(0, 1fr); min-width: 0; border-radius: 14px; overflow: hidden; scroll-snap-align: start; background: rgb(var(--color-background-rgb)); }
+  .rn-offerings__offer[hidden] { display: none; }
+  .rn-offerings__offer > img { width: 100%; height: 100%; min-height: 180px; object-fit: cover; }
+  .rn-offerings__offer > div { min-width: 0; padding: 20px; }
+  .rn-offerings__offer h3 { margin-block: 0 8px; overflow-wrap: anywhere; }
+  .rn-offerings__offer a { color: inherit; overflow-wrap: anywhere; }
+  .rn-offerings__dots { display: flex; justify-content: center; gap: 6px; margin-block-start: 14px; }
+  .rn-offerings__dots span { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .35; }
+  @media (max-width: 749px) {
+    .rn-offerings__tabs { grid-template-columns: repeat(4, minmax(88px, 1fr)); overflow-x: auto; }
+    .rn-offerings__tabs button { flex-direction: column; font-size: 12px; }
+    .rn-offerings__rail { grid-auto-columns: 88%; }
+    .rn-offerings__offer { grid-template-columns: 110px minmax(0, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) { .rn-offerings *, .rn-offerings *::before, .rn-offerings *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW offerings",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "benefit", "name": "Confirmed benefit",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Content approval status", "options": [{ "value": "UNCONFIRMED", "label": "Unconfirmed" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNCONFIRMED" },
+        { "type": "image_picker", "id": "icon", "label": "Approved icon" },
+        { "type": "text", "id": "label", "label": "Benefit label" }
+      ]
+    },
+    {
+      "type": "offer", "name": "Approved offer",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Commercial approval status", "options": [{ "value": "UNCONFIRMED", "label": "Unconfirmed" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNCONFIRMED" },
+        { "type": "select", "id": "benefit_slot", "label": "Benefit tab", "options": [{ "value": "1", "label": "1" }, { "value": "2", "label": "2" }, { "value": "3", "label": "3" }, { "value": "4", "label": "4" }], "default": "1" },
+        { "type": "image_picker", "id": "image", "label": "Optional approved image" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text" },
+        { "type": "text", "id": "title", "label": "Approved title" },
+        { "type": "richtext", "id": "terms", "label": "Approved terms" },
+        { "type": "url", "id": "link", "label": "Optional link" },
+        { "type": "text", "id": "link_label", "label": "Optional link label" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW offerings" }]
+}
+{% endschema %}

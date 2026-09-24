@@ -322,6 +322,19 @@ Category navigation remains present and reorderable in Theme Editor but is disab
 
 No default campaign, discount, deadline, expert, UGC, review, claim, Product, Collection, offer label or commercial copy is stored in the nine template instances. Theme Editor guidance is design-mode-only and does not authorize publication.
 
+## TASK-012 PDP reference Phase 2 content — 2026-09-24
+
+| Reference | Allowed source | Publication gate | Phase 2 state |
+|---|---|---|---|
+| PDP UGC | Permissioned merchant media, approved creator handle and up to two real Shopify Products | Heading plus at least three complete `CONFIRMED` items with media and alt | Disabled; empty; public fail-closed |
+| Shoppable image | Approved panoramic image/alt and native Shopify Products | Section `CONFIRMED` plus at least two distinct `CONFIRMED` Products | Disabled; empty; public fail-closed |
+| Editorial proof | Approved editorial image/copy and verified source attribution | Section `CONFIRMED` plus exactly three complete `CONFIRMED` sources | Disabled; empty; public fail-closed; no rating vocabulary/schema |
+| Product Highlights | Approved image/alt/title/body records | Heading plus exactly four complete `CONFIRMED` highlights | Disabled; empty; public fail-closed |
+| Offerings | Approved benefit icons/labels and approved offer title/terms/media/link | Exactly four `CONFIRMED` benefits plus at least two `CONFIRMED` offers | Disabled; empty; public fail-closed; no promotion defaults |
+| Complete the Look | Two distinct available native Shopify Products and optional approved image overrides | Heading plus exactly two `CONFIRMED` Products with featured media | Disabled; empty; public fail-closed; native Variant/price/form/cart data |
+
+No UGC identity, attribution, authority, review, rating, expert, certification, claim, discount, urgency, offer, campaign or Product relationship is prefilled. Editor guidance is visible only in design mode.
+
 ## TASK-006 PDP reconciliation — 2026-09-20
 
 The merchant-editable PDP navigation uses the neutral interface labels `Purchase`, `Overview`, `Specifications`, `FAQ`, and `Reviews`. It publishes only when at least two real destinations render, hides links whose fail-closed sections are absent, and never creates content or claims for those destinations. Installation video, camera/monitoring, freshness/reliability, cleaning/compatibility and ecosystem storytelling remain pending approved evidence; Horizon native media and the existing RELIVANOW sections require no placeholder copy or fabricated asset.

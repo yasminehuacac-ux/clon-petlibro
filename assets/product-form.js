@@ -3,6 +3,7 @@ import { fetchConfig, preloadImage, onAnimationEnd, yieldToMainThread } from '@t
 import { cartPerformance } from '@theme/performance';
 import { morph } from '@theme/morph';
 import { CartLinesUpdateEvent, CartErrorEvent, ProductSelectEvent, StandardEvents } from '@shopify/events';
+import { resolveProductFormVariantId } from './relivanow-product-form-policy.js';
 
 // Error message display duration - gives users time to read the message
 const ERROR_MESSAGE_DISPLAY_DURATION = 10000;
@@ -346,12 +347,12 @@ class ProductFormComponent extends Component {
       productContext?.querySelector('variant-picker input[type="radio"]:checked')
     );
 
-    return (
-      new URL(window.location.href).searchParams.get('variant') ||
-      this.refs.variantId?.value ||
-      selectedVariant?.dataset.variantId ||
-      undefined
-    );
+    return resolveProductFormVariantId({
+      urlVariantId: new URL(window.location.href).searchParams.get('variant'),
+      formVariantId: this.refs.variantId?.value,
+      selectedVariantId: selectedVariant?.dataset.variantId,
+      preferFormVariant: this.dataset.variantSource === 'form',
+    });
   }
 
   /**

@@ -1,0 +1,109 @@
+{% liquid
+  assign valid_proof_count = 0
+  for block in section.blocks
+    if block.type == 'proof' and block.settings.verification_status == 'CONFIRMED' and block.settings.quote != blank and block.settings.source_name != blank
+      assign valid_proof_count = valid_proof_count | plus: 1
+    endif
+  endfor
+  assign section_ready = false
+  if section.settings.verification_status == 'CONFIRMED' and section.settings.image != blank and section.settings.image_alt != blank and section.settings.heading != blank and section.settings.body != blank and valid_proof_count == 3
+    assign section_ready = true
+  endif
+%}
+
+{% if section_ready or request.design_mode %}
+  <section class="rn-editorial color-{{ section.settings.color_scheme }}">
+    {% if section_ready %}
+      <div class="rn-editorial__layout">
+        <div class="rn-editorial__media">
+          {{ section.settings.image | image_url: width: 1800 | image_tag: widths: '550, 750, 1100, 1500, 1800', sizes: '(min-width: 750px) 50vw, 100vw', alt: section.settings.image_alt, loading: 'lazy' }}
+        </div>
+        <div class="rn-editorial__content">
+          {% if section.settings.eyebrow != blank %}<p class="rn-editorial__eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+          <h2>{{ section.settings.heading | escape }}</h2>
+          <div class="rte">{{ section.settings.body }}</div>
+          {% if section.settings.link_label != blank and section.settings.link != blank %}<a class="button button-secondary" href="{{ section.settings.link }}">{{ section.settings.link_label | escape }}</a>{% endif %}
+          <div class="rn-editorial__proofs" role="list" aria-label="{{ section.settings.heading | escape }}">
+            {% for block in section.blocks %}
+              {% if block.type == 'proof' and block.settings.verification_status == 'CONFIRMED' and block.settings.quote != blank and block.settings.source_name != blank %}
+                <figure class="rn-editorial__proof" role="listitem" {{ block.shopify_attributes }}>
+                  <blockquote>{{ block.settings.quote | escape }}</blockquote>
+                  <figcaption>
+                    {% if block.settings.avatar != blank %}{{ block.settings.avatar | image_url: width: 96 | image_tag: width: 48, height: 48, alt: '', loading: 'lazy' }}{% endif %}
+                    <span>
+                      {% if block.settings.source_link != blank %}<a href="{{ block.settings.source_link }}">{{ block.settings.source_name | escape }}</a>{% else %}<b>{{ block.settings.source_name | escape }}</b>{% endif %}
+                      {% if block.settings.source_role != blank %}<small>{{ block.settings.source_role | escape }}</small>{% endif %}
+                    </span>
+                  </figcaption>
+                </figure>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="rn-editorial__placeholder section section--page-width">Confirm the approved image, editorial copy, and exactly three attributed proof records.</div>
+    {% endif %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .rn-editorial { margin-block: clamp(32px, 6vw, 72px); }
+  .rn-editorial__placeholder { padding: 24px; border: 1px dashed currentColor; text-align: center; }
+  .rn-editorial__layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: 620px; }
+  .rn-editorial__media { min-height: 500px; }
+  .rn-editorial__media img { width: 100%; height: 100%; object-fit: cover; }
+  .rn-editorial__content { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: clamp(32px, 6vw, 80px); }
+  .rn-editorial__eyebrow { margin: 0 0 10px; letter-spacing: .08em; text-transform: uppercase; }
+  .rn-editorial h2 { margin-block: 0 16px; overflow-wrap: anywhere; }
+  .rn-editorial .button { min-height: 44px; }
+  .rn-editorial__proofs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-block-start: 32px; }
+  .rn-editorial__proof { min-width: 0; margin: 0; padding: 16px; border: 1px solid rgb(var(--color-foreground-rgb) / .16); border-radius: 12px; }
+  .rn-editorial__proof blockquote { margin: 0 0 16px; overflow-wrap: anywhere; }
+  .rn-editorial__proof figcaption { display: flex; align-items: center; gap: 10px; }
+  .rn-editorial__proof img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+  .rn-editorial__proof span, .rn-editorial__proof small { display: block; min-width: 0; overflow-wrap: anywhere; }
+  .rn-editorial__proof a { color: inherit; }
+  @media (max-width: 989px) { .rn-editorial__proofs { grid-template-columns: 1fr; } }
+  @media (max-width: 749px) {
+    .rn-editorial__layout { grid-template-columns: 1fr; min-height: 0; }
+    .rn-editorial__media { min-height: 0; aspect-ratio: 4 / 3; }
+    .rn-editorial__content { padding: 32px 20px; }
+    .rn-editorial__proofs { grid-auto-flow: column; grid-auto-columns: 82%; grid-template-columns: none; overflow-x: auto; scroll-snap-type: x mandatory; }
+    .rn-editorial__proof { scroll-snap-align: start; }
+  }
+  @media (prefers-reduced-motion: reduce) { .rn-editorial *, .rn-editorial *::before, .rn-editorial *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW editorial",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "max_blocks": 3,
+  "settings": [
+    { "type": "select", "id": "verification_status", "label": "Editorial approval status", "options": [{ "value": "UNCONFIRMED", "label": "Unconfirmed" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNCONFIRMED" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "richtext", "id": "body", "label": "Editorial body" },
+    { "type": "image_picker", "id": "image", "label": "Approved image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "text", "id": "link_label", "label": "Optional link label" },
+    { "type": "url", "id": "link", "label": "Optional link" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "proof", "name": "Attributed proof",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Source approval status", "options": [{ "value": "UNCONFIRMED", "label": "Unconfirmed" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNCONFIRMED" },
+        { "type": "textarea", "id": "quote", "label": "Approved quote" },
+        { "type": "text", "id": "source_name", "label": "Source name" },
+        { "type": "text", "id": "source_role", "label": "Source role or context" },
+        { "type": "image_picker", "id": "avatar", "label": "Optional approved avatar" },
+        { "type": "url", "id": "source_link", "label": "Optional source link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW editorial" }]
+}
+{% endschema %}

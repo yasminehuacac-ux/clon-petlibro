@@ -6,6 +6,9 @@ All notable project changes are recorded here.
 
 ### Added
 
+- TASK-012 PDP Reference Phase 2: six scoped RELIVANOW OS 2.0 sections for UGC dialog, shoppable hotspots, editorial proof, Product Highlights, Offerings and Complete the Look, appended disabled to `templates/product.json` after its nineteen approved entries.
+- Native Product/Variant/money/image/form/cart reuse for Complete the Look, with exact available-option matching and an explicit form-first opt-in that preserves every existing Product form's legacy URL-first behavior.
+- Contract coverage for Product-template immutability, fail-closed confirmation/media/Product gates, duplicate Product rejection, accessible interaction/motion policies, prohibited defaults/remotes/trackers and exact-width local geometry.
 - TASK-011 Home Reference Phase 1: eight scoped RELIVANOW OS 2.0 sections plus one native category-carousel instance, all appended to `templates/index.json` with `disabled: true` and no change to the approved active Home.
 - Contract coverage for Home-object immutability, nine-instance ordering/disablement, native collection-list integrity, opt-in marquee policy, fail-closed campaign/community/expert behavior, countdown parsing, video controls, responsive gallery, and native Product/Collection sourcing.
 - Approved design and execution records for the hybrid implementation, plus local five-viewport fixture evidence and an explicit inventory of missing media/content inputs.
@@ -59,6 +62,7 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- TASK-012 is complete locally without theme upload or publication. The approved active PDP, Home, gallery, primary purchase flow, sticky navigation, Judge.me, Cart Drawer and structured data remain unchanged; real storefront/Theme Editor visual QA is pending.
 - Native marquee runtime now supports distance-based duration and hover-pause opt-out only when explicit opt-in attributes are present; legacy instances keep their existing formula and default hover behavior. `collection-list.liquid` remains unchanged.
 - TASK-011 is complete locally without theme upload or publication. Campaign, community and expert reference sections remain fail-closed; no campaign, discount, expert, UGC, review, claim or commercial content was invented.
 - TASK-010 remains `IN PROGRESS`, with its authoritative release blockers reduced to six: supplier confirmation for White/Black and Single/Dual; authorized card-gateway selection/connection; authorized PayPal Business connection; real checkout testing; policies/shipping/consent/final six-market QA; and later password removal plus sitemap validation.

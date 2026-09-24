@@ -68,6 +68,19 @@ This summary deliberately matches the eight-row source manifest in `docs/CONTENT
 | HOME-REF-07 | Expert cards | Verified identity/credentials, approved avatar/feature media, alts, links and permission | PENDING; section disabled and fail-closed |
 | HOME-REF-09 | Product-offer campaign tile | Approved campaign image/alt/copy/CTA plus at least two real Shopify Products | PENDING; section disabled and fail-closed |
 
+## TASK-012 PDP reference assets
+
+No new binary is committed or remotely loaded. All inputs remain merchant-owned Theme Editor selections or native Shopify Product media.
+
+| Reference section | Required approved input | Current state |
+|---|---|---|
+| PDP UGC | At least three permissioned portrait images or Shopify-hosted videos, creator handles and meaningful alt text | PENDING; disabled and public fail-closed |
+| Shoppable image | One panoramic lifestyle image/alt plus at least two distinct confirmed real Products | PENDING; disabled and public fail-closed |
+| Editorial proof | One hero image/alt plus exactly three approved, attributed source records and optional approved avatars | PENDING; disabled and public fail-closed |
+| Product Highlights | Exactly four approved full-bleed images/alts with approved title/body copy | PENDING; disabled and public fail-closed |
+| Offerings | Four approved icons plus approved offer thumbnails/alts where used | PENDING; disabled and public fail-closed |
+| Complete the Look | Two distinct available Shopify Products with native featured media; optional approved image overrides/alts | PENDING Product relationships; disabled and public fail-closed |
+
 ## Quality rules
 
 - Natural light, warm neutral interiors, real shadows, believable pets.

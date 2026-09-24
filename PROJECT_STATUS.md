@@ -1,8 +1,8 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** TASK-002 through TASK-009 and independent TASK-011 complete; TASK-010 release-candidate checkpoint validated with external launch gates remaining
-**Active task:** TASK-010 is `IN PROGRESS`; independent TASK-011 is `DONE`
+**Stage:** TASK-002 through TASK-009 and independent TASK-011/TASK-012 complete; TASK-010 release-candidate checkpoint validated with external launch gates remaining
+**Active task:** TASK-010 is `IN PROGRESS`; independent TASK-011 and TASK-012 are `DONE`
 **Last updated:** 2026-09-24
 
 ## Verified baseline facts
@@ -96,6 +96,9 @@
 - Independent TASK-011 adds eight focused RELIVANOW Home reference sections and one native `collection-list` carousel instance on branch `feat/relivanow-reference-sections`. All nine template instances are disabled; the previously approved eight Home objects remain unchanged.
 - TASK-011 keeps `collection-list.liquid` byte-identical and places new marquee speed/hover behavior behind explicit data attributes. Campaign, community and expert output requires complete `CONFIRMED` data; Product/Collection rails consume native Shopify objects and publish no default commercial claims.
 - TASK-011 local verification covers the full Node suite, JavaScript syntax, JSON/JSONC and Liquid schema parsing, setting-ID uniqueness, Theme Check, diff/reference/tracker/asset scans, and an isolated exact-width fixture at 1440×900, 1024×768, 768×1024, 390×844 and 360×800. No Shopify theme upload, Theme Editor save, push or publication occurred; real storefront visual QA is pending.
+- Independent TASK-012 adds six isolated, disabled PDP reference instances after the approved nineteen-entry default Product template. UGC, shoppable hotspots, editorial proof, Product Highlights, Offerings and Complete the Look require confirmed merchant-owned content and real Shopify Products; no public placeholder or fabricated commercial/social-proof content ships.
+- TASK-012 preserves the approved Product payload hash and every protected Home/PDP/gallery/sticky-navigation/Judge.me/Cart surface. The only shared runtime change is a tested `data-variant-source="form"` opt-in for secondary native Product forms; all existing Product forms keep the legacy URL-first path.
+- TASK-012 local validation covers the complete Node suite, JavaScript syntax, JSON/JSONC/Liquid schemas, setting IDs, asset/content/privacy/reference scans, raw and diagnostic Theme Check, and a reproducible five-width geometry contract. Browser policy blocked local `file://` visual rendering, and no Shopify upload/save was authorized, so actual storefront/Theme Editor visual and interaction QA remains pending.
 
 ## Current TASK-010 blockers
 

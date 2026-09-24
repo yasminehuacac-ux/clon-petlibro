@@ -1,0 +1,148 @@
+<script src="{{ 'relivanow-pdp-ugc.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+{% liquid
+  assign valid_item_count = 0
+  for block in section.blocks
+    if block.type == 'ugc_item' and block.settings.verification_status == 'CONFIRMED' and block.settings.creator_handle != blank and block.settings.media_alt != blank
+      if block.settings.image != blank or block.settings.video != blank
+        assign valid_item_count = valid_item_count | plus: 1
+      endif
+    endif
+  endfor
+  assign section_ready = false
+  if section.settings.heading != blank and valid_item_count >= 3
+    assign section_ready = true
+  endif
+%}
+
+{% if section_ready or request.design_mode %}
+  <relivanow-pdp-ugc class="rn-pdp-ugc color-{{ section.settings.color_scheme }} section section--page-width" style="--rn-gap: {{ section.settings.gap }}px">
+    {% if section_ready %}
+      <div class="rn-pdp-ugc__header">
+        <div>
+          <h2>{{ section.settings.heading | escape }}</h2>
+          {% if section.settings.supporting_text != blank %}<div class="rte">{{ section.settings.supporting_text }}</div>{% endif %}
+        </div>
+        <div class="rn-pdp-ugc__actions">
+          {% if section.settings.upload_label != blank and section.settings.upload_link != blank %}
+            <a class="button button-secondary" href="{{ section.settings.upload_link }}">{{ section.settings.upload_label | escape }}</a>
+          {% endif %}
+          <button type="button" data-ugc-scroll="-1" aria-label="{{ 'accessibility.slideshow_previous' | t }}">&larr;</button>
+          <button type="button" data-ugc-scroll="1" aria-label="{{ 'accessibility.slideshow_next' | t }}">&rarr;</button>
+        </div>
+      </div>
+      <div class="rn-pdp-ugc__rail" data-ugc-rail role="region" aria-label="{{ section.settings.heading | escape }}">
+        {% for block in section.blocks %}
+          {% if block.type == 'ugc_item' and block.settings.verification_status == 'CONFIRMED' and block.settings.creator_handle != blank and block.settings.media_alt != blank %}
+            {% if block.settings.image != blank or block.settings.video != blank %}
+              <article class="rn-pdp-ugc__card" {{ block.shopify_attributes }}>
+                <button type="button" data-ugc-open="RnUgcDialog-{{ section.id }}-{{ block.id }}" aria-label="{{ block.settings.creator_handle | escape }}">
+                  {% if block.settings.image != blank %}
+                    {{ block.settings.image | image_url: width: 900 | image_tag: widths: '320, 480, 640, 900', sizes: '(min-width: 750px) 33vw, 82vw', alt: block.settings.media_alt, loading: 'lazy' }}
+                  {% else %}
+                    {{ block.settings.video.preview_image | image_url: width: 900 | image_tag: widths: '320, 480, 640, 900', sizes: '(min-width: 750px) 33vw, 82vw', alt: block.settings.media_alt, loading: 'lazy' }}
+                  {% endif %}
+                  <span>@{{ block.settings.creator_handle | remove_first: '@' | escape }}</span>
+                </button>
+              </article>
+              <dialog id="RnUgcDialog-{{ section.id }}-{{ block.id }}" class="rn-pdp-ugc__dialog" data-ugc-dialog aria-label="{{ block.settings.creator_handle | escape }}">
+                <button type="button" class="rn-pdp-ugc__close" data-ugc-close aria-label="{{ 'accessibility.close_dialog' | t }}">&times;</button>
+                <div class="rn-pdp-ugc__modal-media">
+                  {% if block.settings.video != blank %}
+                    {{ block.settings.video | video_tag: controls: true, autoplay: false, loop: false, image_size: '1200x' }}
+                  {% else %}
+                    {{ block.settings.image | image_url: width: 1400 | image_tag: widths: '480, 720, 960, 1400', sizes: '(min-width: 750px) 58vw, 100vw', alt: block.settings.media_alt, loading: 'lazy' }}
+                  {% endif %}
+                </div>
+                <div class="rn-pdp-ugc__modal-copy">
+                  <strong>@{{ block.settings.creator_handle | remove_first: '@' | escape }}</strong>
+                  {% for index in (1..2) %}
+                    {% if index == 1 %}{% assign featured_product = block.settings.product_one %}{% else %}{% assign featured_product = block.settings.product_two %}{% endif %}
+                    {% if featured_product != blank %}
+                      <a class="rn-pdp-ugc__product" href="{{ featured_product.url }}">
+                        {% if featured_product.featured_image %}{{ featured_product.featured_image | image_url: width: 160 | image_tag: width: 80, height: 80, alt: featured_product.featured_image.alt | default: featured_product.title, loading: 'lazy' }}{% endif %}
+                        <span><b>{{ featured_product.title | escape }}</b><small>{{ featured_product.price | money }}</small></span>
+                      </a>
+                    {% endif %}
+                  {% endfor %}
+                  <div class="rn-pdp-ugc__dialog-nav">
+                    <button type="button" data-ugc-move="-1" aria-label="{{ 'accessibility.slideshow_previous' | t }}">&larr;</button>
+                    <button type="button" data-ugc-move="1" aria-label="{{ 'accessibility.slideshow_next' | t }}">&rarr;</button>
+                  </div>
+                </div>
+              </dialog>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="rn-pdp-reference-placeholder">Configure at least three confirmed UGC items with approved media, attribution, and alt text.</div>
+    {% endif %}
+  </relivanow-pdp-ugc>
+{% endif %}
+
+{% stylesheet %}
+  .rn-pdp-ugc { display: block; padding-block: clamp(32px, 6vw, 72px); }
+  .rn-pdp-ugc__header { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-block-end: 24px; }
+  .rn-pdp-ugc__header h2 { margin: 0; overflow-wrap: anywhere; }
+  .rn-pdp-ugc__actions, .rn-pdp-ugc__dialog-nav { display: flex; align-items: center; gap: 8px; }
+  .rn-pdp-ugc button { min-width: 44px; min-height: 44px; cursor: pointer; }
+  .rn-pdp-ugc__actions > button, .rn-pdp-ugc__dialog-nav button, .rn-pdp-ugc__close { border: 1px solid currentColor; border-radius: 999px; background: rgb(var(--color-background-rgb)); color: rgb(var(--color-foreground-rgb)); }
+  .rn-pdp-ugc__rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--rn-gap); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+  .rn-pdp-ugc__card { min-width: 0; scroll-snap-align: start; }
+  .rn-pdp-ugc__card > button { position: relative; display: block; width: 100%; padding: 0; overflow: hidden; border: 0; border-radius: 18px; background: transparent; aspect-ratio: 4 / 5; }
+  .rn-pdp-ugc__card img { width: 100%; height: 100%; object-fit: cover; }
+  .rn-pdp-ugc__card span { position: absolute; inset: auto 16px 14px; padding: 6px 10px; border-radius: 999px; background: rgb(255 255 255 / .9); color: #111; overflow-wrap: anywhere; }
+  .rn-pdp-ugc__dialog { width: min(1040px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 0; border-radius: 18px; overflow: hidden; background: rgb(var(--color-background-rgb)); color: rgb(var(--color-foreground-rgb)); }
+  .rn-pdp-ugc__dialog::backdrop { background: rgb(0 0 0 / .62); }
+  .rn-pdp-ugc__dialog[open] { display: grid; grid-template-columns: minmax(0, 58fr) minmax(260px, 42fr); }
+  .rn-pdp-ugc__modal-media { min-height: 400px; background: #111; }
+  .rn-pdp-ugc__modal-media :is(img, video) { display: block; width: 100%; height: 100%; max-height: calc(100dvh - 32px); object-fit: contain; }
+  .rn-pdp-ugc__modal-copy { display: flex; flex-direction: column; gap: 18px; padding: 52px 24px 24px; min-width: 0; }
+  .rn-pdp-ugc__close { position: absolute; z-index: 2; inset: 8px 8px auto auto; font-size: 24px; }
+  .rn-pdp-ugc__product { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 12px; align-items: center; color: inherit; text-decoration: none; }
+  .rn-pdp-ugc__product img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; }
+  .rn-pdp-ugc__product span, .rn-pdp-ugc__product small { display: block; min-width: 0; overflow-wrap: anywhere; }
+  .rn-pdp-ugc__dialog-nav { margin-block-start: auto; }
+  .rn-pdp-reference-placeholder { padding: 24px; border: 1px dashed currentColor; text-align: center; }
+  @media (max-width: 749px) {
+    .rn-pdp-ugc__header { align-items: start; }
+    .rn-pdp-ugc__actions .button { display: none; }
+    .rn-pdp-ugc__rail { grid-template-columns: none; grid-auto-columns: 82%; }
+    .rn-pdp-ugc__dialog[open] { display: block; overflow-y: auto; }
+    .rn-pdp-ugc__modal-media { min-height: 0; aspect-ratio: 4 / 5; }
+    .rn-pdp-ugc__modal-copy { min-height: 260px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .rn-pdp-ugc *, .rn-pdp-ugc *::before, .rn-pdp-ugc *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW PDP UGC",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "richtext", "id": "supporting_text", "label": "Supporting text" },
+    { "type": "text", "id": "upload_label", "label": "Optional upload link label" },
+    { "type": "url", "id": "upload_link", "label": "Optional upload link" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "range", "id": "gap", "label": "Card gap", "min": 8, "max": 32, "step": 2, "unit": "px", "default": 16 }
+  ],
+  "blocks": [
+    {
+      "type": "ugc_item", "name": "Approved UGC item",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Rights and content status", "options": [{ "value": "UNCONFIRMED", "label": "Unconfirmed" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNCONFIRMED" },
+        { "type": "text", "id": "creator_handle", "label": "Approved creator handle" },
+        { "type": "image_picker", "id": "image", "label": "Approved portrait image" },
+        { "type": "video", "id": "video", "label": "Approved Shopify-hosted video" },
+        { "type": "text", "id": "media_alt", "label": "Media alt text" },
+        { "type": "product", "id": "product_one", "label": "Related product 1" },
+        { "type": "product", "id": "product_two", "label": "Related product 2" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW PDP UGC" }]
+}
+{% endschema %}

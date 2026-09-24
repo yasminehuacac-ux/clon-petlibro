@@ -1,5 +1,20 @@
 # QA matrix
 
+## TASK-012 PDP reference sections — 2026-09-24
+
+| Case | Result | Evidence / remaining gate |
+|---|---|---|
+| Approved PDP preservation | PASS | SHA-256 over the first nineteen Product IDs/objects remains `c20b497611c8b463d5860285d8acbdda745016cbfb9d7a3c58a057ffd57d0200`; all six reference IDs follow them and are disabled with empty blocks/settings. |
+| Native compatibility | PASS STATIC | Product Information, gallery/details, media gallery, sticky navigation, Judge.me and Cart Drawer files are unchanged. `product-form.js` contains only the tested opt-in resolver; legacy forms remain URL-first. |
+| Content and data integrity | PASS | Confirmation/media/attribution/Product gates fail closed; duplicate Products do not satisfy relationship minima. No fabricated UGC, proof, rating, expert, certification, claim, discount, urgency or campaign default exists. |
+| Accessibility and motion | PASS LOCAL CONTRACT | Native dialog/Escape, backdrop close, keyboard tab navigation, responsive hotspot placement, visible native focus, 44 px controls, local scroll owners and reduced-motion rules are covered by executable contracts. |
+| Exact responsive matrix | PASS GEOMETRY / VISUAL PENDING | A local fixture and geometry validator pass 1440×900, 1024×768, 768×1024, 390×844 and 360×800 for root-overflow ownership, card/mini-PDP widths, text wrapping, undistorted-media CSS, rail navigation and 44 px targets. Chrome blocked `file://` rendering by policy, so no screenshot/visual pass is claimed. |
+| Automated suite | PASS | Full Node suite, JavaScript syntax, JSON/JSONC/Liquid schema parsing, setting-ID uniqueness, asset references, prohibited tracker/remote/default scans and `git diff --check` pass. Exact final counts are recorded in `reports/TASK-012-RESULT.md`. |
+| Theme Check | PASS CODE / KNOWN TOOL FALSE POSITIVE | Raw run inspects 373 files and reports only the inherited Judge.me app-URI `JSONMissingBlock` false positive plus six inherited Horizon warnings. Diagnostic run disabling only `JSONMissingBlock` exits zero with the same six warnings and no TASK-012 offense. |
+| Reference hygiene | PASS | Both supplied references resolve only through `.git/info/exclude`, are absent from tracked files and shared `.gitignore` is unchanged. |
+| Real storefront/editor QA | PENDING BY AUTHORIZATION | No theme was uploaded, saved or published. Real Liquid Product data, Theme Editor lifecycle, media crops, option combinations, quick-add/modal behavior and cart regression require a later authorized development-theme session. |
+| Live safety | PASS | No command targeted live theme `192527597938`; no push, Theme Editor Save, theme push or publication occurred. |
+
 ## TASK-011 Home reference sections — 2026-09-24
 
 | Case | Result | Evidence / remaining gate |

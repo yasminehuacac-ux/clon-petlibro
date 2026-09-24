@@ -1,0 +1,129 @@
+<script src="{{ 'product-hotspot.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% render 'quick-add-styles' %}
+{% render 'quick-add-modal-styles' %}
+{% render 'variant-picker-styles' %}
+{% render 'buy-buttons-styles' %}
+
+{% liquid
+  assign valid_product_count = 0
+  assign seen_product_ids = '|'
+  for block in section.blocks
+    assign hotspot_product = block.settings.product
+    if block.type == 'hotspot' and block.settings.verification_status == 'CONFIRMED' and hotspot_product != blank
+      assign product_token = '|' | append: hotspot_product.id | append: '|'
+      unless seen_product_ids contains product_token
+        assign seen_product_ids = seen_product_ids | append: hotspot_product.id | append: '|'
+        assign valid_product_count = valid_product_count | plus: 1
+      endunless
+    endif
+  endfor
+  assign section_ready = false
+  if section.settings.verification_status == 'CONFIRMED' and section.settings.image != blank and section.settings.image_alt != blank and valid_product_count >= 2
+    assign section_ready = true
+  endif
+%}
+
+{% if section_ready or request.design_mode %}
+  <section class="rn-hotspots section section--page-width color-{{ section.settings.color_scheme }}">
+    {% if section_ready %}
+      {% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}</h2>{% endif %}
+      <div class="rn-hotspots__stage" style="--rn-ratio: {{ section.settings.aspect_ratio }};">
+        {{ section.settings.image | image_url: width: 2400 | image_tag: widths: '750, 1100, 1500, 2000, 2400', sizes: '(min-width: 990px) 1200px, 100vw', alt: section.settings.image_alt, loading: 'lazy', class: 'rn-hotspots__image' }}
+        {% assign rendered_product_ids = '|' %}
+        {% for block in section.blocks %}
+          {% assign hotspot_product = block.settings.product %}
+          {% assign product_token = '|' | append: hotspot_product.id | append: '|' %}
+          {% if block.type == 'hotspot' and block.settings.verification_status == 'CONFIRMED' and hotspot_product != blank %}
+            {% unless rendered_product_ids contains product_token %}
+              {% assign rendered_product_ids = rendered_product_ids | append: hotspot_product.id | append: '|' %}
+              <product-hotspot-component
+                class="rn-hotspot"
+                style="left: calc({{ block.settings.x_position }}% - 22px); top: calc({{ block.settings.y_position }}% - 22px);"
+                data-product-url="{{ hotspot_product.url }}"
+                data-product-title="{{ hotspot_product.title | escape }}"
+                data-id="{{ block.id }}"
+                {{ block.shopify_attributes }}
+              >
+                <button class="rn-hotspot__trigger" type="button" ref="trigger" on:click="/handleHotspotClick" aria-label="{{ 'accessibility.show_product_details' | t: product_name: hotspot_product.title }}"></button>
+                <dialog class="rn-hotspot__dialog" ref="dialog" aria-label="{{ 'accessibility.product_details' | t }}">
+                  <a class="rn-hotspot__cover-link" href="{{ hotspot_product.url }}" aria-label="{{ hotspot_product.title | escape }}" ref="productLink"></a>
+                  <div class="rn-hotspot__product">
+                    {% if hotspot_product.featured_image != blank %}
+                      {{ hotspot_product.featured_image | image_url: width: 240 | image_tag: width: 112, height: 112, alt: hotspot_product.featured_image.alt | default: hotspot_product.title, loading: 'lazy' }}
+                    {% endif %}
+                    <div class="rn-hotspot__copy">
+                      <a href="{{ hotspot_product.url }}"><strong>{{ hotspot_product.title | escape }}</strong></a>
+                      {% render 'price', product_resource: hotspot_product %}
+                      {% if hotspot_product.available %}{% render 'quick-add', product: hotspot_product, section_id: section.id, block: block %}{% endif %}
+                    </div>
+                  </div>
+                </dialog>
+              </product-hotspot-component>
+            {% endunless %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="rn-hotspots__placeholder">Confirm the approved panoramic image and at least two distinct product hotspots.</div>
+    {% endif %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .rn-hotspots { padding-block: clamp(32px, 6vw, 72px); }
+  .rn-hotspots__placeholder { padding: 24px; border: 1px dashed currentColor; text-align: center; }
+  .rn-hotspots h2 { margin-block: 0 24px; overflow-wrap: anywhere; }
+  .rn-hotspots__stage { position: relative; aspect-ratio: var(--rn-ratio, 21 / 9); overflow: clip; border-radius: 18px; }
+  .rn-hotspots__image { width: 100%; height: 100%; object-fit: cover; }
+  .rn-hotspot { --button-size: 44px; --hotspot-size: 32px; position: absolute; z-index: 2; width: 44px; height: 44px; display: grid; place-items: center; }
+  .rn-hotspot__trigger { width: 44px; height: 44px; padding: 0; border: 6px solid rgb(255 255 255 / .72); border-radius: 50%; background: rgb(20 20 20 / .78); box-shadow: 0 2px 12px rgb(0 0 0 / .22); cursor: pointer; }
+  .rn-hotspot__trigger::after { content: ''; display: block; width: 8px; height: 8px; margin: auto; border-radius: 50%; background: white; }
+  .rn-hotspot__dialog { position: absolute; z-index: 3; inset: 50% auto auto calc(100% + 8px); width: min(330px, calc(100vw - 64px)); padding: 0; border: 0; border-radius: 12px; overflow: hidden; transform: translateY(-50%); box-shadow: 0 12px 36px rgb(0 0 0 / .2); background: rgb(var(--color-background-rgb)); color: rgb(var(--color-foreground-rgb)); }
+  .rn-hotspot__dialog[open] { display: block; }
+  .rn-hotspot__dialog[data-placement*='left'] { right: calc(100% + 8px); left: auto; }
+  .rn-hotspot__dialog[data-placement*='right'] { right: auto; left: calc(100% + 8px); }
+  .rn-hotspot__dialog:not([data-placement*='center'])[data-placement*='bottom'] { top: 0; bottom: auto; transform: translateY(var(--dialog-vertical-offset, 0)); }
+  .rn-hotspot__dialog:not([data-placement*='center'])[data-placement*='top'] { top: auto; bottom: 0; transform: translateY(var(--dialog-vertical-offset, 0)); }
+  .rn-hotspot__dialog[data-placement*='center'] { right: auto; left: 50%; transform: translateX(-50%); }
+  .rn-hotspot__dialog[data-placement*='center'][data-placement*='bottom'] { top: calc(100% + 8px); bottom: auto; }
+  .rn-hotspot__dialog[data-placement*='center'][data-placement*='top'] { top: auto; bottom: calc(100% + 8px); }
+  .rn-hotspot__product { display: grid; grid-template-columns: 112px minmax(0, 1fr); min-height: 112px; }
+  .rn-hotspot__product > img { width: 112px; height: 112px; object-fit: cover; }
+  .rn-hotspot__copy { display: flex; min-width: 0; flex-direction: column; justify-content: center; gap: 6px; padding: 12px; }
+  .rn-hotspot__copy a { position: relative; z-index: 2; color: inherit; overflow-wrap: anywhere; }
+  .rn-hotspot__cover-link { position: absolute; inset: 0; }
+  .rn-hotspot .quick-add { position: relative; z-index: 2; }
+  .rn-hotspot .quick-add__button { min-width: 44px; min-height: 44px; }
+  @media (max-width: 749px) {
+    .rn-hotspots__stage { aspect-ratio: 4 / 5; }
+    .rn-hotspot__dialog { display: none !important; }
+  }
+  @media (prefers-reduced-motion: reduce) { .rn-hotspots *, .rn-hotspots *::before, .rn-hotspots *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW hotspots",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "select", "id": "verification_status", "label": "Image approval status", "options": [{ "value": "UNCONFIRMED", "label": "Unconfirmed" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNCONFIRMED" },
+    { "type": "text", "id": "heading", "label": "Optional heading" },
+    { "type": "image_picker", "id": "image", "label": "Approved panoramic image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "select", "id": "aspect_ratio", "label": "Desktop image ratio", "options": [{ "value": "21 / 9", "label": "Panoramic" }, { "value": "16 / 9", "label": "Wide" }], "default": "21 / 9" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "hotspot", "name": "Confirmed product hotspot",
+      "settings": [
+        { "type": "select", "id": "verification_status", "label": "Relationship status", "options": [{ "value": "UNCONFIRMED", "label": "Unconfirmed" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNCONFIRMED" },
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "range", "id": "x_position", "label": "Horizontal position", "min": 5, "max": 95, "step": 1, "unit": "%", "default": 50 },
+        { "type": "range", "id": "y_position", "label": "Vertical position", "min": 5, "max": 95, "step": 1, "unit": "%", "default": 50 }
+      ]
+    }
+  ],
+  "presets": [{ "name": "RELIVANOW hotspots" }]
+}
+{% endschema %}
