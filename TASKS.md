@@ -14,6 +14,7 @@
 | TASK-010 | Final QA and release | IN PROGRESS | Batch 1 accessibility gates pass; six explicit external release gates remain | Work |
 | TASK-011 | Home reference sections — Phase 1 | DONE | User-approved hybrid design; local-only implementation and QA | Work |
 | TASK-012 | PDP reference sections — Phase 2 | DONE | User-approved hybrid design; local-only implementation and static QA | Work |
+| TASK-013 | Controlled reference-section deployment | DONE | Exact allowlist uploaded and verified only on development theme `193260781938` | Work |
 
 ## Status meanings
 
@@ -59,3 +60,7 @@ Work explicitly authorized TASK-011 as independent Phase 1 work while TASK-010 r
 ## TASK-012 gate
 
 Work explicitly authorized TASK-012 as independent Phase 2 work while TASK-010 remains in progress. Six isolated RELIVANOW PDP section types are appended to the confirmed default Product template, all disabled and empty. The first nineteen Product entries remain object-hash stable. UGC, hotspots, editorial proof, highlights, offerings and Complete the Look fail closed until merchant-owned confirmation/data requirements are satisfied. Complete the Look uses native Product/Variant/form/cart ownership and an explicit form-first opt-in that leaves legacy Product forms URL-first. Local contracts, the full Node suite, Theme Check, syntax/schema/scans and exact-width geometry checks pass; visual storefront/Theme Editor QA remains pending because no upload, save or publication was authorized and local `file://` rendering was blocked by browser policy.
+
+## TASK-013 gate
+
+Work authorized one controlled upload of the exact TASK-011/TASK-012 theme allowlist to development theme `193260781938`. All 25 authorized files were downloaded back; 23 JavaScript/Liquid files match byte-for-byte and the two Shopify-canonicalized JSON templates match semantically. All 15 reference instances remain disabled. Home, PDP, Search, Judge.me, Cart Drawer, console and desktop/mobile overflow smoke checks pass read-only. Live theme `192527597938` retains byte-identical protected hashes; no Theme Editor Save, publication, live upload, Product/cart mutation, PR or merge occurred.

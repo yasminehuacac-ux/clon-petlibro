@@ -1,5 +1,18 @@
 # QA matrix
 
+## TASK-013 controlled development deployment — 2026-09-24
+
+| Case | Result | Evidence / remaining gate |
+|---|---|---|
+| Git and destination gate | PASS | Clean `feat/relivanow-reference-sections` at deployed commit `49693c95df3d2ccba44da207abb9bfc7dba904c3`, present on its matching origin branch. Shopify roles were verified before and after: `193260781938` development; `192527597938` live. |
+| Exact allowlist | PASS | Only 25 manually reviewed theme-root paths from the authorized commit range were uploaded with explicit repeated `--only` flags and `--nodelete`; docs, reports, tests and references were excluded. |
+| Remote code parity | PASS | Development readback matches all 23 JavaScript/Liquid files byte-for-byte. Shopify canonicalized the two JSON templates, whose normalized semantic SHA-256 values match local exactly. |
+| Disabled instances | PASS | Nine Home and six PDP reference IDs are present in remote development templates with `disabled: true`; none is publicly visible. |
+| Live safety | PASS | Protected live `layout/theme.liquid`, `config/settings_data.json`, `templates/index.json` and `templates/product.json` hashes are identical before/after. No command targeted live. |
+| Storefront smoke | PASS READ-ONLY | Home and PDP pass desktop/mobile visual and overflow checks; Search returns two feeder results with one H1; Judge.me renders authentic `No reviews`; the existing 17-item Cart Drawer opens/closes without mutation; Home/PDP/Search console logs contain no warnings/errors. |
+| Static validation | PASS CODE / KNOWN TOOL FALSE POSITIVE | 51/51 Node tests, 99/99 JavaScript syntax checks and `git diff --check` pass. Raw Theme Check has only the inherited Judge.me app-URI false positive plus six inherited warnings; the diagnostic run has zero errors and the same warnings. |
+| Publication/editor safety | PASS | No publication, Theme Editor Save, live upload, Product/Variant/cart/form mutation, PR or merge occurred. Content/assets and activation remain future merchant work. |
+
 ## TASK-012 PDP reference sections — 2026-09-24
 
 | Case | Result | Evidence / remaining gate |

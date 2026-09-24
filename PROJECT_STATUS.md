@@ -1,8 +1,8 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** TASK-002 through TASK-009 and independent TASK-011/TASK-012 complete; TASK-010 release-candidate checkpoint validated with external launch gates remaining
-**Active task:** TASK-010 is `IN PROGRESS`; independent TASK-011 and TASK-012 are `DONE`
+**Stage:** TASK-002 through TASK-009 and independent TASK-011/TASK-012/TASK-013 complete; TASK-010 release-candidate checkpoint validated with external launch gates remaining
+**Active task:** TASK-010 is `IN PROGRESS`; independent TASK-011, TASK-012 and TASK-013 are `DONE`
 **Last updated:** 2026-09-24
 
 ## Verified baseline facts
@@ -26,6 +26,8 @@
 
 ## Current state
 
+- TASK-013 uploaded only the reviewed 25-file TASK-011/TASK-012 allowlist to development theme `193260781938` with `--nodelete`. Remote readback matches all JavaScript/Liquid files byte-for-byte and both Shopify-canonicalized templates semantically; all 15 reference instances remain disabled.
+- TASK-013 read-only preview QA passes Home, PDP, Search, Judge.me, Cart Drawer, console and basic desktop/mobile overflow. Live theme `192527597938` retained byte-identical protected hashes and was not targeted; no publication or Theme Editor Save occurred.
 - Branding and conversion direction approved.
 - PETLIBRO Home/PDP audit available.
 - Project control documentation added around the untouched theme implementation.

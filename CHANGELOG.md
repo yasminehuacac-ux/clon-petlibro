@@ -6,6 +6,7 @@ All notable project changes are recorded here.
 
 ### Added
 
+- TASK-013 controlled deployment evidence for the exact 25-file TASK-011/TASK-012 allowlist on development theme `193260781938`, including remote readback hashes, live-theme before/after protection and read-only storefront smoke QA.
 - TASK-012 PDP Reference Phase 2: six scoped RELIVANOW OS 2.0 sections for UGC dialog, shoppable hotspots, editorial proof, Product Highlights, Offerings and Complete the Look, appended disabled to `templates/product.json` after its nineteen approved entries.
 - Native Product/Variant/money/image/form/cart reuse for Complete the Look, with exact available-option matching and an explicit form-first opt-in that preserves every existing Product form's legacy URL-first behavior.
 - Contract coverage for Product-template immutability, fail-closed confirmation/media/Product gates, duplicate Product rejection, accessible interaction/motion policies, prohibited defaults/remotes/trackers and exact-width local geometry.
@@ -62,6 +63,7 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- TASK-013 is complete: all 15 reference instances remain disabled on development, Home/PDP/Search/Judge.me/Cart Drawer/console/overflow checks pass read-only, and live theme `192527597938` is byte-identical across its protected snapshot. No publication, Theme Editor Save, PR or merge occurred.
 - TASK-012 is complete locally without theme upload or publication. The approved active PDP, Home, gallery, primary purchase flow, sticky navigation, Judge.me, Cart Drawer and structured data remain unchanged; real storefront/Theme Editor visual QA is pending.
 - Native marquee runtime now supports distance-based duration and hover-pause opt-out only when explicit opt-in attributes are present; legacy instances keep their existing formula and default hover behavior. `collection-list.liquid` remains unchanged.
 - TASK-011 is complete locally without theme upload or publication. Campaign, community and expert reference sections remain fail-closed; no campaign, discount, expert, UGC, review, claim or commercial content was invented.
