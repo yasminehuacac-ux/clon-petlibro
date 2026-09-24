@@ -1,0 +1,256 @@
+<script src="{{ 'relivanow-countdown.js' | asset_url }}" type="module" fetchpriority="low"></script>
+<script src="{{ 'relivanow-video-card.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+{% liquid
+  assign valid_block_count = 0
+  for block in section.blocks
+    if block.settings.verification_status == 'CONFIRMED' and block.settings.image_alt != blank
+      if block.settings.image != blank or block.settings.video != blank
+        assign valid_block_count = valid_block_count | plus: 1
+      endif
+    endif
+  endfor
+
+  assign now_epoch = 'now' | date: '%s' | plus: 0
+  assign end_epoch = section.settings.end_at | date: '%s' | plus: 0
+  assign timestamp_has_time = false
+  assign timestamp_has_timezone = false
+  assign timezone_marker = section.settings.end_at | slice: -6, 1
+  if section.settings.end_at contains 'T'
+    assign timestamp_has_time = true
+  endif
+  if section.settings.end_at contains 'Z' or timezone_marker == '+' or timezone_marker == '-'
+    assign timestamp_has_timezone = true
+  endif
+  assign deadline_is_future = false
+  if timestamp_has_time and timestamp_has_timezone and end_epoch > now_epoch
+    assign deadline_is_future = true
+  endif
+
+  assign should_render = false
+  if section.settings.campaign_status == 'CONFIRMED' and section.settings.heading != blank and section.settings.end_at != blank and deadline_is_future and valid_block_count >= 2
+    assign should_render = true
+  endif
+%}
+
+{% if should_render %}
+  <section
+    class="relivanow-campaign-grid section section--{{ section.settings.section_width }}"
+    style="--relivanow-campaign-bg: {{ section.settings.background_color }}; --relivanow-campaign-color: {{ section.settings.text_color }}; --relivanow-campaign-gap: {{ section.settings.gap }}px;"
+  >
+    <div class="relivanow-campaign-grid__header">
+      <div>
+        {% if section.settings.eyebrow != blank %}<p class="relivanow-campaign-grid__eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+        <h2>{{ section.settings.heading | escape }}</h2>
+        {% if section.settings.text != blank %}<div class="rte">{{ section.settings.text }}</div>{% endif %}
+      </div>
+      <relivanow-countdown class="relivanow-campaign-grid__countdown" data-end-at="{{ section.settings.end_at | escape }}" aria-label="Campaign countdown">
+        <span><strong data-countdown-days>00</strong><small>Days</small></span>
+        <span><strong data-countdown-hours>00</strong><small>Hours</small></span>
+        <span><strong data-countdown-minutes>00</strong><small>Minutes</small></span>
+        <span><strong data-countdown-seconds>00</strong><small>Seconds</small></span>
+      </relivanow-countdown>
+    </div>
+
+    <div class="relivanow-campaign-grid__cards">
+      {% assign rendered_card_index = 0 %}
+      {% for block in section.blocks %}
+        {% liquid
+          assign card_is_valid = false
+          if block.settings.verification_status == 'CONFIRMED' and block.settings.image_alt != blank
+            if block.settings.image != blank or block.settings.video != blank
+              assign card_is_valid = true
+            endif
+          endif
+        %}
+        {% if card_is_valid %}
+          {% assign rendered_card_index = rendered_card_index | plus: 1 %}
+          <article class="relivanow-campaign-grid__card relivanow-campaign-grid__card--{{ rendered_card_index }}" {{ block.shopify_attributes }}>
+            {% if block.settings.link != blank %}<a href="{{ block.settings.link }}" aria-label="{{ block.settings.link_label | default: block.settings.heading | escape }}">{% endif %}
+              {% if block.settings.video != blank %}
+                {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, preload: 'metadata', class: 'relivanow-campaign-grid__media', data-relivanow-background-video: '' }}
+              {% else %}
+                {{
+                  block.settings.image
+                  | image_url: width: 1600
+                  | image_tag:
+                    widths: '480, 720, 960, 1200, 1600',
+                    sizes: '(min-width: 990px) 50vw, 100vw',
+                    loading: 'lazy',
+                    alt: block.settings.image_alt,
+                    class: 'relivanow-campaign-grid__media'
+                }}
+              {% endif %}
+              {% if block.settings.heading != blank or block.settings.text != blank %}
+                <div class="relivanow-campaign-grid__copy">
+                  {% if block.settings.heading != blank %}<h3>{{ block.settings.heading | escape }}</h3>{% endif %}
+                  {% if block.settings.text != blank %}<p>{{ block.settings.text | escape }}</p>{% endif %}
+                </div>
+              {% endif %}
+            {% if block.settings.link != blank %}</a>{% endif %}
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+{% elsif request.design_mode %}
+  <div class="relivanow-reference-empty" data-relivanow-editor-placeholder>
+    Campaign grid is fail-closed. Confirm the campaign, add a valid future ISO-8601 end date, and configure at least two CONFIRMED media cards.
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-campaign-grid {
+    padding-block: clamp(3rem, 7vw, 7rem);
+    color: var(--relivanow-campaign-color);
+    background: var(--relivanow-campaign-bg);
+  }
+
+  .relivanow-campaign-grid__header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2rem;
+    align-items: end;
+    margin-bottom: 2rem;
+  }
+
+  .relivanow-campaign-grid__header h2,
+  .relivanow-campaign-grid__eyebrow {
+    margin: 0;
+  }
+
+  .relivanow-campaign-grid__header h2 {
+    max-width: 14ch;
+    font-size: clamp(2.25rem, 5vw, 5rem);
+    line-height: 0.95;
+    text-wrap: balance;
+  }
+
+  .relivanow-campaign-grid__countdown {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(3.5rem, 1fr));
+    gap: 0.5rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .relivanow-campaign-grid__countdown span {
+    display: grid;
+    gap: 0.25rem;
+    text-align: center;
+  }
+
+  .relivanow-campaign-grid__countdown strong {
+    font-size: clamp(1.5rem, 3vw, 3rem);
+  }
+
+  .relivanow-campaign-grid__countdown small {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+  }
+
+  .relivanow-campaign-grid__cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(15rem, 32vw);
+    gap: var(--relivanow-campaign-gap);
+  }
+
+  .relivanow-campaign-grid__card {
+    position: relative;
+    min-height: 20rem;
+    overflow: hidden;
+    background: #f0f1ed;
+  }
+
+  .relivanow-campaign-grid__card--1 {
+    grid-row: span 2;
+  }
+
+  .relivanow-campaign-grid__card > a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+  }
+
+  .relivanow-campaign-grid__media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .relivanow-campaign-grid__copy {
+    position: absolute;
+    inset: auto 1.25rem 1.25rem;
+    padding: 1rem;
+    color: #fff;
+    background: rgb(0 0 0 / 45%);
+  }
+
+  .relivanow-campaign-grid__copy :is(h3, p) {
+    margin: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .relivanow-campaign-grid__header {
+      grid-template-columns: 1fr;
+    }
+
+    .relivanow-campaign-grid__cards {
+      grid-template-columns: 1fr;
+      grid-auto-rows: minmax(22rem, 120vw);
+    }
+
+    .relivanow-campaign-grid__card--1 {
+      grid-row: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .relivanow-campaign-grid__media {
+      animation: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW campaign grid",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "campaign_card",
+      "name": "Campaign card",
+      "settings": [
+        { "type": "text", "id": "verification_status", "label": "Verification status", "info": "Enter CONFIRMED only after content and media approval." },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "video", "id": "video", "label": "Shopify-hosted video" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "text", "label": "Text" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "text", "id": "link_label", "label": "Link accessibility label" }
+      ]
+    }
+  ],
+  "settings": [
+    { "type": "text", "id": "campaign_status", "label": "Campaign status", "info": "Enter CONFIRMED only after campaign approval." },
+    { "type": "text", "id": "end_at", "label": "End date and time", "info": "ISO-8601 format with timezone, for example 2027-01-31T23:59:00-05:00." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }],
+      "default": "page-width"
+    },
+    { "type": "range", "id": "gap", "label": "Card gap", "min": 4, "max": 32, "step": 2, "unit": "px", "default": 12 },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#171817" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#FFFFFF" }
+  ],
+  "presets": [{ "name": "RELIVANOW campaign grid" }]
+}
+{% endschema %}

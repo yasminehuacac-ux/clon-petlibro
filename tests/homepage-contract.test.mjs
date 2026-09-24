@@ -84,7 +84,8 @@ test('Home product story consumes native Product data and approved media', () =>
 
 test('Home template follows the conversion sequence and keeps one H1 owner', () => {
   const template = jsonTemplate('templates/index.json');
-  const types = template.order.map((id) => template.sections[id].type);
+  const approvedHomeIds = template.order.slice(0, 8);
+  const types = approvedHomeIds.map((id) => template.sections[id].type);
   const feederHandle = 'automatic-pet-feeder-with-remote-control-and-timed-feeding';
 
   assert.deepEqual(types, [

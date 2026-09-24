@@ -320,7 +320,102 @@
         "padding-block-start": 64,
         "padding-block-end": 64
       }
+    },
+    "reference_promotion_marquee": {
+      "type": "relivanow-promotion-marquee",
+      "disabled": true,
+      "blocks": {},
+      "block_order": [],
+      "name": "Reference 1 — Promotion",
+      "settings": {}
+    },
+    "reference_video_slideshow": {
+      "type": "relivanow-video-slideshow",
+      "disabled": true,
+      "blocks": {},
+      "block_order": [],
+      "name": "Reference 2 — Video",
+      "settings": {}
+    },
+    "reference_image_gallery": {
+      "type": "relivanow-image-gallery",
+      "disabled": true,
+      "blocks": {},
+      "block_order": [],
+      "name": "Reference 3 — Gallery",
+      "settings": {}
+    },
+    "reference_campaign_grid": {
+      "type": "relivanow-campaign-grid",
+      "disabled": true,
+      "blocks": {},
+      "block_order": [],
+      "name": "Reference 4 — Campaign",
+      "settings": {}
+    },
+    "reference_category_carousel": {
+      "type": "collection-list",
+      "disabled": true,
+      "blocks": {},
+      "block_order": [],
+      "name": "Reference 5 — Categories",
+      "settings": {
+        "collection_list": [],
+        "layout_type": "carousel",
+        "columns": 5,
+        "mobile_card_size": "44cqw"
+      }
+    },
+    "reference_community_videos": {
+      "type": "relivanow-community-videos",
+      "disabled": true,
+      "blocks": {},
+      "block_order": [],
+      "name": "Reference 6 — Community",
+      "settings": {}
+    },
+    "reference_expert_cards": {
+      "type": "relivanow-expert-cards",
+      "disabled": true,
+      "blocks": {},
+      "block_order": [],
+      "name": "Reference 7 — Experts",
+      "settings": {}
+    },
+    "reference_trending_grid": {
+      "type": "relivanow-trending-grid",
+      "disabled": true,
+      "blocks": {},
+      "block_order": [],
+      "name": "Reference 8 — Trending",
+      "settings": {}
+    },
+    "reference_product_offers": {
+      "type": "relivanow-product-offers",
+      "disabled": true,
+      "blocks": {},
+      "block_order": [],
+      "name": "Reference 9 — Products",
+      "settings": {}
     }
   },
-  "order": ["home_hero", "home_benefits", "home_categories", "home_products", "home_story_routine", "home_story_connected", "home_reviews", "home_final_cta"]
+  "order": [
+    "home_hero",
+    "home_benefits",
+    "home_categories",
+    "home_products",
+    "home_story_routine",
+    "home_story_connected",
+    "home_reviews",
+    "home_final_cta",
+    "reference_promotion_marquee",
+    "reference_video_slideshow",
+    "reference_image_gallery",
+    "reference_campaign_grid",
+    "reference_category_carousel",
+    "reference_community_videos",
+    "reference_expert_cards",
+    "reference_trending_grid",
+    "reference_product_offers"
+  ]
 }

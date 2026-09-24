@@ -306,6 +306,22 @@ All component variant IDs/quantities, compatibility, inventory, margin, CPA, AOV
 
 Category navigation remains present and reorderable in Theme Editor but is disabled publicly until real merchant collections and category media exist. Promotion/bundle, ecosystem, UGC/social, press/testimonial, and dedicated manifesto modules are omitted rather than populated with provisional claims or assets. Existing Shopify Product media is an approved runtime fallback for the completed Home; hero and story instances enable the editor-controlled safe crop so embedded supplier copy stays outside the visible frame. This runtime treatment does not promote the external HOME-01 files to uploaded/publication-approved status.
 
+## TASK-011 Home reference Phase 1 content — 2026-09-24
+
+| Reference | Allowed source | Publication gate | Phase 1 state |
+|---|---|---|---|
+| Promotion marquee | Merchant-entered approved text/link only | At least one nonblank item | Disabled; empty |
+| Video slideshow | Approved Shopify video or YouTube/Vimeo source, poster, segmented approved heading/copy/CTA | Slide status exactly `CONFIRMED` plus media | Disabled; empty; heading defaults to H2 |
+| Image gallery | Approved Shopify images, alt, label and link | Selected primary image; links remain editor-configured | Disabled; empty |
+| Campaign grid/countdown | Approved campaign copy/media and real future ISO-8601 end time | Campaign `CONFIRMED`, heading, future deadline, at least two `CONFIRMED` media+alt blocks | Disabled; empty; public fail-closed |
+| Category carousel | Native Shopify Collections | Real selected collection list and approved collection media | Disabled; empty native `collection-list` instance |
+| Community videos | Permissioned Shopify video/poster/alt/caption | Heading plus at least two `CONFIRMED` video+alt blocks | Disabled; empty; public fail-closed |
+| Expert cards | Verified identity, credential, permissioned media/alt/link/headline | Heading plus at least two complete `CONFIRMED` experts | Disabled; empty; public fail-closed |
+| Trending grid | Native selected Shopify Product or Collection | Nonblank entity selection | Disabled; empty; native title/URL/image only |
+| Product offer rail | Approved campaign tile plus native Shopify Products | Campaign `CONFIRMED`, image+alt, heading, CTA+link and at least two Products | Disabled; empty; price/compare-at remain Shopify-native |
+
+No default campaign, discount, deadline, expert, UGC, review, claim, Product, Collection, offer label or commercial copy is stored in the nine template instances. Theme Editor guidance is design-mode-only and does not authorize publication.
+
 ## TASK-006 PDP reconciliation — 2026-09-20
 
 The merchant-editable PDP navigation uses the neutral interface labels `Purchase`, `Overview`, `Specifications`, `FAQ`, and `Reviews`. It publishes only when at least two real destinations render, hides links whose fail-closed sections are absent, and never creates content or claims for those destinations. Installation video, camera/monitoring, freshness/reliability, cleaning/compatibility and ecosystem storytelling remain pending approved evidence; Horizon native media and the existing RELIVANOW sections require no placeholder copy or fabricated asset.

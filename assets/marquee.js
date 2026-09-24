@@ -1,5 +1,6 @@
 import { Component } from '@theme/component';
 import { debounce } from '@theme/utilities';
+import { calculateMarqueeDuration, shouldPauseOnHover } from './relivanow-marquee-policy.js';
 
 const ANIMATION_OPTIONS = {
   duration: 500,
@@ -26,16 +27,23 @@ class MarqueeComponent extends Component {
 
     const { numberOfCopies } = await this.#queryNumberOfCopies();
 
-    const speed = this.#calculateSpeed(numberOfCopies);
+    const legacySpeed = this.#calculateSpeed(numberOfCopies);
 
     this.#addRepeatedItems(numberOfCopies);
     this.#duplicateContent();
 
+    const speed =
+      this.getAttribute('data-speed-mode') === 'distance'
+        ? this.#calculateSpeed(numberOfCopies, this.refs.content.scrollWidth)
+        : legacySpeed;
+
     this.#setSpeed(speed);
 
     window.addEventListener('resize', this.#handleResize);
-    this.addEventListener('pointerenter', this.#slowDown);
-    this.addEventListener('pointerleave', this.#speedUp);
+    if (shouldPauseOnHover(this.getAttribute('data-pause-on-hover'))) {
+      this.addEventListener('pointerenter', this.#slowDown);
+      this.addEventListener('pointerleave', this.#speedUp);
+    }
   }
 
   disconnectedCallback() {
@@ -145,30 +153,38 @@ class MarqueeComponent extends Component {
   /**
    * @param {number} numberOfCopies
    */
-  #calculateSpeed(numberOfCopies) {
+  #calculateSpeed(numberOfCopies, loopDistance = 0) {
     const speedFactor = Number(this.getAttribute('data-speed-factor'));
-    const speed = Math.sqrt(numberOfCopies) * speedFactor;
+    const secondsPer100 = Number(this.getAttribute('data-seconds-per-100'));
 
-    return speed;
+    return calculateMarqueeDuration({
+      copyCount: numberOfCopies,
+      speedFactor,
+      speedMode: this.getAttribute('data-speed-mode'),
+      loopDistance,
+      secondsPer100,
+    });
   }
 
   #handleResize = debounce(async () => {
     const { marqueeItems } = this.refs;
-    const { newNumberOfCopies, isHorizontalResize } = await this.#queryNumberOfCopies();
+    const result = await this.#queryNumberOfCopies();
+    const { newNumberOfCopies, isHorizontalResize } = result;
+    const targetNumberOfCopies =
+      this.getAttribute('data-speed-mode') === 'distance' ? result.numberOfCopies : newNumberOfCopies;
 
     // opt out of marquee manipulation on vertical resizes
     if (!isHorizontalResize) return;
 
     const currentNumberOfCopies = marqueeItems.length;
-    const speed = this.#calculateSpeed(newNumberOfCopies);
-
-    if (newNumberOfCopies > currentNumberOfCopies) {
-      this.#addRepeatedItems(newNumberOfCopies - currentNumberOfCopies);
-    } else if (newNumberOfCopies < currentNumberOfCopies) {
-      this.#removeRepeatedItems(currentNumberOfCopies - newNumberOfCopies);
+    if (targetNumberOfCopies > currentNumberOfCopies) {
+      this.#addRepeatedItems(targetNumberOfCopies - currentNumberOfCopies);
+    } else if (targetNumberOfCopies < currentNumberOfCopies) {
+      this.#removeRepeatedItems(currentNumberOfCopies - targetNumberOfCopies);
     }
 
     this.#duplicateContent();
+    const speed = this.#calculateSpeed(targetNumberOfCopies, this.refs.content.scrollWidth);
     this.#setSpeed(speed);
     this.#restartAnimation();
   }, 250);

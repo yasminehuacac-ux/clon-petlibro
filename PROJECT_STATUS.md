@@ -1,9 +1,9 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** TASK-002 through TASK-009 complete; TASK-010 release-candidate checkpoint validated with external launch gates remaining
-**Active task:** TASK-010 is `IN PROGRESS`; TASK-007 and TASK-009 are `DONE`
-**Last updated:** 2026-09-21
+**Stage:** TASK-002 through TASK-009 and independent TASK-011 complete; TASK-010 release-candidate checkpoint validated with external launch gates remaining
+**Active task:** TASK-010 is `IN PROGRESS`; independent TASK-011 is `DONE`
+**Last updated:** 2026-09-24
 
 ## Verified baseline facts
 
@@ -93,6 +93,9 @@
 - Read-only payments discovery confirms Peru as the store's legal country and records only the actual options visible in Admin: Mercado Pago Tarjetas, Mercado Pago Checkout Pro and PayPal Express. Tarjetas + PayPal is the conditional UX recommendation; international/currency support for the six launch markets remains unproven until authorized connection and real checkout testing. No account, credential, bank, contract, provider, plan or charge state changed.
 - United States remains active in inherited USD; Canada and the Germany/Belgium/Spain/France EU market remain draft. English remains published; German, Spanish, French and Dutch remain unpublished. White/Black and Single/Dual remain supplier references only; no Product, Variant, price, inventory or media state changed.
 - Only six accessibility implementation files were uploaded to development theme `193260781938`. Theme list still reports `192527597938` as live, and its three protected snapshot files exactly match their historical byte sizes and SHA-256 values.
+- Independent TASK-011 adds eight focused RELIVANOW Home reference sections and one native `collection-list` carousel instance on branch `feat/relivanow-reference-sections`. All nine template instances are disabled; the previously approved eight Home objects remain unchanged.
+- TASK-011 keeps `collection-list.liquid` byte-identical and places new marquee speed/hover behavior behind explicit data attributes. Campaign, community and expert output requires complete `CONFIRMED` data; Product/Collection rails consume native Shopify objects and publish no default commercial claims.
+- TASK-011 local verification covers the full Node suite, JavaScript syntax, JSON/JSONC and Liquid schema parsing, setting-ID uniqueness, Theme Check, diff/reference/tracker/asset scans, and an isolated exact-width fixture at 1440×900, 1024×768, 768×1024, 390×844 and 360×800. No Shopify theme upload, Theme Editor save, push or publication occurred; real storefront visual QA is pending.
 
 ## Current TASK-010 blockers
 

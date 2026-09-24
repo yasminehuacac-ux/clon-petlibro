@@ -1,5 +1,21 @@
 # QA matrix
 
+## TASK-011 Home reference sections — 2026-09-24
+
+| Case | Result | Evidence / remaining gate |
+|---|---|---|
+| Approved Home preservation | PASS | SHA-256 contract over the first eight Home IDs/objects remains `1cac7b0b9b26aa9f7c7ea55cba71fdb7b7c5afddb8addc8da04a1a7c53cf1ef9`; all nine reference IDs follow them and are disabled. |
+| Native-instance compatibility | PASS | `sections/collection-list.liquid` remains SHA-256 `1A80F7000E2C9BC0A33B1E67A8BF9CCA7E01E6961454B23C9E82430117ABA553`. Marquee tests preserve the legacy duration/hover defaults and verify the new distance/hover controls only through opt-in attributes. |
+| Content integrity | PASS | No default campaign, discount, deadline, expert, UGC, review, claim, offer label, Product or Collection was added. Sections 4, 6 and 7 require complete `CONFIRMED` data and at least two valid media blocks before public output. |
+| Data ownership | PASS | Trending reads selected Product/Collection titles, URLs and featured images. Product offers read native Product title, URL, image, price and compare-at price; custom labels require separate `CONFIRMED` status. |
+| Accessibility/motion | PASS LOCAL CONTRACT | Real buttons/links, focus styles, alt gates/fallbacks, `h2` default for the disabled video hero, scroll snapping and reduced-motion branches are present. A long-heading regression test enforces emergency wrapping on narrow viewports. |
+| Exact responsive matrix | PASS ISOLATED FIXTURE | Chrome headless and browser DOM measurements at 1440×900, 1024×768, 768×1024, 390×844 and 360×800 report zero root/unexpected overflow. Trending resolves 8/8/4/3/3 columns; campaign 2/2/2/1/1; expert cards switch to the mobile horizontal flow below 750 px. Desktop/mobile long captures were visually inspected. |
+| Automated suite | PASS | 38/38 Node tests pass; all 94 JavaScript modules pass `node --check` (87 theme assets plus 7 test modules); JSON/JSONC parsing, Liquid schema parsing, setting-ID uniqueness, asset-reference scan and `git diff --check` pass. |
+| Theme Check | PASS CODE / KNOWN TOOL FALSE POSITIVE | Raw run inspects 367 files and reports only the inherited Judge.me app-URI `JSONMissingBlock` false positive plus six inherited Horizon warnings. Diagnostic run disabling only `JSONMissingBlock` exits zero with the same six warnings and no TASK-011 offense. |
+| Reference hygiene | PASS | Both supplied references resolve only through `.git/info/exclude` and are absent from tracked files. `.gitignore` is unchanged. |
+| Real storefront/editor QA | PENDING BY AUTHORIZATION | No theme was uploaded, saved or published. Real Shopify rendering, Theme Editor add/reorder/save lifecycle and approved-media crop QA require a later authorized development-theme session. |
+| Live safety | PASS | No command targeted live theme `192527597938`; no push, Theme Editor Save, theme push or publication occurred. |
+
 ## TASK-010 Release Gates Batch 1 — 2026-09-21
 
 | Case | Result | Evidence / remaining gate |

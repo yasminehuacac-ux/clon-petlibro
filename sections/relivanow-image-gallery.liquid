@@ -1,0 +1,174 @@
+{% liquid
+  assign valid_card_count = 0
+  for block in section.blocks
+    if block.settings.image != blank
+      assign valid_card_count = valid_card_count | plus: 1
+    endif
+  endfor
+%}
+
+{% if valid_card_count > 0 %}
+  <section
+    class="relivanow-image-gallery section section--{{ section.settings.section_width }}"
+    style="--relivanow-gallery-gap: {{ section.settings.gap }}px; --relivanow-gallery-bg: {{ section.settings.background_color }}; --relivanow-gallery-color: {{ section.settings.text_color }};"
+  >
+    {% if section.settings.heading != blank %}<h2 class="relivanow-image-gallery__heading">{{ section.settings.heading | escape }}</h2>{% endif %}
+    <div class="relivanow-image-gallery__rail" role="list" aria-label="{{ section.settings.accessibility_label | escape }}">
+      {% for block in section.blocks %}
+        {% if block.settings.image != blank %}
+          <article class="relivanow-image-gallery__card" role="listitem" {{ block.shopify_attributes }}>
+            {% if block.settings.link != blank %}
+              <a href="{{ block.settings.link }}" {% if block.settings.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}>
+            {% endif %}
+            <div class="relivanow-image-gallery__media">
+              {{
+                block.settings.image
+                | image_url: width: 1200
+                | image_tag:
+                  widths: '320, 480, 720, 960, 1200',
+                  sizes: '(min-width: 990px) 20vw, 48vw',
+                  loading: 'lazy',
+                  alt: block.settings.image_alt,
+                  class: 'relivanow-image-gallery__image'
+              }}
+              {% if block.settings.hover_image != blank %}
+                {{
+                  block.settings.hover_image
+                  | image_url: width: 1200
+                  | image_tag:
+                    widths: '320, 480, 720, 960, 1200',
+                    sizes: '(min-width: 990px) 20vw, 48vw',
+                    loading: 'lazy',
+                    alt: '',
+                    class: 'relivanow-image-gallery__image relivanow-image-gallery__image--hover'
+                }}
+              {% endif %}
+            </div>
+            {% if block.settings.label != blank %}<span class="relivanow-image-gallery__label">{{ block.settings.label | escape }}</span>{% endif %}
+            {% if block.settings.link != blank %}</a>{% endif %}
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+{% elsif request.design_mode %}
+  <div class="relivanow-reference-empty" data-relivanow-editor-placeholder>
+    Select approved images to preview this gallery.
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-image-gallery {
+    padding-block: clamp(3rem, 7vw, 6rem);
+    color: var(--relivanow-gallery-color);
+    background: var(--relivanow-gallery-bg);
+  }
+
+  .relivanow-image-gallery__heading {
+    margin: 0 0 1.5rem;
+    text-wrap: balance;
+  }
+
+  .relivanow-image-gallery__rail {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - (var(--relivanow-gallery-gap) * 4)) / 5);
+    gap: var(--relivanow-gallery-gap);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+
+  .relivanow-image-gallery__card {
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .relivanow-image-gallery__card a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .relivanow-image-gallery__media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    background: #f0f1ed;
+  }
+
+  .relivanow-image-gallery__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .relivanow-image-gallery__image--hover {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 240ms ease;
+  }
+
+  .relivanow-image-gallery__label {
+    display: block;
+    padding-block: 0.8rem;
+    font-weight: 600;
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .relivanow-image-gallery__card:hover .relivanow-image-gallery__image--hover,
+    .relivanow-image-gallery__card:focus-within .relivanow-image-gallery__image--hover {
+      opacity: 1;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .relivanow-image-gallery__rail {
+      grid-auto-columns: calc((100% - var(--relivanow-gallery-gap)) / 2.1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .relivanow-image-gallery__image--hover {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW image gallery",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Gallery card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "image_picker", "id": "hover_image", "label": "Hover image" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text" },
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "checkbox", "id": "open_in_new_tab", "label": "Open in new tab", "default": false }
+      ]
+    }
+  ],
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "text", "id": "accessibility_label", "label": "Accessibility label", "default": "Image gallery" },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [{ "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }],
+      "default": "page-width"
+    },
+    { "type": "range", "id": "gap", "label": "Card gap", "min": 4, "max": 32, "step": 2, "unit": "px", "default": 12 },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#FFFFFF" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#171817" }
+  ],
+  "presets": [{ "name": "RELIVANOW image gallery" }]
+}
+{% endschema %}

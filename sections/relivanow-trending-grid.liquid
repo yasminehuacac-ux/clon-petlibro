@@ -1,0 +1,168 @@
+{% liquid
+  assign valid_item_count = 0
+  for block in section.blocks
+    if block.settings.source_type == 'product' and block.settings.product != blank
+      assign valid_item_count = valid_item_count | plus: 1
+    elsif block.settings.source_type == 'collection' and block.settings.collection != blank
+      assign valid_item_count = valid_item_count | plus: 1
+    endif
+  endfor
+%}
+
+{% if valid_item_count > 0 %}
+  <section
+    class="relivanow-trending-grid section section--page-width"
+    style="--relivanow-trending-bg: {{ section.settings.background_color }}; --relivanow-trending-color: {{ section.settings.text_color }}; --relivanow-trending-gap: {{ section.settings.gap }}px; --relivanow-trending-ratio: {{ section.settings.image_ratio }};"
+  >
+    {% if section.settings.heading != blank %}<h2 class="relivanow-trending-grid__heading">{{ section.settings.heading | escape }}</h2>{% endif %}
+    <div class="relivanow-trending-grid__grid" role="list">
+      {% for block in section.blocks %}
+        {% liquid
+          assign entity = blank
+          if block.settings.source_type == 'product' and block.settings.product != blank
+            assign entity = block.settings.product
+          elsif block.settings.source_type == 'collection' and block.settings.collection != blank
+            assign entity = block.settings.collection
+          endif
+
+          assign entity_image = block.settings.image
+          if entity_image == blank and entity != blank
+            assign entity_image = entity.featured_image
+          endif
+        %}
+        {% if entity != blank %}
+          <article class="relivanow-trending-grid__item" role="listitem" {{ block.shopify_attributes }}>
+            <a href="{{ entity.url }}">
+              <div class="relivanow-trending-grid__media">
+                {% if entity_image != blank %}
+                  {{
+                    entity_image
+                    | image_url: width: 900
+                    | image_tag:
+                      widths: '180, 260, 360, 540, 720, 900',
+                      sizes: '(min-width: 990px) 12.5vw, 33vw',
+                      loading: 'lazy',
+                      alt: block.settings.image_alt | default: entity.title
+                  }}
+                {% endif %}
+              </div>
+              <span>{{ entity.title | escape }}</span>
+            </a>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+{% elsif request.design_mode %}
+  <div class="relivanow-reference-empty" data-relivanow-editor-placeholder>
+    Select real Shopify products or collections to preview this grid.
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-trending-grid {
+    padding-block: clamp(3rem, 7vw, 6rem);
+    color: var(--relivanow-trending-color);
+    background: var(--relivanow-trending-bg);
+  }
+
+  .relivanow-trending-grid__heading {
+    margin: 0 0 2rem;
+    font-size: clamp(2rem, 4vw, 4rem);
+    text-wrap: balance;
+  }
+
+  .relivanow-trending-grid__grid {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: var(--relivanow-trending-gap);
+  }
+
+  .relivanow-trending-grid__item,
+  .relivanow-trending-grid__item a {
+    min-width: 0;
+  }
+
+  .relivanow-trending-grid__item a {
+    display: grid;
+    gap: 0.65rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .relivanow-trending-grid__media {
+    overflow: hidden;
+    aspect-ratio: var(--relivanow-trending-ratio);
+    background: #f0f1ed;
+  }
+
+  .relivanow-trending-grid__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 240ms ease;
+  }
+
+  .relivanow-trending-grid__item a:is(:hover, :focus-visible) img {
+    transform: scale(1.025);
+  }
+
+  @media screen and (max-width: 989px) {
+    .relivanow-trending-grid__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .relivanow-trending-grid__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .relivanow-trending-grid__media img {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW trending",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "max_blocks": 16,
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Trending item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "source_type",
+          "label": "Source",
+          "options": [{ "value": "product", "label": "Product" }, { "value": "collection", "label": "Collection" }],
+          "default": "product"
+        },
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "image_picker", "id": "image", "label": "Optional image override" },
+        { "type": "text", "id": "image_alt", "label": "Override image alt text" }
+      ]
+    }
+  ],
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading" },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [{ "value": "1 / 1", "label": "Square" }, { "value": "4 / 5", "label": "Portrait" }],
+      "default": "1 / 1"
+    },
+    { "type": "range", "id": "gap", "label": "Grid gap", "min": 4, "max": 24, "step": 2, "unit": "px", "default": 12 },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#FFFFFF" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#171817" }
+  ],
+  "presets": [{ "name": "RELIVANOW trending" }]
+}
+{% endschema %}

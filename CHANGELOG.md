@@ -6,6 +6,9 @@ All notable project changes are recorded here.
 
 ### Added
 
+- TASK-011 Home Reference Phase 1: eight scoped RELIVANOW OS 2.0 sections plus one native category-carousel instance, all appended to `templates/index.json` with `disabled: true` and no change to the approved active Home.
+- Contract coverage for Home-object immutability, nine-instance ordering/disablement, native collection-list integrity, opt-in marquee policy, fail-closed campaign/community/expert behavior, countdown parsing, video controls, responsive gallery, and native Product/Collection sourcing.
+- Approved design and execution records for the hybrid implementation, plus local five-viewport fixture evidence and an explicit inventory of missing media/content inputs.
 - TASK-010 Release Gates Batch 1 evidence: the documented secondary Home, PDP, Judge.me, newsletter, payment and footer controls now expose at least 44 px targets through the existing design token; fresh mouse, keyboard, mobile-pointer and five-viewport checks pass on development theme `193260781938`.
 - Read-only payment discovery for the store's Peru legal country records the three actual Admin options: Mercado Pago Tarjetas, Mercado Pago Checkout Pro and PayPal Express. No provider, account, credential, bank detail, term, subscription or charge was created or changed; the recommended Tarjetas + PayPal combination remains conditional on real six-market checkout validation.
 - Fresh Batch 1 proof for 26 Node tests, 90 JavaScript syntax checks, JSON/JSONC, 51 locale files, Liquid schemas, setting IDs, tracker absence, `git diff --check`, Theme Check, Home/PDP/Search/Judge.me/Cart Drawer regression, and byte-identical protected live-theme hashes.
@@ -56,6 +59,8 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- Native marquee runtime now supports distance-based duration and hover-pause opt-out only when explicit opt-in attributes are present; legacy instances keep their existing formula and default hover behavior. `collection-list.liquid` remains unchanged.
+- TASK-011 is complete locally without theme upload or publication. Campaign, community and expert reference sections remain fail-closed; no campaign, discount, expert, UGC, review, claim or commercial content was invented.
 - TASK-010 remains `IN PROGRESS`, with its authoritative release blockers reduced to six: supplier confirmation for White/Black and Single/Dual; authorized card-gateway selection/connection; authorized PayPal Business connection; real checkout testing; policies/shipping/consent/final six-market QA; and later password removal plus sitemap validation.
 - The accessibility-only correction preserves existing visual treatment while normalizing actual interactive targets for product-card Choose, View all, newsletter submit, Judge.me rating/review actions, More payment options and footer utilities. No Product, Variant, price, inventory, media, Market, language or live-theme configuration changed.
 - TASK-010 moved from `DRAFT` to `IN PROGRESS`. The release candidate has zero open P0/P1 defects, but it is not `READY TO PUBLISH` while commercial, localization, legal/shipping, regional consent, sitemap, Merchant Center, authentic-review follow-up, and post-launch gates remain.

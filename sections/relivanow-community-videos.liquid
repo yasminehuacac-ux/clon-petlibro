@@ -1,0 +1,181 @@
+<script src="{{ 'relivanow-video-card.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+{% liquid
+  assign valid_block_count = 0
+  for block in section.blocks
+    if block.settings.verification_status == 'CONFIRMED' and block.settings.video != blank and block.settings.image_alt != blank
+      assign valid_block_count = valid_block_count | plus: 1
+    endif
+  endfor
+
+  assign should_render = false
+  if section.settings.heading != blank and valid_block_count >= 2
+    assign should_render = true
+  endif
+%}
+
+{% if should_render %}
+  <section
+    class="relivanow-community-videos section section--page-width"
+    style="--relivanow-community-bg: {{ section.settings.background_color }}; --relivanow-community-color: {{ section.settings.text_color }}; --relivanow-community-gap: {{ section.settings.gap }}px;"
+  >
+    <div class="relivanow-community-videos__header">
+      <h2>{{ section.settings.heading | escape }}</h2>
+      {% if section.settings.text != blank %}<div class="rte">{{ section.settings.text }}</div>{% endif %}
+    </div>
+    <div class="relivanow-community-videos__rail" role="list">
+      {% for block in section.blocks %}
+        {% if block.settings.verification_status == 'CONFIRMED' and block.settings.video != blank and block.settings.image_alt != blank %}
+          <relivanow-video-card class="relivanow-community-videos__card" role="listitem" {{ block.shopify_attributes }}>
+            <div class="relivanow-community-videos__media">
+              {% if block.settings.poster != blank %}
+                {{
+                  block.settings.poster
+                  | image_url: width: 900
+                  | image_tag:
+                    widths: '320, 480, 720, 900',
+                    sizes: '(min-width: 990px) 20vw, 46vw',
+                    loading: 'lazy',
+                    alt: block.settings.image_alt,
+                    class: 'relivanow-community-videos__poster'
+                }}
+              {% endif %}
+              {{ block.settings.video | video_tag: autoplay: false, loop: true, muted: true, controls: false, preload: 'metadata', poster: nil, class: 'relivanow-community-videos__video' }}
+              <button type="button" class="relivanow-community-videos__play" aria-label="Play video">
+                <span aria-hidden="true">▶</span>
+              </button>
+            </div>
+            {% if block.settings.caption != blank %}<p>{{ block.settings.caption | escape }}</p>{% endif %}
+          </relivanow-video-card>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+{% elsif request.design_mode %}
+  <div class="relivanow-reference-empty" data-relivanow-editor-placeholder>
+    Community videos are fail-closed. Add a heading and at least two approved videos with CONFIRMED status and meaningful alt text.
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-community-videos {
+    padding-block: clamp(3rem, 7vw, 6rem);
+    color: var(--relivanow-community-color);
+    background: var(--relivanow-community-bg);
+  }
+
+  .relivanow-community-videos__header {
+    max-width: 48rem;
+    margin-bottom: 2rem;
+  }
+
+  .relivanow-community-videos__header h2 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 4rem);
+    text-wrap: balance;
+  }
+
+  .relivanow-community-videos__rail {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - (var(--relivanow-community-gap) * 4)) / 5);
+    gap: var(--relivanow-community-gap);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+  }
+
+  .relivanow-community-videos__card {
+    display: block;
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .relivanow-community-videos__media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    background: #171817;
+  }
+
+  .relivanow-community-videos__poster,
+  .relivanow-community-videos__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .relivanow-community-videos__poster {
+    z-index: 1;
+  }
+
+  .relivanow-community-videos__play {
+    position: absolute;
+    z-index: 2;
+    inset: 50% auto auto 50%;
+    display: grid;
+    width: 3.5rem;
+    height: 3.5rem;
+    padding: 0;
+    border: 1px solid rgb(255 255 255 / 70%);
+    border-radius: 50%;
+    place-items: center;
+    color: #171817;
+    background: rgb(255 255 255 / 90%);
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+  }
+
+  .relivanow-community-videos__play:focus-visible {
+    outline: 3px solid currentcolor;
+    outline-offset: 3px;
+  }
+
+  .relivanow-community-videos__card[playing] .relivanow-community-videos__poster,
+  .relivanow-community-videos__card[playing] .relivanow-community-videos__play {
+    opacity: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .relivanow-community-videos__rail {
+      grid-auto-columns: calc((100% - var(--relivanow-community-gap)) / 2.1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .relivanow-community-videos__rail {
+      scroll-behavior: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW community",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "max_blocks": 10,
+  "blocks": [
+    {
+      "type": "video_card",
+      "name": "Community video",
+      "settings": [
+        { "type": "text", "id": "verification_status", "label": "Verification status", "info": "Enter CONFIRMED only after permission and content approval." },
+        { "type": "video", "id": "video", "label": "Approved Shopify-hosted video" },
+        { "type": "image_picker", "id": "poster", "label": "Poster image" },
+        { "type": "text", "id": "image_alt", "label": "Media alt text" },
+        { "type": "text", "id": "caption", "label": "Approved caption" }
+      ]
+    }
+  ],
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Approved heading" },
+    { "type": "richtext", "id": "text", "label": "Approved introduction" },
+    { "type": "range", "id": "gap", "label": "Card gap", "min": 4, "max": 32, "step": 2, "unit": "px", "default": 12 },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#FFFFFF" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#171817" }
+  ],
+  "presets": [{ "name": "RELIVANOW community" }]
+}
+{% endschema %}

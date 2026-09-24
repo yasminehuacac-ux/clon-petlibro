@@ -1,0 +1,302 @@
+<script src="{{ 'slideshow.js' | asset_url }}" type="module" fetchpriority="low"></script>
+<script src="{{ 'relivanow-video-card.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+{% liquid
+  assign valid_slide_count = 0
+  for block in section.blocks
+    if block.settings.verification_status == 'CONFIRMED'
+      if block.settings.video != blank or block.settings.external_video != blank or block.settings.desktop_poster != blank
+        assign valid_slide_count = valid_slide_count | plus: 1
+      endif
+    endif
+  endfor
+%}
+
+{% if valid_slide_count > 0 %}
+  {% capture controls %}
+    {% if valid_slide_count > 1 %}
+      {% render 'slideshow-controls',
+        style: 'dots',
+        autoplay: section.settings.autoplay,
+        item_count: valid_slide_count,
+        show_arrows: false,
+        arrows_on_media: true,
+        controls_on_media: true,
+        pagination_position: 'center',
+        icon_style: 'none'
+      %}
+    {% endif %}
+  {% endcapture %}
+
+  {% capture slides %}
+    {% assign valid_slide_index = 0 %}
+    {% for block in section.blocks %}
+      {% liquid
+        assign slide_is_valid = false
+        if block.settings.verification_status == 'CONFIRMED'
+          if block.settings.video != blank or block.settings.external_video != blank or block.settings.desktop_poster != blank
+            assign slide_is_valid = true
+          endif
+        endif
+      %}
+      {% if slide_is_valid %}
+        {% capture slide_children %}
+          <div class="relivanow-video-slideshow__media">
+            {% if block.settings.desktop_poster != blank %}
+              <picture>
+                {% if block.settings.mobile_poster != blank %}
+                  <source
+                    media="(max-width: 749px)"
+                    srcset="{{ block.settings.mobile_poster | image_url: width: 960 }}"
+                  >
+                {% endif %}
+                {{
+                  block.settings.desktop_poster
+                  | image_url: width: 2400
+                  | image_tag:
+                    widths: '750, 1100, 1500, 2000, 2400',
+                    sizes: '100vw',
+                    loading: 'lazy',
+                    class: 'relivanow-video-slideshow__poster',
+                    alt: block.settings.image_alt
+                }}
+              </picture>
+            {% endif %}
+            {% if block.settings.video != blank %}
+              {{
+                block.settings.video
+                | video_tag:
+                  autoplay: true,
+                  loop: true,
+                  muted: true,
+                  controls: false,
+                  preload: 'metadata',
+                  class: 'relivanow-video-slideshow__video',
+                  data-relivanow-background-video: ''
+              }}
+            {% elsif block.settings.external_video != blank %}
+              {{
+                block.settings.external_video
+                | external_video_tag:
+                  autoplay: false,
+                  loop: true,
+                  muted: true,
+                  controls: true,
+                  class: 'relivanow-video-slideshow__video'
+              }}
+            {% endif %}
+            <span class="relivanow-video-slideshow__overlay" style="--overlay-opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"></span>
+          </div>
+          <div class="relivanow-video-slideshow__content relivanow-video-slideshow__content--{{ block.settings.content_position }}" {{ block.shopify_attributes }}>
+            {% if block.settings.eyebrow != blank %}<p class="relivanow-video-slideshow__eyebrow">{{ block.settings.eyebrow | escape }}</p>{% endif %}
+            {% if block.settings.heading_prefix != blank or block.settings.heading_highlight != blank or block.settings.heading_suffix != blank %}
+              <{{ section.settings.heading_tag }} class="relivanow-video-slideshow__heading">
+                {{ block.settings.heading_prefix | escape }}
+                {% if block.settings.heading_highlight != blank %}<em>{{ block.settings.heading_highlight | escape }}</em>{% endif %}
+                {{ block.settings.heading_suffix | escape }}
+              </{{ section.settings.heading_tag }}>
+            {% endif %}
+            {% if block.settings.text != blank %}<div class="relivanow-video-slideshow__text rte">{{ block.settings.text }}</div>{% endif %}
+            {% if block.settings.cta_label != blank and block.settings.cta_link != blank %}
+              <a class="button" href="{{ block.settings.cta_link }}">{{ block.settings.cta_label | escape }}</a>
+            {% endif %}
+          </div>
+        {% endcapture %}
+        {% render 'slideshow-slide', index: valid_slide_index, children: slide_children, class: 'relivanow-video-slideshow__slide', slide_size: section.settings.section_height %}
+        {% assign valid_slide_index = valid_slide_index | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+  {% endcapture %}
+
+  <section
+    class="relivanow-video-slideshow"
+    style="--relivanow-video-bg: {{ section.settings.background_color }}; --relivanow-video-color: {{ section.settings.text_color }}; --relivanow-video-highlight: {{ section.settings.highlight_color }};"
+    aria-label="{{ section.settings.accessibility_label | escape }}"
+  >
+    {% render 'slideshow',
+      class: 'relivanow-video-slideshow__component',
+      controls: controls,
+      autoplay: section.settings.autoplay,
+      autoplay_speed: section.settings.autoplay_speed,
+      slides: slides,
+      slide_count: valid_slide_count,
+      slide_size: section.settings.section_height,
+      show_arrows: false,
+      infinite: true
+    %}
+  </section>
+{% elsif request.design_mode %}
+  <div class="relivanow-reference-empty" data-relivanow-editor-placeholder>
+    Add a slide with CONFIRMED status and approved media to preview this section.
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-video-slideshow {
+    color: var(--relivanow-video-color);
+    background: var(--relivanow-video-bg);
+  }
+
+  .relivanow-video-slideshow__component,
+  .relivanow-video-slideshow__slide {
+    position: relative;
+  }
+
+  .relivanow-video-slideshow__media,
+  .relivanow-video-slideshow__media picture,
+  .relivanow-video-slideshow__poster,
+  .relivanow-video-slideshow__video,
+  .relivanow-video-slideshow__overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .relivanow-video-slideshow__poster,
+  .relivanow-video-slideshow__video {
+    object-fit: cover;
+  }
+
+  .relivanow-video-slideshow__overlay {
+    background: rgb(0 0 0 / var(--overlay-opacity, 0.25));
+  }
+
+  .relivanow-video-slideshow__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-height: inherit;
+    width: min(100%, 48rem);
+    padding: clamp(2rem, 6vw, 6rem);
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .relivanow-video-slideshow__content--center-right,
+  .relivanow-video-slideshow__content--bottom-right {
+    margin-inline-start: auto;
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .relivanow-video-slideshow__content--bottom-left,
+  .relivanow-video-slideshow__content--bottom-right {
+    justify-content: flex-end;
+  }
+
+  .relivanow-video-slideshow__heading,
+  .relivanow-video-slideshow__eyebrow,
+  .relivanow-video-slideshow__text {
+    margin: 0;
+    color: inherit;
+  }
+
+  .relivanow-video-slideshow__heading {
+    max-width: 13ch;
+    font-size: clamp(2.25rem, 5.5vw, 6rem);
+    line-height: 0.95;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  .relivanow-video-slideshow__heading em {
+    color: var(--relivanow-video-highlight);
+    font-style: normal;
+  }
+
+  .relivanow-video-slideshow slideshow-controls {
+    bottom: 1.5rem;
+  }
+
+  .relivanow-video-slideshow .slideshow-controls__dots button::after {
+    width: clamp(2.5rem, 7vw, 6rem);
+    height: 0.18rem;
+    border-radius: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .relivanow-video-slideshow__content {
+      width: 100%;
+      padding: 1.5rem;
+    }
+
+    .relivanow-video-slideshow__heading {
+      font-size: clamp(2rem, 11vw, 4rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .relivanow-video-slideshow slideshow-slides,
+    .relivanow-video-slideshow__content {
+      scroll-behavior: auto;
+      animation: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW video hero",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Video slide",
+      "settings": [
+        { "type": "text", "id": "verification_status", "label": "Verification status", "info": "Enter CONFIRMED only after content and media approval." },
+        { "type": "video", "id": "video", "label": "Shopify-hosted video" },
+        { "type": "video_url", "id": "external_video", "label": "YouTube or Vimeo video", "accept": ["youtube", "vimeo"] },
+        { "type": "image_picker", "id": "desktop_poster", "label": "Desktop poster" },
+        { "type": "image_picker", "id": "mobile_poster", "label": "Mobile poster" },
+        { "type": "text", "id": "image_alt", "label": "Poster alt text" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "heading_prefix", "label": "Heading before highlight" },
+        { "type": "text", "id": "heading_highlight", "label": "Highlighted heading text" },
+        { "type": "text", "id": "heading_suffix", "label": "Heading after highlight" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "text", "id": "cta_label", "label": "Button label" },
+        { "type": "url", "id": "cta_link", "label": "Button link" },
+        {
+          "type": "select",
+          "id": "content_position",
+          "label": "Content position",
+          "options": [
+            { "value": "center-left", "label": "Center left" },
+            { "value": "center-right", "label": "Center right" },
+            { "value": "bottom-left", "label": "Bottom left" },
+            { "value": "bottom-right", "label": "Bottom right" }
+          ],
+          "default": "center-right"
+        },
+        { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 25 }
+      ]
+    }
+  ],
+  "settings": [
+    { "type": "text", "id": "accessibility_label", "label": "Accessibility label", "default": "Featured media" },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading level",
+      "options": [{ "value": "h2", "label": "H2" }, { "value": "h1", "label": "H1" }],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "section_height",
+      "label": "Height",
+      "options": [{ "value": "medium", "label": "Medium" }, { "value": "large", "label": "Large" }],
+      "default": "large"
+    },
+    { "type": "checkbox", "id": "autoplay", "label": "Auto-rotate slides", "default": false },
+    { "type": "range", "id": "autoplay_speed", "label": "Seconds per slide", "min": 3, "max": 9, "step": 1, "unit": "s", "default": 5 },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#171817" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#FFFFFF" },
+    { "type": "color", "id": "highlight_color", "label": "Highlight", "default": "#D9FF43" }
+  ],
+  "presets": [{ "name": "RELIVANOW video hero" }]
+}
+{% endschema %}

@@ -61,6 +61,12 @@ This summary deliberately matches the eight-row source manifest in `docs/CONTENT
 | HOME-05 | Ecosystem banner | Feeder/fountain relationship | PENDING |
 | HOME-06 | UGC/social | Usage rights and real context | PENDING |
 | HOME-07 | Brand manifesto | Emotional lifestyle scene | PENDING |
+| HOME-REF-02 | Reference video slideshow | Up to four approved Shopify videos or YouTube/Vimeo sources, desktop/mobile posters, rights, alt text | PENDING; section disabled and fail-closed per slide |
+| HOME-REF-03 | 3:4 image gallery | Approved primary/hover pairs, destination links, alt text | PENDING; section disabled |
+| HOME-REF-04 | Campaign grid | Approved campaign media, meaningful alts, rights, future ISO-8601 end time | PENDING; section disabled and fail-closed |
+| HOME-REF-06 | Community videos | Permissioned Shopify videos, posters, alts and approved captions | PENDING; section disabled and fail-closed |
+| HOME-REF-07 | Expert cards | Verified identity/credentials, approved avatar/feature media, alts, links and permission | PENDING; section disabled and fail-closed |
+| HOME-REF-09 | Product-offer campaign tile | Approved campaign image/alt/copy/CTA plus at least two real Shopify Products | PENDING; section disabled and fail-closed |
 
 ## Quality rules
 

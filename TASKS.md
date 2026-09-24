@@ -12,6 +12,7 @@
 | TASK-008 | Home | DONE | Development-theme QA, Theme Editor, PDP/Cart regression, and handoff complete | Work |
 | TASK-009 | Analytics and SEO | DONE | Technical baseline verified; authorized administrative baseline recorded; release gates documented | Work |
 | TASK-010 | Final QA and release | IN PROGRESS | Batch 1 accessibility gates pass; six explicit external release gates remain | Work |
+| TASK-011 | Home reference sections — Phase 1 | DONE | User-approved hybrid design; local-only implementation and QA | Work |
 
 ## Status meanings
 
@@ -49,3 +50,7 @@ Work explicitly authorized TASK-009 to proceed independently while TASK-007 was 
 Release Gates Batch 1 resolves the documented sub-44 px secondary targets without redesigning approved components. The correction and fresh Home/PDP/Search/Judge.me/Cart Drawer regression pass only on development theme `193260781938`; live theme `192527597938` retains its protected hashes. Read-only Admin discovery confirms Peru as the legal country, United States active in USD, Canada and the Germany/Belgium/Spain/France EU market in draft, English published, and German/Spanish/French/Dutch unpublished. Mercado Pago Tarjetas, Mercado Pago Checkout Pro and PayPal Express are the three real payment options inspected; no connection or commercial state changed.
 
 TASK-010 stays `IN PROGRESS`. Its authoritative blockers are exactly: (1) real supplier confirmation for White/Black and Single/Dual, (2) authorized selection and connection of a card gateway, (3) authorized PayPal Business connection, (4) real checkout testing, (5) policies, shipping, consent and final QA for all six markets, and (6) later password removal and sitemap validation.
+
+## TASK-011 gate
+
+Work explicitly authorized TASK-011 as independent Phase 1 work while TASK-010 remains in progress. Eight new RELIVANOW OS 2.0 sections plus one native `collection-list` instance are appended to Home with all nine instances disabled. The approved active Home is byte-stable at the JSON-object level; `collection-list.liquid` is unchanged; marquee extensions are opt-in. Campaign, community and expert modules fail closed. Local contracts, Theme Check, content/privacy/reference scans and isolated five-viewport QA pass for the implemented code. Real Theme Editor/storefront QA remains pending because no theme upload, editor save, push or publication was authorized.

@@ -1,0 +1,188 @@
+{% liquid
+  assign valid_block_count = 0
+  for block in section.blocks
+    if block.settings.verification_status == 'CONFIRMED' and block.settings.name != blank and block.settings.image != blank and block.settings.image_alt != blank
+      assign valid_block_count = valid_block_count | plus: 1
+    endif
+  endfor
+
+  assign should_render = false
+  if section.settings.heading != blank and valid_block_count >= 2
+    assign should_render = true
+  endif
+%}
+
+{% if should_render %}
+  <section
+    class="relivanow-expert-cards section section--page-width"
+    style="--relivanow-experts-bg: {{ section.settings.background_color }}; --relivanow-experts-color: {{ section.settings.text_color }}; --relivanow-experts-gap: {{ section.settings.gap }}px;"
+  >
+    <div class="relivanow-expert-cards__header">
+      <h2>{{ section.settings.heading | escape }}</h2>
+      {% if section.settings.text != blank %}<div class="rte">{{ section.settings.text }}</div>{% endif %}
+    </div>
+    <div class="relivanow-expert-cards__rail" role="list">
+      {% for block in section.blocks %}
+        {% if block.settings.verification_status == 'CONFIRMED' and block.settings.name != blank and block.settings.image != blank and block.settings.image_alt != blank %}
+          <article class="relivanow-expert-cards__card" role="listitem" {{ block.shopify_attributes }}>
+            <div class="relivanow-expert-cards__identity">
+              {% if block.settings.avatar != blank %}
+                {{ block.settings.avatar | image_url: width: 160 | image_tag: widths: '80, 120, 160', sizes: '56px', loading: 'lazy', alt: '', class: 'relivanow-expert-cards__avatar' }}
+              {% endif %}
+              <div>
+                <h3>{{ block.settings.name | escape }}</h3>
+                {% if block.settings.credential != blank %}<p>{{ block.settings.credential | escape }}</p>{% endif %}
+              </div>
+            </div>
+            {% if block.settings.video_link != blank %}<a class="relivanow-expert-cards__media" href="{{ block.settings.video_link }}" aria-label="{{ block.settings.link_label | default: block.settings.name | escape }}">{% else %}<div class="relivanow-expert-cards__media">{% endif %}
+              {{
+                block.settings.image
+                | image_url: width: 1200
+                | image_tag:
+                  widths: '360, 540, 720, 960, 1200',
+                  sizes: '(min-width: 990px) 33vw, 80vw',
+                  loading: 'lazy',
+                  alt: block.settings.image_alt
+              }}
+              {% if block.settings.video_link != blank %}<span class="relivanow-expert-cards__play" aria-hidden="true">▶</span>{% endif %}
+            {% if block.settings.video_link != blank %}</a>{% else %}</div>{% endif %}
+            {% if block.settings.headline != blank %}<p class="relivanow-expert-cards__headline">{{ block.settings.headline | escape }}</p>{% endif %}
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+{% elsif request.design_mode %}
+  <div class="relivanow-reference-empty" data-relivanow-editor-placeholder>
+    Expert cards are fail-closed. Add a heading and at least two real experts with CONFIRMED identity, approved media, and meaningful alt text.
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .relivanow-expert-cards {
+    padding-block: clamp(3rem, 7vw, 6rem);
+    color: var(--relivanow-experts-color);
+    background: var(--relivanow-experts-bg);
+  }
+
+  .relivanow-expert-cards__header {
+    max-width: 50rem;
+    margin-bottom: 2rem;
+  }
+
+  .relivanow-expert-cards__header h2 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 4rem);
+    text-wrap: balance;
+  }
+
+  .relivanow-expert-cards__rail {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--relivanow-experts-gap);
+  }
+
+  .relivanow-expert-cards__card {
+    min-width: 0;
+  }
+
+  .relivanow-expert-cards__identity {
+    display: flex;
+    min-height: 4.5rem;
+    margin-bottom: 1rem;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .relivanow-expert-cards__identity :is(h3, p),
+  .relivanow-expert-cards__headline {
+    margin: 0;
+  }
+
+  .relivanow-expert-cards__avatar {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .relivanow-expert-cards__media {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    color: inherit;
+    background: #f0f1ed;
+  }
+
+  .relivanow-expert-cards__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .relivanow-expert-cards__play {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    display: grid;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    place-items: center;
+    color: #171817;
+    background: rgb(255 255 255 / 90%);
+    transform: translate(-50%, -50%);
+  }
+
+  .relivanow-expert-cards__headline {
+    padding-top: 1rem;
+    font-weight: 600;
+  }
+
+  @media screen and (max-width: 749px) {
+    .relivanow-expert-cards__rail {
+      grid-auto-flow: column;
+      grid-auto-columns: 82%;
+      grid-template-columns: none;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+    }
+
+    .relivanow-expert-cards__card {
+      scroll-snap-align: start;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "RELIVANOW expert cards",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "expert",
+      "name": "Expert card",
+      "settings": [
+        { "type": "text", "id": "verification_status", "label": "Verification status", "info": "Enter CONFIRMED only after identity, credential, media, and copy approval." },
+        { "type": "text", "id": "name", "label": "Approved name" },
+        { "type": "text", "id": "credential", "label": "Approved credential" },
+        { "type": "image_picker", "id": "avatar", "label": "Approved avatar" },
+        { "type": "image_picker", "id": "image", "label": "Approved feature image" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text" },
+        { "type": "url", "id": "video_link", "label": "Approved video link" },
+        { "type": "text", "id": "link_label", "label": "Link accessibility label" },
+        { "type": "textarea", "id": "headline", "label": "Approved headline" }
+      ]
+    }
+  ],
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Approved heading" },
+    { "type": "richtext", "id": "text", "label": "Approved introduction" },
+    { "type": "range", "id": "gap", "label": "Card gap", "min": 4, "max": 32, "step": 2, "unit": "px", "default": 16 },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#F7F7F4" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#171817" }
+  ],
+  "presets": [{ "name": "RELIVANOW expert cards" }]
+}
+{% endschema %}
