@@ -1,6 +1,10 @@
 <script src="{{ 'relivanow-pdp-ugc.js' | asset_url }}" type="module" fetchpriority="low"></script>
 
 {% liquid
+  if section.settings.background_color != blank
+    render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
+  endif
+
   assign valid_item_count = 0
   for block in section.blocks
     if block.type == 'ugc_item' and block.settings.verification_status == 'CONFIRMED' and block.settings.creator_handle != blank and block.settings.media_alt != blank
@@ -16,7 +20,7 @@
 %}
 
 {% if section_ready or request.design_mode %}
-  <relivanow-pdp-ugc class="rn-pdp-ugc color-{{ section.settings.color_scheme }} section section--page-width" style="--rn-gap: {{ section.settings.gap }}px">
+  <relivanow-pdp-ugc class="rn-pdp-ugc section section--page-width{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}" style="--rn-gap: {{ section.settings.gap }}px">
     {% if section_ready %}
       <div class="rn-pdp-ugc__header">
         <div>
@@ -126,7 +130,7 @@
     { "type": "richtext", "id": "supporting_text", "label": "Supporting text" },
     { "type": "text", "id": "upload_label", "label": "Optional upload link label" },
     { "type": "url", "id": "upload_link", "label": "Optional upload link" },
-    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "color", "id": "background_color", "label": "t:settings.background_color", "placeholder": "t:settings.default" },
     { "type": "range", "id": "gap", "label": "Card gap", "min": 8, "max": 32, "step": 2, "unit": "px", "default": 16 }
   ],
   "blocks": [

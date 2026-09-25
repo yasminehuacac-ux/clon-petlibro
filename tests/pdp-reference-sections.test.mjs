@@ -68,6 +68,34 @@ test('all six PDP reference sections expose merchant-owned schemas without prese
   }
 });
 
+test('PDP reference sections use the Horizon palette-compatible background override contract', () => {
+  const settingsSchema = JSON.parse(read('config/settings_schema.json'));
+  const globalSettings = settingsSchema.flatMap((group) => group.settings ?? []);
+  const productTemplate = jsonTemplate('templates/product.json');
+
+  assert.equal(globalSettings.filter(({ type }) => type === 'color_palette').length, 1);
+  assert.equal(globalSettings.filter(({ type }) => type === 'color_scheme_group').length, 0);
+
+  for (const [id, type] of expectedReferences) {
+    const path = `sections/${type}.liquid`;
+    const schema = schemaFor(path);
+    const source = read(path);
+    const backgroundSetting = schema.settings.find(({ id: settingId }) => settingId === 'background_color');
+
+    assert.equal(
+      schema.settings.some(({ type: settingType }) => settingType === 'color_scheme'),
+      false,
+      `${path} must not depend on a color_scheme_group that Horizon does not define`,
+    );
+    assert.equal(backgroundSetting?.type, 'color', `${path} must expose Horizon's optional background color override`);
+    assert.equal(backgroundSetting?.default, undefined, `${path} must inherit the palette when the override is blank`);
+    assert.match(source, /render 'contrast-override', background_color: section\.settings\.background_color, section_id: section\.id/);
+    assert.match(source, /color-custom-\{\{ section\.id \}\}/);
+    assert.doesNotMatch(source, /color-\{\{ section\.settings\.color_scheme \}\}/);
+    assert.equal('color_scheme' in productTemplate.sections[id].settings, false, `${id} must not retain a legacy saved value`);
+  }
+});
+
 test('UGC is a three-item confirmed media contract with a native accessible modal', () => {
   const path = 'sections/relivanow-pdp-ugc.liquid';
   const schema = schemaFor(path);

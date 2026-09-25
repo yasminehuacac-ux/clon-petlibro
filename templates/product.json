@@ -1055,7 +1055,6 @@
         "supporting_text": "",
         "upload_label": "",
         "upload_link": "",
-        "color_scheme": "",
         "gap": 16
       },
       "disabled": true
@@ -1067,8 +1066,7 @@
         "verification_status": "UNCONFIRMED",
         "heading": "",
         "image_alt": "",
-        "aspect_ratio": "21 / 9",
-        "color_scheme": ""
+        "aspect_ratio": "21 / 9"
       },
       "disabled": true
     },
@@ -1082,8 +1080,7 @@
         "body": "",
         "image_alt": "",
         "link_label": "",
-        "link": "",
-        "color_scheme": ""
+        "link": ""
       },
       "disabled": true
     },
@@ -1135,7 +1132,6 @@
       "settings": {
         "heading": "Smart feeding highlights",
         "intro": "",
-        "color_scheme": "",
         "gap": 14
       }
     },
@@ -1143,8 +1139,7 @@
       "type": "relivanow-offerings",
       "blocks": {},
       "settings": {
-        "heading": "",
-        "color_scheme": ""
+        "heading": ""
       },
       "disabled": true
     },
@@ -1171,7 +1166,6 @@
       "block_order": ["product_RCFNH9", "product_FxXxyx"],
       "settings": {
         "heading": "Complete the setup",
-        "color_scheme": "",
         "gap": 20
       }
     }

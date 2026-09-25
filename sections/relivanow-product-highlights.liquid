@@ -1,4 +1,8 @@
 {% liquid
+  if section.settings.background_color != blank
+    render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
+  endif
+
   assign valid_highlight_count = 0
   for block in section.blocks
     if block.type == 'highlight' and block.settings.verification_status == 'CONFIRMED' and block.settings.image != blank and block.settings.image_alt != blank and block.settings.title != blank and block.settings.text != blank
@@ -12,7 +16,7 @@
 %}
 
 {% if section_ready or request.design_mode %}
-  <section class="rn-highlights section section--page-width color-{{ section.settings.color_scheme }}" style="--rn-gap: {{ section.settings.gap }}px">
+  <section class="rn-highlights section section--page-width{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}" style="--rn-gap: {{ section.settings.gap }}px">
     {% if section_ready %}
       <header class="rn-highlights__header">
         <h2>{{ section.settings.heading | escape }}</h2>
@@ -66,7 +70,7 @@
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading" },
     { "type": "richtext", "id": "intro", "label": "Optional introduction" },
-    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "color", "id": "background_color", "label": "t:settings.background_color", "placeholder": "t:settings.default" },
     { "type": "range", "id": "gap", "label": "Card gap", "min": 8, "max": 32, "step": 2, "unit": "px", "default": 14 }
   ],
   "blocks": [

@@ -2,6 +2,10 @@
 {% render 'buy-buttons-styles' %}
 
 {% liquid
+  if section.settings.background_color != blank
+    render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
+  endif
+
   assign valid_product_count = 0
   assign seen_product_ids = '|'
   for block in section.blocks
@@ -27,7 +31,7 @@
 %}
 
 {% if section_ready or request.design_mode %}
-  <section class="rn-complete section section--page-width color-{{ section.settings.color_scheme }}" style="--rn-gap: {{ section.settings.gap }}px">
+  <section class="rn-complete section section--page-width{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}" style="--rn-gap: {{ section.settings.gap }}px">
     {% if section_ready %}
       <h2>{{ section.settings.heading | escape }}</h2>
       <div class="rn-complete__grid">
@@ -170,7 +174,7 @@
   "max_blocks": 2,
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading" },
-    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "color", "id": "background_color", "label": "t:settings.background_color", "placeholder": "t:settings.default" },
     { "type": "range", "id": "gap", "label": "Column gap", "min": 8, "max": 36, "step": 2, "unit": "px", "default": 20 }
   ],
   "blocks": [

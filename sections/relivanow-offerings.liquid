@@ -1,6 +1,10 @@
 <script src="{{ 'relivanow-offerings.js' | asset_url }}" type="module" fetchpriority="low"></script>
 
 {% liquid
+  if section.settings.background_color != blank
+    render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
+  endif
+
   assign valid_benefit_count = 0
   assign valid_offer_count = 0
   for block in section.blocks
@@ -19,7 +23,7 @@
 %}
 
 {% if section_ready or request.design_mode %}
-  <relivanow-offerings class="rn-offerings section section--page-width color-{{ section.settings.color_scheme }}">
+  <relivanow-offerings class="rn-offerings section section--page-width{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}">
     {% if section_ready %}
       <div class="rn-offerings__panel">
         <header class="rn-offerings__header">
@@ -105,7 +109,7 @@
   "disabled_on": { "groups": ["header", "footer"] },
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading" },
-    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+    { "type": "color", "id": "background_color", "label": "t:settings.background_color", "placeholder": "t:settings.default" }
   ],
   "blocks": [
     {
