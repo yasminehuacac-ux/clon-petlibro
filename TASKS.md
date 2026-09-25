@@ -17,6 +17,8 @@
 | TASK-013 | Controlled reference-section deployment | DONE | Exact allowlist uploaded and verified only on development theme `193260781938` | Work |
 | TASK-014 | Development reference-section configuration | BLOCKED | Seven evidence-backed sections saved on development; authenticated post-Save visual QA unavailable | Work |
 | TASK-015 | Phase 3C synchronization and post-Save QA | BLOCKED | Git sync, color fix, Product scoping and protected deployment complete; fresh browser QA unavailable | Work |
+| TASK-016 | Authenticated reference-section visual QA | BLOCKED | Browser helper unavailable; owner desktop observations recorded, full viewport matrix pending | Work |
+| TASK-017 | Home visual remediation | PARTIAL | Code/configuration fixes deployed and verified on development; authenticated post-remediation QA pending | Work |
 
 ## Status meanings
 
@@ -70,3 +72,7 @@ Work authorized one controlled upload of the exact TASK-011/TASK-012 theme allow
 ## TASK-014/TASK-015 gate
 
 TASK-014 subsequently configured and enabled seven evidence-backed reference sections only on development theme `193260781938`; eight unsupported or incomplete sections remain disabled. TASK-015 synchronized that saved state, replaced six invalid legacy `color_scheme` settings with Horizon's optional palette-compatible background override, and bound the two enabled PDP reference sections to the documented automatic-feeder Product so they fail closed on other Products. Exact allowlist readback passes and protected live hashes remain byte-identical. Both tasks remain `BLOCKED` only for fresh authenticated Theme Editor/storefront QA because the browser-control runtime timed out and reset twice; no visual PASS is inferred from static evidence.
+
+## TASK-016/TASK-017 gate
+
+TASK-016 remains `BLOCKED` for its full authenticated five-viewport matrix, but now records the owner's real desktop Home observations. TASK-017 traced those defects to exact section IDs, corrected four scoped components with RED→GREEN coverage, disabled unsupported supplier-media surfaces and deployed only four Liquid files plus `templates/index.json` to development theme `193260781938`. Readback and live protection pass; isolated exact-width fixture evidence is not substituted for fresh storefront/editor QA.

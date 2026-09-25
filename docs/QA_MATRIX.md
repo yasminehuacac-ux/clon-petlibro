@@ -1,5 +1,18 @@
 # QA matrix
 
+## TASK-017 Home visual remediation — 2026-09-24
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Root-cause mapping | PASS | Every owner-reported defect is mapped to an exact Home section ID and classified as CODE/LAYOUT, CONFIGURATION or ASSET/CONTENT. |
+| Fail-closed configuration | PASS | Six weak/supplier-media instances were disabled; the two-Collection native carousel uses two columns; only READY Home entries remain active. |
+| TDD/static validation | PASS | Focused 14/14 and full 55/55 Node tests, 99/99 JavaScript syntax, JSON/JSONC, Liquid schemas, setting IDs, contrast 17.80:1, scans and `git diff --check` pass. |
+| Exact-width isolated fixture | PASS FIXTURE | 1440×900, 1024×768, 768×1024, 390×844 and 360×800 have no root overflow; desktop rows fill, Trending is 2×2 below 990 px, and mobile peek exists only with contained scrolling. This is not storefront QA. |
+| Theme Check | PASS WITH KNOWN BASELINE | Raw run has only the inherited Judge.me URI false positive plus six inherited Horizon warnings; diagnostic run has zero errors and the same warnings. |
+| Development deployment/readback | PASS | Four Liquid files match local byte for byte; Home JSON has exactly seven intended changes plus reviewed Shopify default canonicalization; theme remains `development`. |
+| Live protection | PASS | All four protected files on live `192527597938` are byte-identical before/after. |
+| Authenticated post-remediation visual/editor QA | PENDING | Must be repeated manually at all five viewports; no real visual PASS is claimed from the isolated fixture. |
+
 ## TASK-015 post-Save synchronization and diagnosis — 2026-09-24
 
 | Gate | Result | Evidence |
