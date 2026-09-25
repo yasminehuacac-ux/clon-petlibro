@@ -32,7 +32,7 @@ const expectedReferences = [
   ['reference_product_offers', 'relivanow-product-offers'],
 ];
 
-test('Home preserves its approved eight entries and appends nine disabled references', () => {
+test('Home preserves its approved eight entries and saves the approved reference configuration', () => {
   const template = jsonTemplate('templates/index.json');
   const approvedIds = template.order.slice(0, 8);
   const approvedPayload = approvedIds.map((id) => [id, template.sections[id]]);
@@ -44,10 +44,23 @@ test('Home preserves its approved eight entries and appends nine disabled refere
   );
   assert.deepEqual(template.order.slice(8), expectedReferences.map(([id]) => id));
 
+  const enabledReferences = new Set([
+    'reference_promotion_marquee',
+    'reference_video_slideshow',
+    'reference_image_gallery',
+    'reference_category_carousel',
+    'reference_trending_grid',
+  ]);
+
   for (const [id, type] of expectedReferences) {
     assert.equal(template.sections[id]?.type, type, `${id} must use ${type}`);
-    assert.equal(template.sections[id]?.disabled, true, `${id} must remain disabled by default`);
+    assert.equal(Boolean(template.sections[id]?.disabled), !enabledReferences.has(id), `${id} activation state changed`);
   }
+
+  assert.equal(template.sections.reference_campaign_grid.settings.campaign_status, '');
+  assert.equal(template.sections.reference_community_videos.settings.heading, '');
+  assert.equal(template.sections.reference_expert_cards.settings.heading, '');
+  assert.equal(template.sections.reference_product_offers.settings.campaign_status, '');
 });
 
 test('native collection-list implementation remains unchanged for the category reference', () => {
@@ -61,7 +74,7 @@ test('native collection-list implementation remains unchanged for the category r
   assert.equal(category.settings.layout_type, 'carousel');
   assert.equal(category.settings.columns, 5);
   assert.equal(category.settings.mobile_card_size, '44cqw');
-  assert.deepEqual(category.settings.collection_list, []);
+  assert.deepEqual(category.settings.collection_list, ['pet-clean', 'spare-parts']);
 });
 
 test('promotion marquee exposes opt-in motion without changing the native section schema', () => {

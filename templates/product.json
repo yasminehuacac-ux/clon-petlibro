@@ -1050,38 +1050,130 @@
     "reference_pdp_ugc": {
       "type": "relivanow-pdp-ugc",
       "blocks": {},
-      "settings": {},
+      "settings": {
+        "heading": "",
+        "supporting_text": "",
+        "upload_label": "",
+        "upload_link": "",
+        "color_scheme": "",
+        "gap": 16
+      },
       "disabled": true
     },
     "reference_pdp_hotspots": {
       "type": "relivanow-shoppable-hotspots",
       "blocks": {},
-      "settings": {},
+      "settings": {
+        "verification_status": "UNCONFIRMED",
+        "heading": "",
+        "image_alt": "",
+        "aspect_ratio": "21 / 9",
+        "color_scheme": ""
+      },
       "disabled": true
     },
     "reference_pdp_editorial_proof": {
       "type": "relivanow-editorial-proof",
       "blocks": {},
-      "settings": {},
+      "settings": {
+        "verification_status": "UNCONFIRMED",
+        "eyebrow": "",
+        "heading": "",
+        "body": "",
+        "image_alt": "",
+        "link_label": "",
+        "link": "",
+        "color_scheme": ""
+      },
       "disabled": true
     },
     "reference_pdp_highlights": {
       "type": "relivanow-product-highlights",
-      "blocks": {},
-      "settings": {},
-      "disabled": true
+      "blocks": {
+        "highlight_mDhWrW": {
+          "type": "highlight",
+          "settings": {
+            "verification_status": "CONFIRMED",
+            "image": "shopify://shop_images/6c61baa6-19ae-4c5f-9692-5742cd4c6de8.jpg",
+            "image_alt": "Automatic pet feeder product image",
+            "title": "1–10 meals per day",
+            "text": "<p>Set between 1 and 10 meals per day.</p>"
+          }
+        },
+        "highlight_MJDEDU": {
+          "type": "highlight",
+          "settings": {
+            "verification_status": "CONFIRMED",
+            "image": "shopify://shop_images/050e291b-0ad0-4be1-82d0-04b648093585.jpg",
+            "image_alt": "Automatic pet feeder product image",
+            "title": "1–12 portions per meal",
+            "text": "<p>Set between 1 and 12 portions for each meal.</p>"
+          }
+        },
+        "highlight_ya7zXi": {
+          "type": "highlight",
+          "settings": {
+            "verification_status": "CONFIRMED",
+            "image": "shopify://shop_images/b3cb3084-0618-477c-a029-c71a469322c1.jpg",
+            "image_alt": "Automatic pet feeder product image",
+            "title": "Remote control",
+            "text": "<p>WiFi-enabled models support smartphone app management.</p>"
+          }
+        },
+        "highlight_WeVQyg": {
+          "type": "highlight",
+          "settings": {
+            "verification_status": "CONFIRMED",
+            "image": "shopify://shop_images/53fdbdbd-b2b8-43d2-9733-cc7fdb9a11ef.jpg",
+            "image_alt": "Automatic pet feeder product image",
+            "title": "For cats and dogs",
+            "text": "<p>The feeder is suitable for both cats and dogs.</p>"
+          }
+        }
+      },
+      "block_order": ["highlight_mDhWrW", "highlight_MJDEDU", "highlight_ya7zXi", "highlight_WeVQyg"],
+      "settings": {
+        "heading": "Smart feeding highlights",
+        "intro": "",
+        "color_scheme": "",
+        "gap": 14
+      }
     },
     "reference_pdp_offerings": {
       "type": "relivanow-offerings",
       "blocks": {},
-      "settings": {},
+      "settings": {
+        "heading": "",
+        "color_scheme": ""
+      },
       "disabled": true
     },
     "reference_pdp_complete_look": {
       "type": "relivanow-complete-look",
-      "blocks": {},
-      "settings": {},
-      "disabled": true
+      "blocks": {
+        "product_RCFNH9": {
+          "type": "product",
+          "settings": {
+            "verification_status": "CONFIRMED",
+            "product": "portable-pet-water-bottle-with-bowl",
+            "image_alt": ""
+          }
+        },
+        "product_FxXxyx": {
+          "type": "product",
+          "settings": {
+            "verification_status": "CONFIRMED",
+            "product": "smart-pet-paw-cleaning-cup",
+            "image_alt": ""
+          }
+        }
+      },
+      "block_order": ["product_RCFNH9", "product_FxXxyx"],
+      "settings": {
+        "heading": "Complete the setup",
+        "color_scheme": "",
+        "gap": 20
+      }
     }
   },
   "order": [

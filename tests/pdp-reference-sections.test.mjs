@@ -31,7 +31,7 @@ const expectedReferences = [
 
 const sectionPaths = expectedReferences.map(([, type]) => `sections/${type}.liquid`);
 
-test('default Product template preserves all nineteen approved entries and appends six disabled references', () => {
+test('default Product template preserves all nineteen approved entries and saves the approved reference configuration', () => {
   const template = jsonTemplate('templates/product.json');
   const approvedIds = template.order.slice(0, 19);
   const approvedPayload = approvedIds.map((id) => [id, template.sections[id]]);
@@ -43,11 +43,19 @@ test('default Product template preserves all nineteen approved entries and appen
   );
   assert.deepEqual(template.order.slice(19), expectedReferences.map(([id]) => id));
 
+  const enabledReferences = new Set(['reference_pdp_highlights', 'reference_pdp_complete_look']);
+
   for (const [id, type] of expectedReferences) {
     assert.equal(template.sections[id]?.type, type, `${id} must use ${type}`);
-    assert.equal(template.sections[id]?.disabled, true, `${id} must remain disabled by default`);
-    assert.deepEqual(template.sections[id]?.blocks, {}, `${id} must not ship fabricated block content`);
+    assert.equal(Boolean(template.sections[id]?.disabled), !enabledReferences.has(id), `${id} activation state changed`);
   }
+
+  assert.equal(template.sections.reference_pdp_ugc.settings.heading, '');
+  assert.equal(template.sections.reference_pdp_hotspots.settings.verification_status, 'UNCONFIRMED');
+  assert.equal(template.sections.reference_pdp_editorial_proof.settings.verification_status, 'UNCONFIRMED');
+  assert.equal(template.sections.reference_pdp_offerings.settings.heading, '');
+  assert.equal(template.sections.reference_pdp_highlights.block_order.length, 4);
+  assert.equal(template.sections.reference_pdp_complete_look.block_order.length, 2);
 });
 
 test('all six PDP reference sections expose merchant-owned schemas without presets containing content', () => {

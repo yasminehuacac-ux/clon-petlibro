@@ -323,27 +323,120 @@
     },
     "reference_promotion_marquee": {
       "type": "relivanow-promotion-marquee",
-      "disabled": true,
-      "blocks": {},
-      "block_order": [],
+      "blocks": {
+        "item_GyDxAx": {
+          "type": "item",
+          "settings": {
+            "text": "Smart care for life together.",
+            "link": "",
+            "open_in_new_tab": false
+          }
+        }
+      },
+      "block_order": ["item_GyDxAx"],
       "name": "Reference 1 — Promotion",
-      "settings": {}
+      "settings": {
+        "accessibility_label": "Store updates",
+        "movement_direction": "normal",
+        "seconds_per_100": 2,
+        "pause_on_hover": true,
+        "desktop_gap": 48,
+        "mobile_gap": 28,
+        "desktop_padding": 20,
+        "mobile_padding": 16,
+        "background_color": "#171817",
+        "text_color": "#ffffff"
+      }
     },
     "reference_video_slideshow": {
       "type": "relivanow-video-slideshow",
-      "disabled": true,
-      "blocks": {},
-      "block_order": [],
+      "blocks": {
+        "slide_9FdBdV": {
+          "type": "slide",
+          "settings": {
+            "verification_status": "CONFIRMED",
+            "external_video": "",
+            "desktop_poster": "shopify://shop_images/d7385e69-c6e8-4d2e-8c47-d96e7c676e19.jpg",
+            "image_alt": "Automatic pet feeder with remote control and timed feeding",
+            "eyebrow": "RELIVANOW",
+            "heading_prefix": "Smart care for",
+            "heading_highlight": "everyday life",
+            "heading_suffix": "",
+            "text": "<p>Timed feeding, quantitative dispensing and WiFi-enabled remote control in compatible models.</p>",
+            "cta_label": "View product",
+            "cta_link": "",
+            "content_position": "center-right",
+            "overlay_opacity": 25
+          }
+        }
+      },
+      "block_order": ["slide_9FdBdV"],
       "name": "Reference 2 — Video",
-      "settings": {}
+      "settings": {
+        "accessibility_label": "Featured media",
+        "heading_tag": "h2",
+        "section_height": "large",
+        "autoplay": false,
+        "autoplay_speed": 5,
+        "background_color": "#171817",
+        "text_color": "#ffffff",
+        "highlight_color": "#d9ff43"
+      }
     },
     "reference_image_gallery": {
       "type": "relivanow-image-gallery",
-      "disabled": true,
-      "blocks": {},
-      "block_order": [],
+      "blocks": {
+        "card_w8xXHn": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/7b5eeb4e-660c-44fa-b327-e84e764df017.jpg",
+            "image_alt": "Automatic pet feeder",
+            "label": "Automatic pet feeder",
+            "link": "",
+            "open_in_new_tab": false
+          }
+        },
+        "card_EYBDWc": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/5ba72a48-3c06-493b-aeb7-ebbbd3607d43.jpg",
+            "image_alt": "Automatic pet feeder product image",
+            "label": "Feeder detail 2",
+            "link": "",
+            "open_in_new_tab": false
+          }
+        },
+        "card_rqkqMX": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/9b2ba9c5-7a3f-4e4f-b18c-96bb8062d41c.jpg",
+            "image_alt": "Automatic pet feeder product image",
+            "label": "Feeder detail 3",
+            "link": "",
+            "open_in_new_tab": false
+          }
+        },
+        "card_KEe4PJ": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/9be31551-5b18-47f6-9312-15250688707f.jpg",
+            "image_alt": "Automatic pet feeder product image",
+            "label": "Feeder detail 4",
+            "link": "",
+            "open_in_new_tab": false
+          }
+        }
+      },
+      "block_order": ["card_w8xXHn", "card_EYBDWc", "card_rqkqMX", "card_KEe4PJ"],
       "name": "Reference 3 — Gallery",
-      "settings": {}
+      "settings": {
+        "heading": "Automatic feeder details",
+        "accessibility_label": "Image gallery",
+        "section_width": "page-width",
+        "gap": 12,
+        "background_color": "#ffffff",
+        "text_color": "#171817"
+      }
     },
     "reference_campaign_grid": {
       "type": "relivanow-campaign-grid",
@@ -351,19 +444,77 @@
       "blocks": {},
       "block_order": [],
       "name": "Reference 4 — Campaign",
-      "settings": {}
+      "settings": {
+        "campaign_status": "",
+        "end_at": "",
+        "eyebrow": "",
+        "heading": "",
+        "text": "",
+        "section_width": "page-width",
+        "gap": 12,
+        "background_color": "#171817",
+        "text_color": "#ffffff"
+      }
     },
     "reference_category_carousel": {
       "type": "collection-list",
-      "disabled": true,
-      "blocks": {},
-      "block_order": [],
+      "blocks": {
+        "static-collection-card": {
+          "type": "_collection-card",
+          "static": true,
+          "settings": {
+            "placement": "on_image",
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "collection_card_gap": 8,
+            "background_color": "",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_color": "",
+            "border_radius": 0
+          },
+          "blocks": {
+            "collection-card-image": {
+              "type": "_collection-card-image",
+              "static": true,
+              "settings": {
+                "image_ratio": "portrait",
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        }
+      },
       "name": "Reference 5 — Categories",
       "settings": {
-        "collection_list": [],
+        "collection_list": ["pet-clean", "spare-parts"],
         "layout_type": "carousel",
+        "carousel_on_mobile": false,
         "columns": 5,
-        "mobile_card_size": "44cqw"
+        "mobile_columns": "2",
+        "mobile_card_size": "44cqw",
+        "columns_gap": 8,
+        "bento_gap": 8,
+        "rows_gap": 8,
+        "max_collections": 4,
+        "icons_style": "arrow",
+        "icons_shape": "none",
+        "section_width": "page-width",
+        "gap": 12,
+        "background_color": "",
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     },
     "reference_community_videos": {
@@ -372,7 +523,13 @@
       "blocks": {},
       "block_order": [],
       "name": "Reference 6 — Community",
-      "settings": {}
+      "settings": {
+        "heading": "",
+        "text": "",
+        "gap": 12,
+        "background_color": "#ffffff",
+        "text_color": "#171817"
+      }
     },
     "reference_expert_cards": {
       "type": "relivanow-expert-cards",
@@ -380,23 +537,115 @@
       "blocks": {},
       "block_order": [],
       "name": "Reference 7 — Experts",
-      "settings": {}
+      "settings": {
+        "heading": "",
+        "text": "",
+        "gap": 16,
+        "background_color": "#f7f7f4",
+        "text_color": "#171817"
+      }
     },
     "reference_trending_grid": {
       "type": "relivanow-trending-grid",
-      "disabled": true,
-      "blocks": {},
-      "block_order": [],
+      "blocks": {
+        "item_UKRTxH": {
+          "type": "item",
+          "settings": {
+            "source_type": "product",
+            "product": "automatic-pet-feeder-with-remote-control-and-timed-feeding",
+            "collection": "",
+            "image_alt": ""
+          }
+        },
+        "item_PzzCb4": {
+          "type": "item",
+          "settings": {
+            "source_type": "product",
+            "product": "smart-pet-paw-cleaning-cup",
+            "collection": "",
+            "image_alt": ""
+          }
+        },
+        "item_Y76UXB": {
+          "type": "item",
+          "settings": {
+            "source_type": "product",
+            "product": "pet-nail-grinder",
+            "collection": "",
+            "image_alt": ""
+          }
+        },
+        "item_FxheWG": {
+          "type": "item",
+          "settings": {
+            "source_type": "product",
+            "product": "portable-pet-water-bottle-with-bowl",
+            "collection": "",
+            "image_alt": ""
+          }
+        }
+      },
+      "block_order": ["item_UKRTxH", "item_PzzCb4", "item_Y76UXB", "item_FxheWG"],
       "name": "Reference 8 — Trending",
-      "settings": {}
+      "settings": {
+        "heading": "Explore RELIVANOW",
+        "image_ratio": "1 / 1",
+        "gap": 12,
+        "background_color": "#ffffff",
+        "text_color": "#171817"
+      }
     },
     "reference_product_offers": {
       "type": "relivanow-product-offers",
       "disabled": true,
-      "blocks": {},
-      "block_order": [],
+      "blocks": {
+        "product_mQVYAk": {
+          "type": "product",
+          "settings": {
+            "product": "automatic-pet-feeder-with-remote-control-and-timed-feeding",
+            "label_status": "",
+            "custom_label": ""
+          }
+        },
+        "product_nbCXfi": {
+          "type": "product",
+          "settings": {
+            "product": "car-mounted-pet-safety-seat",
+            "label_status": "",
+            "custom_label": ""
+          }
+        },
+        "product_gjnTtq": {
+          "type": "product",
+          "settings": {
+            "product": "portable-pet-water-bottle-with-bowl",
+            "label_status": "",
+            "custom_label": ""
+          }
+        },
+        "product_FwpyCr": {
+          "type": "product",
+          "settings": {
+            "product": "pet-nail-grinder",
+            "label_status": "",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": ["product_mQVYAk", "product_nbCXfi", "product_gjnTtq", "product_FwpyCr"],
       "name": "Reference 9 — Products",
-      "settings": {}
+      "settings": {
+        "heading": "Featured products",
+        "campaign_status": "",
+        "campaign_image_alt": "",
+        "campaign_heading": "",
+        "campaign_text": "",
+        "campaign_cta_label": "",
+        "campaign_link": "",
+        "gap": 12,
+        "background_color": "#f7f7f4",
+        "text_color": "#171817"
+      }
     }
   },
   "order": [
