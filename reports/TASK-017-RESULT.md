@@ -14,6 +14,8 @@
 
 **Documentation commit subject:** `docs: record RELIVANOW Home visual remediation` — exact hash is reported in the final Git handoff
 
+**390×844 follow-up fix:** `4e813b5c2702319ae1fd1ef47862c220c9413979` — `fix: disable incomplete RELIVANOW Home asset section`
+
 **Development theme:** `193260781938` — `Development (bfe2c0-DESKTOP-EHRJHE7)` — role `development`
 
 **Protected live theme:** `192527597938` — `Dawn` — role `live`
@@ -24,9 +26,9 @@
 
 The owner-provided desktop defects were traced to exact Home section IDs and separated into code/layout, configuration and asset/content causes. Sparse custom grids now fill their desktop rows, Trending uses a balanced 2×2 tablet/mobile grid, Product Offers keeps horizontal peeking only on mobile, and the dark story consumes its configured foreground color with 17.80:1 contrast and 48–104 px bottom CTA space.
 
-No Product title, price, Variant, global Product media, review, campaign, expert, UGC or commercial record was changed. Sections that depend on supplier overlays, repeated media or incomplete evidence remain in JSON but are disabled. The native `collection-list.liquid` is byte-identical; the configured reference category carousel now has two columns for its two Collections and inherits Horizon's disabled-control hiding.
+No Product title, price, Variant, global Product media, review, campaign, expert, UGC or commercial record was changed. Sections that depend on supplier overlays, repeated media or incomplete evidence remain in JSON but are disabled. The native `collection-list.liquid` is byte-identical. The reference category carousel retained its two real Collections and two-column configuration, but is now disabled after manual 390×844 evidence confirmed that their current supplier media is incomplete.
 
-Only five theme files were uploaded to development with an explicit allowlist and `--nodelete`. Readback proves the four Liquid files match local byte for byte and the Home template contains exactly the seven intended state changes. The live theme retained all four protected hashes exactly.
+The initial remediation uploaded five theme files to development with an explicit allowlist and `--nodelete`. Readback proved the four Liquid files matched local byte for byte and the Home template contained exactly the seven intended state changes. A later one-file follow-up uploaded only `templates/index.json` to disable the category reference; its readback has exactly one semantic delta. The live theme retained all four protected hashes across both deployments.
 
 This report does not claim real post-remediation visual QA. The five-width evidence below is an isolated local CSS/DOM fixture; authenticated Shopify storefront and Theme Editor inspection must be repeated manually.
 
@@ -40,7 +42,7 @@ This report does not claim real post-remediation visual QA. The five-width evide
 | CTA too close to dark section edge | `home_final_cta` | CODE/LAYOUT | Added responsive 48–104 px bottom content padding. |
 | Post-marquee hero with embedded `4L` / supplier instructions | `reference_video_slideshow` | ASSET/CONTENT | Disabled until a clean approved poster/video exists. |
 | Tiny embedded copy, duplicates and generic detail labels | `reference_image_gallery` | ASSET/CONTENT | Component layout corrected; current instance disabled until four clean media items and verified descriptions exist. |
-| Two cards compressed left | `reference_category_carousel` | CONFIGURATION | Columns changed from five to two for the two saved Collections; native section and controls remain unchanged. |
+| Two supplier-media cards remain visible/cropped at 390×844 immediately above the footer | `reference_category_carousel` | ASSET/CONTENT | Exact ID/type proven from Home order and its two saved Collections (`pet-clean`, `spare-parts`). Section retained in JSON but disabled; native section, Collections and media records unchanged. |
 | Four cards use roughly half the viewport | `reference_trending_grid` | CODE/LAYOUT + ASSET/CONTENT | Adaptive four-column desktop and balanced 2×2 tablet/mobile layout implemented; instance remains disabled because current Product imagery has overlays/inconsistent quality. |
 | Inconsistent Product card ratios/titles/media | `home_products`, `reference_trending_grid` | ASSET/CONTENT | Both public surfaces disabled; no global Product record or media changed. |
 | Desktop rails could expose partial cards or empty columns | `reference_image_gallery`, `reference_trending_grid`, `reference_product_offers` | CODE/LAYOUT | Desktop grids fill available columns; mobile-only gallery/offers rails retain contained horizontal scroll and peek. |
@@ -65,7 +67,7 @@ Only `READY` entries remain active. A READY fail-closed host can be active while
 | `reference_video_slideshow` | BLOCKED | Disabled | Clean approved poster/video missing. |
 | `reference_image_gallery` | BLOCKED | Disabled | Four clean media items and verified descriptions missing. |
 | `reference_campaign_grid` | BLOCKED | Disabled | No confirmed campaign, dates, offer or campaign media. |
-| `reference_category_carousel` | READY | Active | Two real Collections and corrected two-column configuration. |
+| `reference_category_carousel` | BLOCKED | Disabled | Manual 390×844 QA confirmed incomplete/cropped supplier media for both saved Collections. |
 | `reference_community_videos` | BLOCKED | Disabled | No approved UGC/video evidence. |
 | `reference_expert_cards` | BLOCKED | Disabled | No approved experts/attributions. |
 | `reference_trending_grid` | PARTIAL | Disabled | Layout ready; clean consistent image overrides or Product media still missing. |
@@ -94,6 +96,8 @@ Home configuration changes were limited to:
 - change `reference_category_carousel.settings.columns` from `5` to `2`;
 - disable `reference_trending_grid`.
 
+The 390×844 follow-up adds one further configuration change only: disable `reference_category_carousel` while preserving its ID, type, blocks, Collection handles, settings and order.
+
 No Home order entry was added, removed or moved.
 
 ## TDD and validation
@@ -103,6 +107,7 @@ No Home order entry was added, removed or moved.
 | Initial focused RED | PASS evidence — 10/14 passed and four new assertions failed for the active bad-media states, five-column category configuration, five-slot gallery rail and dark-story contrast/spacing. |
 | Fixture-discovered tablet RED | PASS evidence — 13/14 passed; the new 768 px 2×2 Trending contract failed before correction. |
 | Focused GREEN | PASS — 14/14. |
+| 390×844 follow-up RED→GREEN | PASS — 13/14 failed only on `reference_category_carousel` still active; after the one-line template fix, focused tests pass 14/14. |
 | Full Node suite | PASS — 55/55, including TASK-011/TASK-012, JSON/JSONC, Liquid schemas and setting-ID uniqueness. |
 | JavaScript syntax | PASS — 99/99. |
 | Dark-section contrast | PASS — `#FFFFFF` on `#171817` = 17.80:1. |
@@ -153,6 +158,22 @@ Shopify returned theme ID `193260781938`, shop `relivanow.myshopify.com` and rol
 
 For `index.json`, before/after recursive review found exactly seven intended differences and 122 Shopify canonicalizations of empty/default schema values and hex color casing. The reviewed difference payload hash is `93A874561155EFBE88C49CAC4FCB9CBF21ADEDD43E947DF37EB79D90897A59CB`. Home order is unchanged; the intended local settings match the remote readback.
 
+### 390×844 follow-up deployment
+
+The follow-up command was limited to:
+
+```text
+shopify theme push --store relivanow.myshopify.com --theme 193260781938 --nodelete --json \
+  --only templates/index.json
+```
+
+- Development `index.json` before: `0F5DE19398C5F02C797A096FEE5C938738B7D6EF5F00B7022D5E91E49B7BBBD0`.
+- Local `index.json`: `0CD52B9CBEAF8A565A0D0C12ADEA9B1ACC4E10BCA0797EAB5F1C94641B016CB5`.
+- Development readback after: `69D56EC804A3271BF8178B2B163EEC2FE2ACBB8D1A5C21FFDE9CB3F856EC13EF`.
+- Recursive before/after comparison: exactly one semantic difference, `sections.reference_category_carousel.disabled = true`.
+- Remote ID remains `reference_category_carousel`, type remains `collection-list`, Collections remain `pet-clean` and `spare-parts`, columns remain `2`, and Home order is unchanged.
+- The only active Home `reference_*` instance after readback is `reference_promotion_marquee`.
+
 ## Protected live verification
 
 | File | Before | After | Result |
@@ -182,7 +203,7 @@ On authenticated preview `193260781938`, validate Home at 1440×900, 1024×768, 
 1. Visually confirm the theme ID/role is development, never live.
 2. Confirm active Home output is limited to READY surfaces and that the disabled supplier-media/story/gallery/trending surfaces are absent.
 3. Check final CTA contrast, CTA lower spacing, responsive crop and focus target.
-4. Check the two-Collection category carousel fills the row and exposes no enabled controls when no scroll is possible.
+4. Confirm the two-Collection category carousel and its orange-container/device supplier media are absent at every viewport, especially 390×844.
 5. Check marquee continuity, no broken fragments, pause behavior and reduced motion.
 6. Confirm no root overflow, clipped card, stretched image, empty column or unintended desktop peek.
 7. Inspect keyboard order, visible focus and 44 px touch targets.

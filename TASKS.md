@@ -18,7 +18,7 @@
 | TASK-014 | Development reference-section configuration | BLOCKED | Seven evidence-backed sections saved on development; authenticated post-Save visual QA unavailable | Work |
 | TASK-015 | Phase 3C synchronization and post-Save QA | BLOCKED | Git sync, color fix, Product scoping and protected deployment complete; fresh browser QA unavailable | Work |
 | TASK-016 | Authenticated reference-section visual QA | BLOCKED | Browser helper unavailable; owner desktop observations recorded, full viewport matrix pending | Work |
-| TASK-017 | Home visual remediation | PARTIAL | Code/configuration fixes deployed and verified on development; authenticated post-remediation QA pending | Work |
+| TASK-017 | Home visual remediation | PARTIAL | 390×844 category-media defect disabled and verified on development; authenticated re-QA pending | Work |
 
 ## Status meanings
 
@@ -75,4 +75,4 @@ TASK-014 subsequently configured and enabled seven evidence-backed reference sec
 
 ## TASK-016/TASK-017 gate
 
-TASK-016 remains `BLOCKED` for its full authenticated five-viewport matrix, but now records the owner's real desktop Home observations. TASK-017 traced those defects to exact section IDs, corrected four scoped components with RED→GREEN coverage, disabled unsupported supplier-media surfaces and deployed only four Liquid files plus `templates/index.json` to development theme `193260781938`. Readback and live protection pass; isolated exact-width fixture evidence is not substituted for fresh storefront/editor QA.
+TASK-016 remains `BLOCKED` for its full authenticated five-viewport matrix, but now records the owner's real desktop Home observations. TASK-017 traced those defects to exact section IDs, corrected four scoped components with RED→GREEN coverage, disabled unsupported supplier-media surfaces and deployed only four Liquid files plus `templates/index.json` to development theme `193260781938`. Manual 390×844 QA then identified `reference_category_carousel` (`collection-list`) as the remaining two-image supplier-media surface; a one-file follow-up disabled it with an exact one-delta readback. Live protection passes; isolated fixture evidence is not substituted for fresh storefront/editor re-QA.
