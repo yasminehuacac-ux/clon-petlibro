@@ -46,7 +46,6 @@ test('Home preserves unaffected approved entries and saves the remediated refere
 
   const enabledReferences = new Set([
     'reference_promotion_marquee',
-    'reference_category_carousel',
   ]);
 
   for (const [id, type] of expectedReferences) {

@@ -463,6 +463,7 @@
     },
     "reference_category_carousel": {
       "type": "collection-list",
+      "disabled": true,
       "blocks": {
         "static-collection-card": {
           "type": "_collection-card",
