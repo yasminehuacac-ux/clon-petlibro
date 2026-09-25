@@ -5,8 +5,12 @@
     assign story_product = section.settings.fallback_collection.products.first
   endif
   assign story_image = section.settings.image
+  assign approved_asset_fallback = section.settings.approved_asset_fallback
+  unless approved_asset_fallback == '02-relivanow-cat-feeding-16x9.png'
+    assign approved_asset_fallback = blank
+  endunless
 
-  if story_image == blank and story_product != blank
+  if story_image == blank and approved_asset_fallback == blank and story_product != blank
     assign media_index = section.settings.product_media_position | minus: 1
     assign story_media = story_product.media[media_index]
     if story_media == blank
@@ -21,8 +25,10 @@
   endif
 
   assign story_is_valid = false
-  if section.settings.enable_section and story_status == 'CONFIRMED' and section.settings.heading != blank and section.settings.text != blank and story_image != blank
-    assign story_is_valid = true
+  if section.settings.enable_section and story_status == 'CONFIRMED' and section.settings.heading != blank and section.settings.text != blank
+    if story_image != blank or approved_asset_fallback != blank
+      assign story_is_valid = true
+    endif
   endif
 %}
 
@@ -42,7 +48,11 @@
   >
     <div class="relivanow-home-story__layout">
       <figure class="relivanow-home-story__media{% if section.settings.crop_embedded_copy %} relivanow-home-story__media--safe-crop{% endif %}">
-        {{ story_image | image_url: width: 2000 | image_tag: widths: '480, 750, 1000, 1500, 2000', sizes: '(min-width: 750px) 55vw, 100vw', loading: 'lazy', alt: story_alt, style: focal_point_style }}
+        {% if story_image != blank %}
+          {{ story_image | image_url: width: 2000 | image_tag: widths: '480, 750, 1000, 1500, 2000', sizes: '(min-width: 750px) 55vw, 100vw', loading: 'lazy', alt: story_alt, style: focal_point_style }}
+        {% else %}
+          {% render 'relivanow-approved-image', asset_key: approved_asset_fallback, alt: story_alt, class: 'relivanow-home-story__image', sizes: '(min-width: 750px) 55vw, 100vw', loading: 'lazy' %}
+        {% endif %}
       </figure>
       <div class="relivanow-home-story__content relivanow-home-story__content--{{ section.settings.alignment }}">
         {% if section.settings.eyebrow != blank %}<p class="relivanow-home-story__eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
@@ -129,6 +139,7 @@
     { "type": "select", "id": "verification_status", "label": "Content status", "options": [{ "value": "UNVERIFIED", "label": "Unverified" }, { "value": "PROVISIONAL", "label": "Provisional" }, { "value": "CONFIRMED", "label": "Confirmed" }], "default": "UNVERIFIED" },
     { "type": "product", "id": "product", "label": "Product source" },
     { "type": "image_picker", "id": "image", "label": "Optional approved image override" },
+    { "type": "select", "id": "approved_asset_fallback", "label": "Approved theme asset fallback", "options": [{ "value": "", "label": "None" }, { "value": "02-relivanow-cat-feeding-16x9.png", "label": "RELIVANOW cat feeding story" }], "default": "" },
     { "type": "range", "id": "product_media_position", "label": "Product media position", "min": 1, "max": 10, "step": 1, "default": 1, "info": "Falls back to featured media when this position is unavailable." },
     { "type": "checkbox", "id": "crop_embedded_copy", "label": "Crop embedded source copy", "info": "Zooms from the bottom to keep text baked into fallback media outside the visible frame. Disable for an approved clean image override.", "default": false },
     { "type": "text", "id": "image_alt", "label": "Image alt text" },

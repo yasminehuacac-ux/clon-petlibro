@@ -18,10 +18,12 @@
             "verification_status": "CONFIRMED",
             "product": "automatic-pet-feeder-with-remote-control-and-timed-feeding",
             "mobile_object_position": "left center",
-            "crop_embedded_copy": true,
+            "crop_embedded_copy": false,
+            "approved_asset_fallback": "01-relivanow-home-hero-16x9.png",
+            "image_alt": "Cat beside a RELIVANOW feeder in a calm home setting",
             "eyebrow": "RELIVANOW Smart Pet Care",
             "heading": "Smart care for life together.",
-            "text": "<p>Build a more predictable feeding routine with connected controls and precise portions.</p>",
+            "text": "",
             "primary_label": "Shop Now",
             "content_position": "bottom-left",
             "overlay_color": "#171817",
@@ -49,6 +51,7 @@
     },
     "home_benefits": {
       "type": "relivanow-benefits-bar",
+      "disabled": true,
       "blocks": {
         "meals": {
           "type": "benefit",
@@ -242,7 +245,6 @@
     },
     "home_story_routine": {
       "type": "relivanow-home-product-story",
-      "disabled": true,
       "name": "Daily routine story",
       "settings": {
         "enable_section": true,
@@ -250,14 +252,16 @@
         "verification_status": "CONFIRMED",
         "product": "automatic-pet-feeder-with-remote-control-and-timed-feeding",
         "product_media_position": 1,
-        "crop_embedded_copy": true,
-        "eyebrow": "Better routines",
-        "heading": "More certainty at every meal.",
-        "text": "<p>Choose from 1 to 10 meals each day and 1 to 12 portions per meal to support a consistent routine.</p>",
+        "crop_embedded_copy": false,
+        "approved_asset_fallback": "02-relivanow-cat-feeding-16x9.png",
+        "image_alt": "Cat eating beside a RELIVANOW feeder in a bright home setting",
+        "eyebrow": "RELIVANOW",
+        "heading": "Care that fits the daily routine.",
+        "text": "<p>Smart care for life together.</p>",
         "cta_label": "Shop Now",
         "cta_style": "primary",
         "media_position": "left",
-        "image_ratio": "4 / 5",
+        "image_ratio": "16 / 9",
         "alignment": "left",
         "section_width": "full-width",
         "background_color": "#FFFFFF",
@@ -294,6 +298,7 @@
     },
     "home_reviews": {
       "type": "relivanow-reviews",
+      "disabled": true,
       "blocks": {},
       "block_order": [],
       "name": "Verified reviews",
@@ -301,6 +306,7 @@
     },
     "home_final_cta": {
       "type": "relivanow-home-product-story",
+      "disabled": true,
       "name": "Final call to action",
       "settings": {
         "enable_section": true,
@@ -389,14 +395,14 @@
     },
     "reference_image_gallery": {
       "type": "relivanow-image-gallery",
-      "disabled": true,
       "blocks": {
         "card_w8xXHn": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/7b5eeb4e-660c-44fa-b327-e84e764df017.jpg",
-            "image_alt": "Automatic pet feeder",
-            "label": "Automatic pet feeder",
+            "image": "",
+            "approved_asset_fallback": "03-relivanow-editorial-cat-4x5.png",
+            "image_alt": "Cat resting beside a RELIVANOW feeder in a softly lit room",
+            "label": "",
             "link": "",
             "open_in_new_tab": false
           }
@@ -404,9 +410,10 @@
         "card_EYBDWc": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/5ba72a48-3c06-493b-aeb7-ebbbd3607d43.jpg",
-            "image_alt": "Automatic pet feeder product image",
-            "label": "Feeder detail 2",
+            "image": "",
+            "approved_asset_fallback": "04-relivanow-camera-detail-4x5.png",
+            "image_alt": "Close editorial view of the RELIVANOW feeder front panel",
+            "label": "",
             "link": "",
             "open_in_new_tab": false
           }
@@ -414,9 +421,10 @@
         "card_rqkqMX": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/9b2ba9c5-7a3f-4e4f-b18c-96bb8062d41c.jpg",
-            "image_alt": "Automatic pet feeder product image",
-            "label": "Feeder detail 3",
+            "image": "",
+            "approved_asset_fallback": "05-relivanow-cat-dog-3x4.png",
+            "image_alt": "Cat and dog together near a RELIVANOW feeder at home",
+            "label": "",
             "link": "",
             "open_in_new_tab": false
           }
@@ -424,9 +432,10 @@
         "card_KEe4PJ": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/9be31551-5b18-47f6-9312-15250688707f.jpg",
-            "image_alt": "Automatic pet feeder product image",
-            "label": "Feeder detail 4",
+            "image": "",
+            "approved_asset_fallback": "06-relivanow-product-studio-1x1.png",
+            "image_alt": "RELIVANOW feeder photographed against a clean studio background",
+            "label": "",
             "link": "",
             "open_in_new_tab": false
           }
@@ -435,10 +444,10 @@
       "block_order": ["card_w8xXHn", "card_EYBDWc", "card_rqkqMX", "card_KEe4PJ"],
       "name": "Reference 3 — Gallery",
       "settings": {
-        "heading": "Automatic feeder details",
-        "accessibility_label": "Image gallery",
+        "heading": "",
+        "accessibility_label": "RELIVANOW editorial image gallery",
         "section_width": "page-width",
-        "gap": 12,
+        "gap": 16,
         "background_color": "#ffffff",
         "text_color": "#171817"
       }
@@ -656,17 +665,17 @@
     }
   },
   "order": [
+    "reference_promotion_marquee",
     "home_hero",
+    "home_story_routine",
+    "reference_image_gallery",
     "home_benefits",
     "home_categories",
     "home_products",
-    "home_story_routine",
     "home_story_connected",
     "home_reviews",
     "home_final_cta",
-    "reference_promotion_marquee",
     "reference_video_slideshow",
-    "reference_image_gallery",
     "reference_campaign_grid",
     "reference_category_carousel",
     "reference_community_videos",

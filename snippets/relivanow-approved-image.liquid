@@ -1,0 +1,61 @@
+{%- liquid
+  assign asset_filename = ''
+  assign asset_width = 0
+  assign asset_height = 0
+
+  case asset_key
+    when '01-relivanow-home-hero-16x9.png'
+      assign asset_filename = '01-relivanow-home-hero-16x9.png'
+      assign asset_width = 1672
+      assign asset_height = 941
+    when '02-relivanow-cat-feeding-16x9.png'
+      assign asset_filename = '02-relivanow-cat-feeding-16x9.png'
+      assign asset_width = 1672
+      assign asset_height = 941
+    when '03-relivanow-editorial-cat-4x5.png'
+      assign asset_filename = '03-relivanow-editorial-cat-4x5.png'
+      assign asset_width = 1122
+      assign asset_height = 1402
+    when '04-relivanow-camera-detail-4x5.png'
+      assign asset_filename = '04-relivanow-camera-detail-4x5.png'
+      assign asset_width = 1122
+      assign asset_height = 1402
+    when '05-relivanow-cat-dog-3x4.png'
+      assign asset_filename = '05-relivanow-cat-dog-3x4.png'
+      assign asset_width = 1086
+      assign asset_height = 1448
+    when '06-relivanow-product-studio-1x1.png'
+      assign asset_filename = '06-relivanow-product-studio-1x1.png'
+      assign asset_width = 1254
+      assign asset_height = 1254
+  endcase
+
+  assign rendered_alt = alt | default: ''
+  assign rendered_class = class | default: ''
+  assign rendered_sizes = sizes | default: '100vw'
+  assign rendered_loading = loading | default: 'lazy'
+  assign rendered_position = object_position
+-%}
+
+{%- if asset_filename != blank -%}
+  <img
+    src="{{ asset_filename | asset_url }}"
+    srcset="
+      {{ asset_filename | asset_img_url: '320x' }} 320w,
+      {{ asset_filename | asset_img_url: '480x' }} 480w,
+      {{ asset_filename | asset_img_url: '720x' }} 720w,
+      {{ asset_filename | asset_img_url: '960x' }} 960w,
+      {% if asset_width >= 1200 %}{{ asset_filename | asset_img_url: '1200x' }} 1200w,{% endif %}
+      {% if asset_width >= 1500 %}{{ asset_filename | asset_img_url: '1500x' }} 1500w,{% endif %}
+      {{ asset_filename | asset_url }} {{ asset_width }}w
+    "
+    sizes="{{ rendered_sizes | escape }}"
+    width="{{ asset_width }}"
+    height="{{ asset_height }}"
+    loading="{{ rendered_loading }}"
+    {% if fetchpriority != blank %}fetchpriority="{{ fetchpriority }}"{% endif %}
+    alt="{{ rendered_alt | escape }}"
+    class="{{ rendered_class | escape }}"
+    {% if rendered_position != blank %}style="object-position: {{ rendered_position | escape }};"{% endif %}
+  >
+{%- endif -%}

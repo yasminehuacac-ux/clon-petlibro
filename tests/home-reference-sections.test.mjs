@@ -32,20 +32,26 @@ const expectedReferences = [
   ['reference_product_offers', 'relivanow-product-offers'],
 ];
 
-test('Home preserves unaffected approved entries and saves the remediated reference configuration', () => {
+test('Home preserves every reference entry and activates only approved visual references', () => {
   const template = jsonTemplate('templates/index.json');
-  const approvedIds = ['home_hero', 'home_benefits', 'home_categories', 'home_reviews', 'home_final_cta'];
-  const approvedPayload = approvedIds.map((id) => [id, template.sections[id]]);
-
-  assert.equal(
-    sha256(JSON.stringify(approvedPayload)),
-    '810672d6d25c0e0b088f2327538ae6ac34bb4553ce1db8c833b616944ecb442e',
-    'an unaffected approved Home entry changed',
+  assert.deepEqual(
+    template.order.filter((id) => id.startsWith('reference_')),
+    [
+      'reference_promotion_marquee',
+      'reference_image_gallery',
+      'reference_video_slideshow',
+      'reference_campaign_grid',
+      'reference_category_carousel',
+      'reference_community_videos',
+      'reference_expert_cards',
+      'reference_trending_grid',
+      'reference_product_offers',
+    ],
   );
-  assert.deepEqual(template.order.slice(8), expectedReferences.map(([id]) => id));
 
   const enabledReferences = new Set([
     'reference_promotion_marquee',
+    'reference_image_gallery',
   ]);
 
   for (const [id, type] of expectedReferences) {
@@ -58,10 +64,10 @@ test('Home preserves unaffected approved entries and saves the remediated refere
   assert.equal(template.sections.reference_expert_cards.settings.heading, '');
   assert.equal(template.sections.reference_product_offers.settings.campaign_status, '');
 
-  for (const id of ['home_products', 'home_story_routine', 'home_story_connected']) {
+  for (const id of ['home_benefits', 'home_categories', 'home_products', 'home_story_connected', 'home_reviews', 'home_final_cta']) {
     assert.equal(template.sections[id]?.disabled, true, `${id} must remain in JSON but stay publicly disabled`);
   }
-  assert.equal(Boolean(template.sections.home_final_cta.disabled), false, 'the remediated dark CTA remains active');
+  assert.equal(Boolean(template.sections.home_story_routine.disabled), false, 'the approved horizontal story remains active');
   assert.equal(template.sections.reference_category_carousel.settings.columns, 2);
   assert.equal(template.sections.reference_category_carousel.settings.collection_list.length, 2);
 });
@@ -141,7 +147,7 @@ test('video slideshow keeps long merchant headings inside narrow viewports', () 
   );
 });
 
-test('image gallery exposes truthful 3:4 linked cards', () => {
+test('image gallery exposes truthful 3:4 cards in a compact mobile grid', () => {
   const schema = schemaFor('sections/relivanow-image-gallery.liquid');
   const card = schema.blocks.find(({ type }) => type === 'card');
   const ids = settingIds(card.settings);
@@ -149,17 +155,19 @@ test('image gallery exposes truthful 3:4 linked cards', () => {
 
   const source = read('sections/relivanow-image-gallery.liquid');
   assert.match(source, /aspect-ratio:\s*3\s*\/\s*4/);
-  assert.match(source, /scroll-snap-type:\s*x mandatory/);
+  assert.match(source, /@media screen and \(max-width: 749px\)[\s\S]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.doesNotMatch(source, /scroll-snap-type:\s*x mandatory/);
 });
 
-test('reference card layouts fill sparse desktop rows and reserve horizontal rails for mobile', () => {
+test('reference card layouts fill sparse desktop rows and keep overflow only where intended', () => {
   const gallery = read('sections/relivanow-image-gallery.liquid');
   const trending = read('sections/relivanow-trending-grid.liquid');
   const offers = read('sections/relivanow-product-offers.liquid');
 
   assert.match(gallery, /grid-template-columns:\s*repeat\(var\(--relivanow-gallery-columns\), minmax\(0, 1fr\)\)/);
   assert.match(gallery, /--relivanow-gallery-columns:\s*\{\{ desktop_columns \}\}/);
-  assert.match(gallery, /@media screen and \(max-width: 749px\)[\s\S]*grid-auto-flow:\s*column/);
+  assert.match(gallery, /@media screen and \(max-width: 749px\)[\s\S]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.doesNotMatch(gallery, /@media screen and \(max-width: 749px\)[\s\S]*overflow-x:\s*auto/);
   assert.doesNotMatch(gallery, /grid-auto-columns:\s*calc\(\(100% - \(var\(--relivanow-gallery-gap\) \* 4\)\) \/ 5\)/);
 
   assert.match(trending, /--relivanow-trending-columns:\s*\{\{ desktop_columns \}\}/);

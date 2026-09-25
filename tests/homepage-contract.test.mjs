@@ -84,29 +84,33 @@ test('Home product story consumes native Product data and approved media', () =>
 
 test('Home template follows the conversion sequence and keeps one H1 owner', () => {
   const template = jsonTemplate('templates/index.json');
-  const approvedHomeIds = template.order.slice(0, 8);
+  const approvedHomeIds = template.order.filter((id) => !template.sections[id].disabled);
   const types = approvedHomeIds.map((id) => template.sections[id].type);
   const feederHandle = 'automatic-pet-feeder-with-remote-control-and-timed-feeding';
 
+  assert.deepEqual(approvedHomeIds, [
+    'reference_promotion_marquee',
+    'home_hero',
+    'home_story_routine',
+    'reference_image_gallery',
+  ]);
   assert.deepEqual(types, [
+    'relivanow-promotion-marquee',
     'relivanow-home-hero',
-    'relivanow-benefits-bar',
-    'collection-list',
-    'product-list',
     'relivanow-home-product-story',
-    'relivanow-home-product-story',
-    'relivanow-reviews',
-    'relivanow-home-product-story',
+    'relivanow-image-gallery',
   ]);
 
   assert.equal(types.filter((type) => type === 'relivanow-home-hero').length, 1);
   assert.equal(template.sections.home_hero.blocks.campaign_primary.settings.product, feederHandle);
   assert.equal(template.sections.home_hero.blocks.campaign_primary.settings.mobile_object_position, 'left center');
-  assert.equal(template.sections.home_hero.blocks.campaign_primary.settings.crop_embedded_copy, true);
+  assert.equal(template.sections.home_hero.blocks.campaign_primary.settings.crop_embedded_copy, false);
+  assert.equal(template.sections.home_hero.blocks.campaign_primary.settings.approved_asset_fallback, '01-relivanow-home-hero-16x9.png');
   assert.equal(template.sections.home_story_routine.settings.product, feederHandle);
   assert.equal(template.sections.home_story_connected.settings.product, feederHandle);
   assert.equal(template.sections.home_final_cta.settings.product, feederHandle);
-  assert.equal(template.sections.home_story_routine.settings.crop_embedded_copy, true);
+  assert.equal(template.sections.home_story_routine.settings.crop_embedded_copy, false);
+  assert.equal(template.sections.home_story_routine.settings.approved_asset_fallback, '02-relivanow-cat-feeding-16x9.png');
   assert.equal(template.sections.home_story_connected.settings.crop_embedded_copy, true);
   assert.equal(template.sections.home_final_cta.settings.crop_embedded_copy, true);
   assert.equal(template.sections.home_products.settings.defer_card_images, true);

@@ -1,8 +1,15 @@
 {% liquid
   assign valid_card_count = 0
   for block in section.blocks
-    if block.settings.image != blank
-      assign valid_card_count = valid_card_count | plus: 1
+    if block.settings.image != blank or block.settings.approved_asset_fallback != blank
+      assign approved_asset_fallback_is_valid = false
+      case block.settings.approved_asset_fallback
+        when '03-relivanow-editorial-cat-4x5.png', '04-relivanow-camera-detail-4x5.png', '05-relivanow-cat-dog-3x4.png', '06-relivanow-product-studio-1x1.png'
+          assign approved_asset_fallback_is_valid = true
+      endcase
+      if block.settings.image != blank or approved_asset_fallback_is_valid
+        assign valid_card_count = valid_card_count | plus: 1
+      endif
     endif
   endfor
 
@@ -20,22 +27,33 @@
     {% if section.settings.heading != blank %}<h2 class="relivanow-image-gallery__heading">{{ section.settings.heading | escape }}</h2>{% endif %}
     <div class="relivanow-image-gallery__rail" role="list" aria-label="{{ section.settings.accessibility_label | escape }}">
       {% for block in section.blocks %}
-        {% if block.settings.image != blank %}
+        {% liquid
+          assign approved_asset_fallback_is_valid = false
+          case block.settings.approved_asset_fallback
+            when '03-relivanow-editorial-cat-4x5.png', '04-relivanow-camera-detail-4x5.png', '05-relivanow-cat-dog-3x4.png', '06-relivanow-product-studio-1x1.png'
+              assign approved_asset_fallback_is_valid = true
+          endcase
+        %}
+        {% if block.settings.image != blank or approved_asset_fallback_is_valid %}
           <article class="relivanow-image-gallery__card" role="listitem" {{ block.shopify_attributes }}>
             {% if block.settings.link != blank %}
               <a href="{{ block.settings.link }}" {% if block.settings.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}>
             {% endif %}
             <div class="relivanow-image-gallery__media">
-              {{
-                block.settings.image
-                | image_url: width: 1200
-                | image_tag:
-                  widths: '320, 480, 720, 960, 1200',
-                  sizes: '(min-width: 990px) 20vw, 48vw',
-                  loading: 'lazy',
-                  alt: block.settings.image_alt,
-                  class: 'relivanow-image-gallery__image'
-              }}
+              {% if block.settings.image != blank %}
+                {{
+                  block.settings.image
+                  | image_url: width: 1200
+                  | image_tag:
+                    widths: '320, 480, 720, 960, 1200',
+                    sizes: '(min-width: 990px) 25vw, 50vw',
+                    loading: 'lazy',
+                    alt: block.settings.image_alt,
+                    class: 'relivanow-image-gallery__image'
+                }}
+              {% else %}
+                {% render 'relivanow-approved-image', asset_key: block.settings.approved_asset_fallback, alt: block.settings.image_alt, class: 'relivanow-image-gallery__image', sizes: '(min-width: 990px) 25vw, 50vw', loading: 'lazy' %}
+              {% endif %}
               {% if block.settings.hover_image != blank %}
                 {{
                   block.settings.hover_image
@@ -125,13 +143,7 @@
 
   @media screen and (max-width: 749px) {
     .relivanow-image-gallery__rail {
-      grid-template-columns: none;
-      grid-auto-flow: column;
-      grid-auto-columns: calc((100% - var(--relivanow-gallery-gap)) / 2.1);
-      overflow-x: auto;
-      overscroll-behavior-inline: contain;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: thin;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
@@ -154,6 +166,19 @@
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Image" },
         { "type": "image_picker", "id": "hover_image", "label": "Hover image" },
+        {
+          "type": "select",
+          "id": "approved_asset_fallback",
+          "label": "Approved theme asset fallback",
+          "options": [
+            { "value": "", "label": "None" },
+            { "value": "03-relivanow-editorial-cat-4x5.png", "label": "RELIVANOW editorial cat" },
+            { "value": "04-relivanow-camera-detail-4x5.png", "label": "RELIVANOW editorial device detail" },
+            { "value": "05-relivanow-cat-dog-3x4.png", "label": "RELIVANOW cat and dog lifestyle" },
+            { "value": "06-relivanow-product-studio-1x1.png", "label": "RELIVANOW product studio" }
+          ],
+          "default": ""
+        },
         { "type": "text", "id": "image_alt", "label": "Image alt text" },
         { "type": "text", "id": "label", "label": "Label" },
         { "type": "url", "id": "link", "label": "Link" },
