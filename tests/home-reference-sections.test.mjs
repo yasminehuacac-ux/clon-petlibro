@@ -32,24 +32,21 @@ const expectedReferences = [
   ['reference_product_offers', 'relivanow-product-offers'],
 ];
 
-test('Home preserves its approved eight entries and saves the approved reference configuration', () => {
+test('Home preserves unaffected approved entries and saves the remediated reference configuration', () => {
   const template = jsonTemplate('templates/index.json');
-  const approvedIds = template.order.slice(0, 8);
+  const approvedIds = ['home_hero', 'home_benefits', 'home_categories', 'home_reviews', 'home_final_cta'];
   const approvedPayload = approvedIds.map((id) => [id, template.sections[id]]);
 
   assert.equal(
     sha256(JSON.stringify(approvedPayload)),
-    '1cac7b0b9b26aa9f7c7ea55cba71fdb7b7c5afddb8addc8da04a1a7c53cf1ef9',
-    'the approved Home payload changed',
+    '810672d6d25c0e0b088f2327538ae6ac34bb4553ce1db8c833b616944ecb442e',
+    'an unaffected approved Home entry changed',
   );
   assert.deepEqual(template.order.slice(8), expectedReferences.map(([id]) => id));
 
   const enabledReferences = new Set([
     'reference_promotion_marquee',
-    'reference_video_slideshow',
-    'reference_image_gallery',
     'reference_category_carousel',
-    'reference_trending_grid',
   ]);
 
   for (const [id, type] of expectedReferences) {
@@ -61,9 +58,18 @@ test('Home preserves its approved eight entries and saves the approved reference
   assert.equal(template.sections.reference_community_videos.settings.heading, '');
   assert.equal(template.sections.reference_expert_cards.settings.heading, '');
   assert.equal(template.sections.reference_product_offers.settings.campaign_status, '');
+
+  for (const id of ['home_products', 'home_story_routine', 'home_story_connected']) {
+    assert.equal(template.sections[id]?.disabled, true, `${id} must remain in JSON but stay publicly disabled`);
+  }
+  assert.equal(Boolean(template.sections.home_final_cta.disabled), false, 'the remediated dark CTA remains active');
+  assert.equal(template.sections.reference_category_carousel.settings.columns, 2);
+  assert.equal(template.sections.reference_category_carousel.settings.collection_list.length, 2);
 });
 
 test('native collection-list implementation remains unchanged for the category reference', () => {
+  const carousel = read('snippets/resource-list-carousel.liquid');
+
   assert.equal(
     sha256(read('sections/collection-list.liquid')).toUpperCase(),
     '1A80F7000E2C9BC0A33B1E67A8BF9CCA7E01E6961454B23C9E82430117ABA553',
@@ -72,9 +78,10 @@ test('native collection-list implementation remains unchanged for the category r
   const template = jsonTemplate('templates/index.json');
   const category = template.sections.reference_category_carousel;
   assert.equal(category.settings.layout_type, 'carousel');
-  assert.equal(category.settings.columns, 5);
+  assert.equal(category.settings.columns, category.settings.collection_list.length);
   assert.equal(category.settings.mobile_card_size, '44cqw');
   assert.deepEqual(category.settings.collection_list, ['pet-clean', 'spare-parts']);
+  assert.match(carousel, /\.slideshow-control\[disabled\]\s*\{\s*display:\s*none/);
 });
 
 test('promotion marquee exposes opt-in motion without changing the native section schema', () => {
@@ -144,6 +151,40 @@ test('image gallery exposes truthful 3:4 linked cards', () => {
   const source = read('sections/relivanow-image-gallery.liquid');
   assert.match(source, /aspect-ratio:\s*3\s*\/\s*4/);
   assert.match(source, /scroll-snap-type:\s*x mandatory/);
+});
+
+test('reference card layouts fill sparse desktop rows and reserve horizontal rails for mobile', () => {
+  const gallery = read('sections/relivanow-image-gallery.liquid');
+  const trending = read('sections/relivanow-trending-grid.liquid');
+  const offers = read('sections/relivanow-product-offers.liquid');
+
+  assert.match(gallery, /grid-template-columns:\s*repeat\(var\(--relivanow-gallery-columns\), minmax\(0, 1fr\)\)/);
+  assert.match(gallery, /--relivanow-gallery-columns:\s*\{\{ desktop_columns \}\}/);
+  assert.match(gallery, /@media screen and \(max-width: 749px\)[\s\S]*grid-auto-flow:\s*column/);
+  assert.doesNotMatch(gallery, /grid-auto-columns:\s*calc\(\(100% - \(var\(--relivanow-gallery-gap\) \* 4\)\) \/ 5\)/);
+
+  assert.match(trending, /--relivanow-trending-columns:\s*\{\{ desktop_columns \}\}/);
+  assert.match(trending, /grid-template-columns:\s*repeat\(var\(--relivanow-trending-columns\), minmax\(0, 1fr\)\)/);
+  assert.match(trending, /@media screen and \(max-width: 989px\)[\s\S]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(trending, /sizes:\s*'\(min-width: 990px\) 25vw, 50vw'/);
+  assert.doesNotMatch(trending, /grid-template-columns:\s*repeat\(8,/);
+
+  assert.match(offers, /grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\)/);
+  assert.match(offers, /@media screen and \(max-width: 749px\)[\s\S]*grid-auto-flow:\s*column/);
+  assert.match(offers, /@media screen and \(max-width: 749px\)[\s\S]*overflow-x:\s*auto/);
+});
+
+test('dark Home stories use configured foreground contrast and reserve CTA breathing room', () => {
+  const template = jsonTemplate('templates/index.json');
+  const source = read('sections/relivanow-home-product-story.liquid');
+  const finalCta = template.sections.home_final_cta.settings;
+
+  assert.equal(finalCta.background_color.toLowerCase(), '#171817');
+  assert.equal(finalCta.text_color.toLowerCase(), '#ffffff');
+  assert.match(source, /\.relivanow-home-story__eyebrow,[\s\S]*\.relivanow-home-story__text\s*\{\s*color:\s*var\(--home-story-text\)/);
+  assert.match(source, /padding-block-end:\s*clamp\(48px, 7vw, 104px\)/);
+  assert.doesNotMatch(source, /\.relivanow-home-story__eyebrow\s*\{[^}]*color:\s*var\(--color-brand\)/s);
+  assert.doesNotMatch(source, /\.relivanow-home-story__text\s*\{[^}]*color:\s*var\(--color-muted\)/s);
 });
 
 test('campaign, community, and expert sections are explicit fail-closed contracts', () => {

@@ -169,6 +169,7 @@
     },
     "home_products": {
       "type": "product-list",
+      "disabled": true,
       "blocks": {
         "static-header": {
           "type": "_product-list-content",
@@ -241,6 +242,7 @@
     },
     "home_story_routine": {
       "type": "relivanow-home-product-story",
+      "disabled": true,
       "name": "Daily routine story",
       "settings": {
         "enable_section": true,
@@ -266,6 +268,7 @@
     },
     "home_story_connected": {
       "type": "relivanow-home-product-story",
+      "disabled": true,
       "name": "Connected care story",
       "settings": {
         "enable_section": true,
@@ -350,6 +353,7 @@
     },
     "reference_video_slideshow": {
       "type": "relivanow-video-slideshow",
+      "disabled": true,
       "blocks": {
         "slide_9FdBdV": {
           "type": "slide",
@@ -385,6 +389,7 @@
     },
     "reference_image_gallery": {
       "type": "relivanow-image-gallery",
+      "disabled": true,
       "blocks": {
         "card_w8xXHn": {
           "type": "card",
@@ -501,7 +506,7 @@
         "collection_list": ["pet-clean", "spare-parts"],
         "layout_type": "carousel",
         "carousel_on_mobile": false,
-        "columns": 5,
+        "columns": 2,
         "mobile_columns": "2",
         "mobile_card_size": "44cqw",
         "columns_gap": 8,
@@ -547,6 +552,7 @@
     },
     "reference_trending_grid": {
       "type": "relivanow-trending-grid",
+      "disabled": true,
       "blocks": {
         "item_UKRTxH": {
           "type": "item",

@@ -95,6 +95,7 @@
     gap: var(--gap-sm);
     min-width: 0;
     padding: clamp(32px, 6vw, 88px);
+    padding-block-end: clamp(48px, 7vw, 104px);
   }
 
   .relivanow-home-story__content--center { justify-items: center; text-align: center; }
@@ -102,9 +103,11 @@
   .relivanow-home-story__content h2,
   .relivanow-home-story__text > :first-child,
   .relivanow-home-story__text > :last-child { margin-block: 0; }
-  .relivanow-home-story__eyebrow { color: var(--color-brand); font-size: var(--font-size--sm); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+  .relivanow-home-story__eyebrow,
+  .relivanow-home-story__text { color: var(--home-story-text); }
+  .relivanow-home-story__eyebrow { font-size: var(--font-size--sm); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
   .relivanow-home-story__content h2 { max-width: 15ch; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.02; text-wrap: balance; }
-  .relivanow-home-story__text { max-width: 38rem; color: var(--color-muted); font-size: clamp(1rem, 1.5vw, 1.125rem); }
+  .relivanow-home-story__text { max-width: 38rem; font-size: clamp(1rem, 1.5vw, 1.125rem); }
   .relivanow-home-story__content .button { width: fit-content; min-height: 44px; margin-block-start: var(--margin-xs); }
 
   @media screen and (min-width: 750px) {

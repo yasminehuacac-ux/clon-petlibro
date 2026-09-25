@@ -95,12 +95,8 @@
 
   .relivanow-product-offers__rail {
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(16rem, 22%);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--relivanow-offers-gap);
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scroll-snap-type: x mandatory;
   }
 
   .relivanow-product-offers__rail > * {
@@ -169,12 +165,17 @@
 
   @media screen and (max-width: 749px) {
     .relivanow-product-offers__rail {
+      grid-template-columns: none;
+      grid-auto-flow: column;
       grid-auto-columns: 72%;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      scroll-snap-type: x mandatory;
     }
 
     .relivanow-product-offers__campaign {
       grid-column: auto;
-      min-width: 82%;
+      min-width: 0;
     }
   }
 {% endstylesheet %}

@@ -5,12 +5,17 @@
       assign valid_card_count = valid_card_count | plus: 1
     endif
   endfor
+
+  assign desktop_columns = valid_card_count
+  if desktop_columns > 4
+    assign desktop_columns = 4
+  endif
 %}
 
 {% if valid_card_count > 0 %}
   <section
     class="relivanow-image-gallery section section--{{ section.settings.section_width }}"
-    style="--relivanow-gallery-gap: {{ section.settings.gap }}px; --relivanow-gallery-bg: {{ section.settings.background_color }}; --relivanow-gallery-color: {{ section.settings.text_color }};"
+    style="--relivanow-gallery-gap: {{ section.settings.gap }}px; --relivanow-gallery-columns: {{ desktop_columns }}; --relivanow-gallery-bg: {{ section.settings.background_color }}; --relivanow-gallery-color: {{ section.settings.text_color }};"
   >
     {% if section.settings.heading != blank %}<h2 class="relivanow-image-gallery__heading">{{ section.settings.heading | escape }}</h2>{% endif %}
     <div class="relivanow-image-gallery__rail" role="list" aria-label="{{ section.settings.accessibility_label | escape }}">
@@ -71,13 +76,8 @@
 
   .relivanow-image-gallery__rail {
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: calc((100% - (var(--relivanow-gallery-gap) * 4)) / 5);
+    grid-template-columns: repeat(var(--relivanow-gallery-columns), minmax(0, 1fr));
     gap: var(--relivanow-gallery-gap);
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
   }
 
   .relivanow-image-gallery__card {
@@ -125,7 +125,13 @@
 
   @media screen and (max-width: 749px) {
     .relivanow-image-gallery__rail {
+      grid-template-columns: none;
+      grid-auto-flow: column;
       grid-auto-columns: calc((100% - var(--relivanow-gallery-gap)) / 2.1);
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
     }
   }
 
