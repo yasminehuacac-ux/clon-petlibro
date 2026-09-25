@@ -3,6 +3,11 @@
     render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
   endif
 
+  assign product_matches = false
+  if section.settings.applies_to_product != blank and product != blank and section.settings.applies_to_product.id == product.id
+    assign product_matches = true
+  endif
+
   assign valid_highlight_count = 0
   for block in section.blocks
     if block.type == 'highlight' and block.settings.verification_status == 'CONFIRMED' and block.settings.image != blank and block.settings.image_alt != blank and block.settings.title != blank and block.settings.text != blank
@@ -10,7 +15,7 @@
     endif
   endfor
   assign section_ready = false
-  if section.settings.heading != blank and valid_highlight_count == 4
+  if product_matches and section.settings.heading != blank and valid_highlight_count == 4
     assign section_ready = true
   endif
 %}
@@ -68,6 +73,7 @@
   "disabled_on": { "groups": ["header", "footer"] },
   "max_blocks": 4,
   "settings": [
+    { "type": "product", "id": "applies_to_product", "label": "Show only on this product" },
     { "type": "text", "id": "heading", "label": "Heading" },
     { "type": "richtext", "id": "intro", "label": "Optional introduction" },
     { "type": "color", "id": "background_color", "label": "t:settings.background_color", "placeholder": "t:settings.default" },

@@ -1130,6 +1130,7 @@
       },
       "block_order": ["highlight_mDhWrW", "highlight_MJDEDU", "highlight_ya7zXi", "highlight_WeVQyg"],
       "settings": {
+        "applies_to_product": "automatic-pet-feeder-with-remote-control-and-timed-feeding",
         "heading": "Smart feeding highlights",
         "intro": "",
         "gap": 14
@@ -1165,6 +1166,7 @@
       },
       "block_order": ["product_RCFNH9", "product_FxXxyx"],
       "settings": {
+        "applies_to_product": "automatic-pet-feeder-with-remote-control-and-timed-feeding",
         "heading": "Complete the setup",
         "gap": 20
       }

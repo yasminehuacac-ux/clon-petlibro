@@ -89,10 +89,42 @@ test('PDP reference sections use the Horizon palette-compatible background overr
     );
     assert.equal(backgroundSetting?.type, 'color', `${path} must expose Horizon's optional background color override`);
     assert.equal(backgroundSetting?.default, undefined, `${path} must inherit the palette when the override is blank`);
-    assert.match(source, /render 'contrast-override', background_color: section\.settings\.background_color, section_id: section\.id/);
-    assert.match(source, /color-custom-\{\{ section\.id \}\}/);
+    assert.match(
+      source,
+      /if section\.settings\.background_color != blank\s+render 'contrast-override', background_color: section\.settings\.background_color, section_id: section\.id\s+endif/,
+      `${path} must emit its override only for a configured color`,
+    );
+    assert.match(
+      source,
+      /\{% if section\.settings\.background_color != blank %\} color-custom-\{\{ section\.id \}\}\{% endif %\}/,
+      `${path} must add its custom-color class only for a configured color`,
+    );
     assert.doesNotMatch(source, /color-\{\{ section\.settings\.color_scheme \}\}/);
     assert.equal('color_scheme' in productTemplate.sections[id].settings, false, `${id} must not retain a legacy saved value`);
+    assert.ok(
+      !('background_color' in productTemplate.sections[id].settings) || productTemplate.sections[id].settings.background_color === '',
+      `${id} must keep the optional override blank or omitted until the merchant configures it`,
+    );
+  }
+});
+
+test('enabled PDP reference sections fail closed outside their selected parent Product', () => {
+  const template = jsonTemplate('templates/product.json');
+  const parentHandle = 'automatic-pet-feeder-with-remote-control-and-timed-feeding';
+
+  for (const [id, type] of [
+    ['reference_pdp_highlights', 'relivanow-product-highlights'],
+    ['reference_pdp_complete_look', 'relivanow-complete-look'],
+  ]) {
+    const path = `sections/${type}.liquid`;
+    const schema = schemaFor(path);
+    const source = read(path);
+    const parentSetting = schema.settings.find(({ id: settingId }) => settingId === 'applies_to_product');
+
+    assert.equal(parentSetting?.type, 'product', `${path} must use a merchant-owned Product association`);
+    assert.equal(template.sections[id].settings.applies_to_product, parentHandle, `${id} must target the approved feeder`);
+    assert.match(source, /section\.settings\.applies_to_product\.id == product\.id/);
+    assert.match(source, /if product_matches and section\.settings\.heading != blank/);
   }
 });
 
