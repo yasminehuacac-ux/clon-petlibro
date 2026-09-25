@@ -6,6 +6,8 @@ All notable project changes are recorded here.
 
 ### Added
 
+- TASK-015 post-Save synchronization and diagnosis evidence: 7 enabled / 8 disabled reference instances, a Horizon palette-compatible PDP background contract, exact development readbacks, protected-live hashes and an explicit blocked browser-QA matrix.
+- Merchant-owned parent-Product associations for the enabled Product Highlights and Complete the Look instances, with a fail-closed current-Product guard and regression coverage preventing feeder content on unrelated PDPs.
 - TASK-013 controlled deployment evidence for the exact 25-file TASK-011/TASK-012 allowlist on development theme `193260781938`, including remote readback hashes, live-theme before/after protection and read-only storefront smoke QA.
 - TASK-012 PDP Reference Phase 2: six scoped RELIVANOW OS 2.0 sections for UGC dialog, shoppable hotspots, editorial proof, Product Highlights, Offerings and Complete the Look, appended disabled to `templates/product.json` after its nineteen approved entries.
 - Native Product/Variant/money/image/form/cart reuse for Complete the Look, with exact available-option matching and an explicit form-first opt-in that preserves every existing Product form's legacy URL-first behavior.
@@ -63,6 +65,8 @@ All notable project changes are recorded here.
 
 ### Changed
 
+- Six RELIVANOW PDP reference sections now use optional `background_color` plus Horizon's native `contrast-override` pattern instead of an unsupported legacy `color_scheme`; no hardcoded color default was introduced.
+- TASK-014/TASK-015 retain seven enabled evidence-backed sections and eight disabled incomplete/unsupported sections only on development theme `193260781938`. Fresh authenticated visual QA remains blocked; live theme `192527597938` is unchanged.
 - TASK-013 is complete: all 15 reference instances remain disabled on development, Home/PDP/Search/Judge.me/Cart Drawer/console/overflow checks pass read-only, and live theme `192527597938` is byte-identical across its protected snapshot. No publication, Theme Editor Save, PR or merge occurred.
 - TASK-012 is complete locally without theme upload or publication. The approved active PDP, Home, gallery, primary purchase flow, sticky navigation, Judge.me, Cart Drawer and structured data remain unchanged; real storefront/Theme Editor visual QA is pending.
 - Native marquee runtime now supports distance-based duration and hover-pause opt-out only when explicit opt-in attributes are present; legacy instances keep their existing formula and default hover behavior. `collection-list.liquid` remains unchanged.

@@ -1,8 +1,8 @@
 # Project status
 
 **Project:** RELIVANOW Theme  
-**Stage:** TASK-002 through TASK-009 and independent TASK-011/TASK-012/TASK-013 complete; TASK-010 release-candidate checkpoint validated with external launch gates remaining
-**Active task:** TASK-010 is `IN PROGRESS`; independent TASK-011, TASK-012 and TASK-013 are `DONE`
+**Stage:** TASK-002 through TASK-009 and independent TASK-011/TASK-012/TASK-013 complete; TASK-014/TASK-015 implemented with authenticated visual QA blocked; TASK-010 release-candidate checkpoint validated with external launch gates remaining
+**Active task:** TASK-010 is `IN PROGRESS`; TASK-014/TASK-015 are `BLOCKED` only on fresh authenticated browser QA
 **Last updated:** 2026-09-24
 
 ## Verified baseline facts
@@ -26,6 +26,9 @@
 
 ## Current state
 
+- TASK-014 configured and enabled seven evidence-backed reference sections only on development theme `193260781938`; eight incomplete or unsupported sections remain disabled. The saved state is synchronized to Git.
+- TASK-015 replaced the six unsupported PDP `color_scheme` settings with Horizon's optional `background_color`/`contrast-override` contract. Independent review also found and closed default-template claim leakage: Product Highlights and Complete the Look now require the documented automatic-feeder Product association and fail closed on other Products.
+- Exact development readbacks match the changed Liquid files byte for byte and both templates semantically. Protected live theme `192527597938` retained byte-identical hashes. Fresh editor/storefront QA is still blocked because the browser helper timed out and reset twice; no post-Save visual result is claimed.
 - TASK-013 uploaded only the reviewed 25-file TASK-011/TASK-012 allowlist to development theme `193260781938` with `--nodelete`. Remote readback matches all JavaScript/Liquid files byte-for-byte and both Shopify-canonicalized templates semantically; all 15 reference instances remain disabled.
 - TASK-013 read-only preview QA passes Home, PDP, Search, Judge.me, Cart Drawer, console and basic desktop/mobile overflow. Live theme `192527597938` retained byte-identical protected hashes and was not targeted; no publication or Theme Editor Save occurred.
 - Branding and conversion direction approved.
@@ -95,10 +98,10 @@
 - Read-only payments discovery confirms Peru as the store's legal country and records only the actual options visible in Admin: Mercado Pago Tarjetas, Mercado Pago Checkout Pro and PayPal Express. Tarjetas + PayPal is the conditional UX recommendation; international/currency support for the six launch markets remains unproven until authorized connection and real checkout testing. No account, credential, bank, contract, provider, plan or charge state changed.
 - United States remains active in inherited USD; Canada and the Germany/Belgium/Spain/France EU market remain draft. English remains published; German, Spanish, French and Dutch remain unpublished. White/Black and Single/Dual remain supplier references only; no Product, Variant, price, inventory or media state changed.
 - Only six accessibility implementation files were uploaded to development theme `193260781938`. Theme list still reports `192527597938` as live, and its three protected snapshot files exactly match their historical byte sizes and SHA-256 values.
-- Independent TASK-011 adds eight focused RELIVANOW Home reference sections and one native `collection-list` carousel instance on branch `feat/relivanow-reference-sections`. All nine template instances are disabled; the previously approved eight Home objects remain unchanged.
+- Independent TASK-011 added eight focused RELIVANOW Home reference sections and one native `collection-list` carousel instance on branch `feat/relivanow-reference-sections`. All nine were originally appended disabled; TASK-014 later enabled five evidence-backed Home instances only on development. The previously approved eight Home objects remain unchanged.
 - TASK-011 keeps `collection-list.liquid` byte-identical and places new marquee speed/hover behavior behind explicit data attributes. Campaign, community and expert output requires complete `CONFIRMED` data; Product/Collection rails consume native Shopify objects and publish no default commercial claims.
 - TASK-011 local verification covers the full Node suite, JavaScript syntax, JSON/JSONC and Liquid schema parsing, setting-ID uniqueness, Theme Check, diff/reference/tracker/asset scans, and an isolated exact-width fixture at 1440×900, 1024×768, 768×1024, 390×844 and 360×800. No Shopify theme upload, Theme Editor save, push or publication occurred; real storefront visual QA is pending.
-- Independent TASK-012 adds six isolated, disabled PDP reference instances after the approved nineteen-entry default Product template. UGC, shoppable hotspots, editorial proof, Product Highlights, Offerings and Complete the Look require confirmed merchant-owned content and real Shopify Products; no public placeholder or fabricated commercial/social-proof content ships.
+- Independent TASK-012 added six isolated PDP reference instances after the approved nineteen-entry default Product template. All six were originally appended disabled; TASK-014 later enabled Product Highlights and Complete the Look with evidence-backed configuration, and TASK-015 bound both to the documented feeder Product. The remaining four stay disabled; no public placeholder or fabricated commercial/social-proof content ships.
 - TASK-012 preserves the approved Product payload hash and every protected Home/PDP/gallery/sticky-navigation/Judge.me/Cart surface. The only shared runtime change is a tested `data-variant-source="form"` opt-in for secondary native Product forms; all existing Product forms keep the legacy URL-first path.
 - TASK-012 local validation covers the complete Node suite, JavaScript syntax, JSON/JSONC/Liquid schemas, setting IDs, asset/content/privacy/reference scans, raw and diagnostic Theme Check, and a reproducible five-width geometry contract. Browser policy blocked local `file://` visual rendering, and no Shopify upload/save was authorized, so actual storefront/Theme Editor visual and interaction QA remains pending.
 
@@ -133,4 +136,4 @@
 
 ## Active task
 
-TASK-007 is `DONE`: its Judge.me infrastructure and authentic zero-review launch state are validated on unpublished theme `193260781938`; populated behavior remains future operational QA after real buyer reviews exist. TASK-009 is `DONE`: its code, tests, development preview, authorized Markets/privacy/language baseline, Search Console ownership, and Merchant account setup are recorded. TASK-010 is `IN PROGRESS`: Batch 1 accessibility and read-only discovery pass, while the six authoritative blockers above prevent publication. Active theme `192527597938` remains protected and unchanged.
+TASK-007 is `DONE`: its Judge.me infrastructure and authentic zero-review launch state are validated on unpublished theme `193260781938`; populated behavior remains future operational QA after real buyer reviews exist. TASK-009 is `DONE`: its code, tests, development preview, authorized Markets/privacy/language baseline, Search Console ownership, and Merchant account setup are recorded. TASK-010 is `IN PROGRESS`: Batch 1 accessibility and read-only discovery pass, while the six authoritative blockers above prevent publication. TASK-014/TASK-015 remain `BLOCKED` only for fresh authenticated editor/storefront QA. Active theme `192527597938` remains protected and unchanged.

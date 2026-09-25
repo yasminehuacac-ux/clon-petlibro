@@ -1,5 +1,17 @@
 # QA matrix
 
+## TASK-015 post-Save synchronization and diagnosis — 2026-09-24
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Saved reference state | PASS CONFIGURATION | Development readback and Git contain seven enabled evidence-backed instances and eight disabled incomplete/unsupported instances. |
+| PDP color contract | PASS STATIC / BLOCKED EDITOR | Six PDP sections use Horizon's optional `background_color` plus `contrast-override`; no `color_scheme` dependency remains. Fresh warning disappearance is not visually claimed because browser control failed. |
+| Parent-Product scope | PASS STATIC / BLOCKED STOREFRONT | Product Highlights and Complete the Look require a merchant-owned feeder Product association and current Product ID match. Feeder/non-feeder browser confirmation remains pending. |
+| Full contracts | PASS | 53/53 Node tests pass, including explicit blank/omitted color behavior and fail-closed parent-Product scope. |
+| Development readback | PASS | Changed Liquid files match byte for byte; Shopify-canonicalized templates match semantically. |
+| Live protection | PASS | `layout/theme.liquid`, `config/settings_data.json`, `templates/index.json` and `templates/product.json` retain byte-identical before/after hashes on live theme `192527597938`. |
+| Five-viewport/editor/regression QA | BLOCKED | Fresh Chrome creation and its single recovery call both timed out and reset. No previous or static result is substituted for current visual evidence. |
+
 ## TASK-013 controlled development deployment — 2026-09-24
 
 | Case | Result | Evidence / remaining gate |

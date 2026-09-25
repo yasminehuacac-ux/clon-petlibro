@@ -15,6 +15,8 @@
 | TASK-011 | Home reference sections — Phase 1 | DONE | User-approved hybrid design; local-only implementation and QA | Work |
 | TASK-012 | PDP reference sections — Phase 2 | DONE | User-approved hybrid design; local-only implementation and static QA | Work |
 | TASK-013 | Controlled reference-section deployment | DONE | Exact allowlist uploaded and verified only on development theme `193260781938` | Work |
+| TASK-014 | Development reference-section configuration | BLOCKED | Seven evidence-backed sections saved on development; authenticated post-Save visual QA unavailable | Work |
+| TASK-015 | Phase 3C synchronization and post-Save QA | BLOCKED | Git sync, color fix, Product scoping and protected deployment complete; fresh browser QA unavailable | Work |
 
 ## Status meanings
 
@@ -64,3 +66,7 @@ Work explicitly authorized TASK-012 as independent Phase 2 work while TASK-010 r
 ## TASK-013 gate
 
 Work authorized one controlled upload of the exact TASK-011/TASK-012 theme allowlist to development theme `193260781938`. All 25 authorized files were downloaded back; 23 JavaScript/Liquid files match byte-for-byte and the two Shopify-canonicalized JSON templates match semantically. All 15 reference instances remain disabled. Home, PDP, Search, Judge.me, Cart Drawer, console and desktop/mobile overflow smoke checks pass read-only. Live theme `192527597938` retains byte-identical protected hashes; no Theme Editor Save, publication, live upload, Product/cart mutation, PR or merge occurred.
+
+## TASK-014/TASK-015 gate
+
+TASK-014 subsequently configured and enabled seven evidence-backed reference sections only on development theme `193260781938`; eight unsupported or incomplete sections remain disabled. TASK-015 synchronized that saved state, replaced six invalid legacy `color_scheme` settings with Horizon's optional palette-compatible background override, and bound the two enabled PDP reference sections to the documented automatic-feeder Product so they fail closed on other Products. Exact allowlist readback passes and protected live hashes remain byte-identical. Both tasks remain `BLOCKED` only for fresh authenticated Theme Editor/storefront QA because the browser-control runtime timed out and reset twice; no visual PASS is inferred from static evidence.

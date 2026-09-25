@@ -16,7 +16,7 @@
 
 ## Outcome
 
-The post-Save state from development theme `193260781938` is synchronized into Git. The editor's color warning was traced to a local schema mismatch, covered by a RED→GREEN regression test, corrected with Horizon's native palette-compatible pattern and deployed through a seven-file allowlist. The protected live files are byte-identical before and after deployment.
+The post-Save state from development theme `193260781938` is synchronized into Git. The editor's color warning was traced to a local schema mismatch, covered by a RED→GREEN regression test, corrected with Horizon's native palette-compatible pattern and deployed through a seven-file allowlist. Independent review then identified that the two enabled PDP reference sections were attached to the shared default Product template without a parent-Product guard. A second RED→GREEN correction now binds both instances to the existing automatic-feeder Product through merchant-owned Product settings and was deployed through a three-file allowlist. The protected live files are byte-identical before and after both deployments.
 
 The mandatory real browser QA is not complete. A newly requested Chrome session timed out and reset the browser helper; the single allowed recovery call also timed out and reset it. No stale session, unauthenticated response or prior TASK-013/TASK-014 observation is presented as current visual proof.
 
@@ -120,7 +120,7 @@ The test verifies that:
 
 RED evidence: 13/14 tests passed; the new test failed first at `sections/relivanow-pdp-ugc.liquid` because `color_scheme` was still present.
 
-GREEN evidence: after the minimal correction, 14/14 targeted tests passed and the complete suite passed 52/52.
+GREEN evidence: after the minimal correction, 14/14 targeted tests passed and the complete suite passed 52/52. The strengthened color contract now explicitly checks the blank/omitted saved value and both conditional Liquid branches rather than merely checking for their source strings.
 
 ### Minimal correction
 
@@ -141,6 +141,20 @@ The wrapper receives `color-custom-{{ section.id }}` only when the optional over
 `1ef0c93786f4d9ccb1f43b1eec059c360083da46` — `fix: resolve RELIVANOW color scheme configuration`
 
 The commit was pushed only to `origin/feat/relivanow-reference-sections`.
+
+### Independent-review Product-scope correction
+
+The required independent review found one important activation risk: Product Highlights contains feeder-specific claims, while Product Highlights and Complete the Look were enabled inside the shared default Product template. Their readiness gates validated content but did not prove that the current PDP was the approved feeder.
+
+A new regression contract, `enabled PDP reference sections fail closed outside their selected parent Product`, was added before implementation. RED evidence was 14/15 targeted tests, failing because `relivanow-product-highlights.liquid` had no Product association. Both active sections now expose `applies_to_product` as a Shopify Product setting and require `section.settings.applies_to_product.id == product.id` before becoming public-ready. The saved value is the already documented Product handle `automatic-pet-feeder-with-remote-control-and-timed-feeding`; no numeric ID, new Product or hardcoded Liquid handle was introduced.
+
+GREEN evidence is 15/15 targeted tests and 53/53 in the full suite.
+
+Correction commit:
+
+`ba142ac589746a17bf89cc2ee8ccac511f338978` — `fix: scope RELIVANOW PDP sections to feeder`
+
+This correction changes no Product record or template assignment in Shopify Admin. On non-matching PDPs both sections fail closed publicly; Theme Editor can still show the existing design-mode placeholder.
 
 ### Theme Editor confirmation
 
@@ -179,6 +193,24 @@ Shopify returned theme `193260781938`, store `relivanow.myshopify.com` and role 
 
 All six downloaded Liquid files match the local files byte for byte. The downloaded Product template has zero semantic differences from local; its raw hash differs from the local working representation only because Shopify canonicalizes JSON.
 
+### Post-review three-file deployment
+
+Exact allowlist:
+
+- `sections/relivanow-product-highlights.liquid`
+- `sections/relivanow-complete-look.liquid`
+- `templates/product.json`
+
+The two Liquid files were uploaded with the template in one `--nodelete` push. Shopify persisted the Liquid schemas but initially discarded the two newly introduced Product-setting values while processing the same batch. This was detected by immediate readback (`REMOTE_MISSING_SCOPE`); `templates/product.json` was then retried alone after the schemas existed remotely. The second readback contained both Product associations and reported zero semantic differences from local.
+
+| File | Before scope fix | Final development readback |
+|---|---|---|
+| `sections/relivanow-product-highlights.liquid` | `5f5c67fd288dff8668ff5ba3640f44076fd4ea2c810350fd8fce9303884d0bdb` | `fcb1346e84ffcd6ab75f77663e4ce73c70625abe3fb83ba30fd1bb48d4a05971` |
+| `sections/relivanow-complete-look.liquid` | `fdc1be0a4733ce3031b28e3affd5c16768f8b22cfbcdb5b90565e8d80fd6e057` | `c7abf263e1669fcf5136750ba1836f24e380aa06787d1c8b34e422da379d57aa` |
+| `templates/product.json` | `e453315766e15d45c7beef7053082b907e25e2b275099b4d06c60980be2ed81a` | `8094040aa2c1cb5711bd4b0738f62a587f4116287526c9af229f9bd6ea5527df` |
+
+The two final Liquid hashes match local byte for byte. The Product template differs only by Shopify JSON canonicalization; recursive comparison returned `DIFF_COUNT=0` and confirmed both `applies_to_product` values. Final roles remained development `193260781938` and live `192527597938`.
+
 ## 5. Protected live verification
 
 | File | SHA-256 before | SHA-256 after | Result |
@@ -190,13 +222,15 @@ All six downloaded Liquid files match the local files byte for byte. The downloa
 
 The final theme list still reports `193260781938` as `development` and `192527597938` as `live`.
 
+The same four live hashes were checked again after the Product-scope deployment and its template retry; all four remained identical.
+
 ## 6. Technical validation
 
 | Gate | Result |
 |---|---|
-| Full Node suite | PASS — 52/52 |
+| Full Node suite | PASS — 53/53 |
 | TASK-011 Home reference contracts | PASS within full suite |
-| TASK-012 PDP reference contracts plus new color test | PASS within full suite |
+| TASK-012 PDP reference contracts plus color and parent-Product scope tests | PASS within full suite |
 | JavaScript syntax | PASS — 99/99 |
 | JSON/JSONC parsing | PASS within full suite |
 | Liquid schemas and setting-ID uniqueness | PASS within full suite |
@@ -218,8 +252,8 @@ The six inherited warnings remain one `ExcessiveSettingsCount` in `sections/head
 | Image gallery | Verified in template and remote sync | BLOCKED — browser unavailable |
 | Category carousel | Verified in template and remote sync | BLOCKED — browser unavailable |
 | Trending grid | Verified in template and remote sync | BLOCKED — browser unavailable |
-| PDP Product Highlights | Verified in template and remote sync | BLOCKED — browser unavailable |
-| PDP Complete the Look | Verified in template and remote sync | BLOCKED — browser unavailable |
+| PDP Product Highlights | Verified in template/readback and scoped to the feeder Product | BLOCKED — browser unavailable |
+| PDP Complete the Look | Verified in template/readback and scoped to the feeder Product | BLOCKED — browser unavailable |
 
 Static/configuration verification is not substituted for render evidence.
 
@@ -271,13 +305,14 @@ Use a fresh authenticated browser. Do not Save, publish, submit forms, add to ca
 9. **Trending grid:** confirm the four configured real Products, native Product links, current dynamic prices/availability, responsive cards and no visible “best seller”/popularity claim.
 10. **PDP Product Highlights:** confirm exactly four cards, correct four approved images/texts, correct 4/2/horizontal responsive behavior, focus visibility where applicable and no clipping.
 11. **PDP Complete the Look:** confirm the water bottle and paw-cleaning cup, native current prices/availability, Product links/forms, variant controls and 44px targets. Variant display may be inspected, but do not submit either Product form.
-12. At all five sizes, measure `document.documentElement.scrollWidth <= document.documentElement.clientWidth` and inspect local carousel rails separately so intended rail scrolling is not misreported as root overflow.
-13. Emulate `prefers-reduced-motion: reduce`; verify marquee/slideshow motion and transitions respect it.
-14. Keyboard-test interactive controls using Tab, Shift+Tab, Enter/Space and arrow keys where supported; confirm focus is visible and never trapped.
-15. Regress existing Home and PDP sections, native Product gallery, current variant UI, sticky navigation and Judge.me's authentic `No reviews` state.
-16. Open Search, query `feeder` without submitting any commercial form, and verify title/results/overflow.
-17. Open and close Cart Drawer without changing quantity, removing lines, applying discounts or checking out; compare item count/total before and after.
-18. Record console errors/warnings and failed network responses for Home, PDP and Search. Do not claim PASS for uncaptured states.
+12. Open at least one non-feeder Product that uses the default Product template. Confirm Product Highlights and Complete the Look emit no public wrapper or feeder content there; do not change its template assignment.
+13. At all five sizes, measure `document.documentElement.scrollWidth <= document.documentElement.clientWidth` and inspect local carousel rails separately so intended rail scrolling is not misreported as root overflow.
+14. Emulate `prefers-reduced-motion: reduce`; verify marquee/slideshow motion and transitions respect it.
+15. Keyboard-test interactive controls using Tab, Shift+Tab, Enter/Space and arrow keys where supported; confirm focus is visible and never trapped.
+16. Regress existing Home and PDP sections, native Product gallery, current variant UI, sticky navigation and Judge.me's authentic `No reviews` state.
+17. Open Search, query `feeder` without submitting any commercial form, and verify title/results/overflow.
+18. Open and close Cart Drawer without changing quantity, removing lines, applying discounts or checking out; compare item count/total before and after.
+19. Record console errors/warnings and failed network responses for Home, PDP and Search. Do not claim PASS for uncaptured states.
 
 ## 10. Eight sections still disabled
 
@@ -303,8 +338,9 @@ Remaining gates:
 
 1. Recover a controllable authenticated browser.
 2. Confirm the Theme Editor warning is absent on all six affected PDP sections.
-3. Complete the five-viewport matrix and exact manual checklist above.
-4. Record real console and regression evidence.
+3. Confirm both enabled PDP reference sections render on the feeder and remain absent on at least one non-feeder PDP using the default template.
+4. Complete the five-viewport matrix and exact manual checklist above.
+5. Record real console and regression evidence.
 
 Safety confirmation:
 
